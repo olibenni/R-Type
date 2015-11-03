@@ -50,7 +50,7 @@ Ship.prototype.cx = 200;
 Ship.prototype.cy = 200;
 Ship.prototype.velX = 0;
 Ship.prototype.velY = 0;
-Ship.prototype.launchVel = 2;
+Ship.prototype.launchVel = 10;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
@@ -286,7 +286,7 @@ Ship.prototype.maybeFireBullet = function (du) {
         entityManager.fireBullet(
            this.cx + launchDist, this.cy,
            relVelX, relVelY,
-           this.rotation);
+           0);
            
     }
     

@@ -66,8 +66,7 @@ findEntityInRange: function(posX, posY, radius) {
     // TODO: YOUR STUFF HERE!
     for (var ID in this._entities) {
         var e = this._entities[ID];
-        var distSq = util.wrappedDistSq(posX, posY, e.posX, e.posY, 
-            g_canvas.width, g_canvas.height);
+        var distSq = util.distSq(posX, posY, e.posX, e.posY);
         var limitSq = Math.pow(radius + e.radius,2);
         if(distSq < limitSq) {
             return e.entity;

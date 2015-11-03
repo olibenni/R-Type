@@ -50,7 +50,8 @@ function createInitialShips() {
 
     entityManager.generateShip({
         cx : 200,
-        cy : 200
+        cy : 200,
+		sprite : g_sprites.ship2
     });
     
 }
@@ -193,8 +194,8 @@ function preloadDone() {
     g_sprites.ship2 = new Sprite(g_images.ship2, 166, 3, 33, 15);
     g_sprites.rock  = new Sprite(g_images.rock);
 
-    g_sprites.bullet = new Sprite(g_images.ship);
-    g_sprites.bullet.scale = 0.25;
+    g_sprites.bullet = new Sprite(g_images.ship2, 248,88,17,6);
+    g_sprites.bullet.scale = 1;
 
     entityManager.init();
     createInitialShips();

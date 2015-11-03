@@ -323,6 +323,9 @@ Ship.prototype.isLaserIsFullyCharged = function() {
 Ship.prototype.chargeLaser = function(du) {
     console.log("CHARGING LASOR MY LORD");
     this.laserCharge += du;
+    if( !this.notChargingLaser() ){
+        this.playChargingAnimation(du)
+    }
 };
 
 Ship.prototype.unchargeLaser = function() {
@@ -332,7 +335,17 @@ Ship.prototype.unchargeLaser = function() {
 Ship.prototype.fireLaser = function() {
     console.log("FIRING MY LASOR");
     this.laserCharge = 0;
-}
+};
+
+Ship.prototype.chargeSprite = 0;
+Ship.prototype.playChargingAnimation = function(du) {
+    this.chargeSprite = (this.chargeSprite + 1) % 8;
+};
+
+
+
+
+
 
 
 Ship.prototype.getRadius = function () {
@@ -371,7 +384,13 @@ Ship.prototype.render = function (ctx) {
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
     this.sprite.drawWrappedCentredAt(
-	ctx, this.cx, this.cy, this.rotation
+	   ctx, this.cx, this.cy, this.rotation
     );
+    if( !this.notChargingLaser() ) {
+        g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(
+            ctx, this.cx+this.sprite.width, this.cy, this.rotation
+        );
+    }
+
     this.sprite.scale = origScale;
 };

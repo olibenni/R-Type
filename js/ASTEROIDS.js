@@ -85,10 +85,7 @@ function updateSimulation(du) {
     processDiagnostics();
     
     entityManager.update(du);
-
-    // Prevent perpetual firing!
-    eatKey(Ship.prototype.KEY_FIRE);
-}
+};
 
 // GAME-SPECIFIC DIAGNOSTICS
 

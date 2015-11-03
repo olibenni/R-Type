@@ -38,7 +38,6 @@ isBetween: function(value, lowBound, highBound) {
 },
 
 boundary: function(length, pos, min, max){
-	console.log(length,pos,min,max)
 	return Math.min(Math.max(min+length, pos), max-length);
 },
 

@@ -22,6 +22,7 @@ function Ship(descr) {
     
     // Default sprite, if not otherwise specified
     this.sprite = this.sprite || g_sprites.ship;
+    this.sprites = this.sprites;
     
     // Set normal drawing scale, and warp state off
     this._scale = 1;
@@ -134,7 +135,7 @@ Ship.prototype.update = function (du) {
         return;
     }
     
-    // TODO: YOUR STUFF HERE! --- Unregister and check for death
+    // Unregister and check for death
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
@@ -151,7 +152,7 @@ Ship.prototype.update = function (du) {
     // Handle firing
     this.maybeFireBullet(du);
 
-    // TODO: YOUR STUFF HERE! --- Warp if isColliding, otherwise Register
+    // Handle collision
     if(this.isColliding()) {
         if(--this.lives === 0) return entityManager.KILL_ME_NOW;
         this.warp();
@@ -172,25 +173,35 @@ Ship.prototype.computeSubStep = function (du) {
     //accelY += this.computeGravity();
 
     //this.applyAccel(accelX, accelY, du);
+    var nextX = this.cx;
+    var nextY = this.cy;
     if(keys[this.KEY_THRUST]){
-		var nextX = this.cx + this.speed * du;
-		this.cx = util.boundary(this.sprite.width/2, nextX, 0, g_canvas.width); 
+		nextX += this.speed * du;
 	}
 	else if(keys[this.KEY_RETRO]){
-		nextX = this.cx - this.speed * du;
-		this.cx = util.boundary(this.sprite.width/2, nextX, 0, g_canvas.width); 
+		nextX -= this.speed * du;
 	}
 	if(keys[this.KEY_UPWARD]){
-		var nextY = this.cy - this.speed * du;
-		this.cy = util.boundary(this.sprite.height/2, nextY, 0, g_canvas.height); 
+        this.moveUp();
+		nextY -= this.speed * du;
 	}
 	else if(keys[this.KEY_DOWNWARD]){
-		nextY = this.cy + this.speed * du;
-		this.cy = util.boundary(this.sprite.height/2, nextY, 0, g_canvas.height);  
+		nextY += this.speed * du;
 	}
+    this.keepWithinBounds(nextX, nextY);
     //this.wrapPosition();
     
 };
+
+Ship.prototype.moveUp = function() {
+
+};
+
+Ship.prototype.keepWithinBounds = function(nextX, nextY) {
+    this.cx = util.boundary(this.sprite.width/2, nextX, 0, g_canvas.width); 
+    this.cy = util.boundary(this.sprite.height/2, nextY, 0, g_canvas.height);
+};
+
 
 var NOMINAL_GRAVITY = 0.12;
 
@@ -258,39 +269,71 @@ Ship.prototype.applyAccel = function (accelX, accelY, du) {
     this.cy += du * intervalVelY;
 };
 
-// When timer is less than 0 we can fire bullets
-Ship.prototype.timeBetweenBullets = 0;
+// When timer is more than 200 we can fire bullets
+Ship.prototype.reloadTime = 200 / NOMINAL_UPDATE_INTERVAL;
+// We start with being able to fire
+Ship.prototype.elapsedReloadingTime = 200 / NOMINAL_UPDATE_INTERVAL;
 
-// If 500ms have passed since last bullet, another bullet can be fired
-Ship.prototype.enoughTimeBetweenBullets = function(du) {
-    this.timeBetweenBullets -= du;
-    if(this.timeBetweenBullets < 0 && keys[this.KEY_FIRE]) {
-        this.timeBetweenBullets = 500 / NOMINAL_UPDATE_INTERVAL;
+// If 200ms have passed since last bullet, another bullet can be fired
+Ship.prototype.reloadingBullet = function(du) {
+    if(this.elapsedReloadingTime >= this.reloadTime && keys[this.KEY_FIRE]) {
+        this.elapsedReloadingTime = 0;
         return true;
     }
     return false;
 };
 
 Ship.prototype.maybeFireBullet = function (du) {
+    this.elapsedReloadingTime += du;
+    if (this.reloadingBullet(du) && this.notChargingLaser()) {
+            //var dX = +Math.sin(this.rotation);
+            //var dY = -Math.cos(this.rotation);
+            var launchDist = this.getRadius() * 1.2;
+            
+            var relVel = this.launchVel;
+            var relVelX = relVel;
+            var relVelY = 0;
 
-    if (this.enoughTimeBetweenBullets(du)) {
-        
-        //var dX = +Math.sin(this.rotation);
-        //var dY = -Math.cos(this.rotation);
-        var launchDist = this.getRadius() * 1.2;
-        
-        var relVel = this.launchVel;
-        var relVelX = relVel;
-        var relVelY = 0;
-
-        entityManager.fireBullet(
-           this.cx + launchDist, this.cy,
-           relVelX, relVelY,
-           0);
-           
+            entityManager.fireBullet(
+               this.cx + launchDist, this.cy,
+               relVelX, relVelY,
+               0
+            );
+            this.chargeLaser(du);
+    } else if( this.isLaserIsFullyCharged() ) {
+        this.fireLaser();
+    } else if(keys[this.KEY_FIRE]) {
+        this.chargeLaser(du);
+    } else {
+        this.unchargeLaser();
     }
-    
 };
+
+Ship.prototype.laserCharge = 0;
+Ship.prototype.laserFullChargeTime = 3000 / NOMINAL_UPDATE_INTERVAL;
+
+Ship.prototype.notChargingLaser = function() {
+    return this.laserCharge <= this.reloadTime ;
+};
+
+Ship.prototype.isLaserIsFullyCharged = function() {
+    return this.laserCharge >= this.laserFullChargeTime;
+};
+
+Ship.prototype.chargeLaser = function(du) {
+    console.log("CHARGING LASOR MY LORD");
+    this.laserCharge += du;
+};
+
+Ship.prototype.unchargeLaser = function() {
+    this.laserCharge = 0;
+};
+
+Ship.prototype.fireLaser = function() {
+    console.log("FIRING MY LASOR");
+    this.laserCharge = 0;
+}
+
 
 Ship.prototype.getRadius = function () {
     return (this.sprite.width / 2) * 0.9;

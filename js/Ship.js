@@ -173,18 +173,22 @@ Ship.prototype.computeSubStep = function (du) {
 
     //this.applyAccel(accelX, accelY, du);
     if(keys[this.KEY_THRUST]){
-		this.cx += this.speed; 
+		var nextX = this.cx + this.speed * du;
+		this.cx = util.boundary(this.sprite.width/2, nextX, 0, g_canvas.width); 
 	}
 	else if(keys[this.KEY_RETRO]){
-		this.cx -= this.speed; 
+		nextX = this.cx - this.speed * du;
+		this.cx = util.boundary(this.sprite.width/2, nextX, 0, g_canvas.width); 
 	}
 	if(keys[this.KEY_UPWARD]){
-		this.cy -= this.speed; 
+		var nextY = this.cy - this.speed * du;
+		this.cy = util.boundary(this.sprite.height/2, nextY, 0, g_canvas.height); 
 	}
 	else if(keys[this.KEY_DOWNWARD]){
-		this.cy += this.speed; 
+		nextY = this.cy + this.speed * du;
+		this.cy = util.boundary(this.sprite.height/2, nextY, 0, g_canvas.height);  
 	}
-    this.wrapPosition();
+    //this.wrapPosition();
     
 };
 
@@ -293,7 +297,7 @@ Ship.prototype.getRadius = function () {
 };
 
 Ship.prototype.takeBulletHit = function () {
-    this.warp();
+    //this.warp();
 };
 
 Ship.prototype.reset = function () {

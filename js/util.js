@@ -37,6 +37,11 @@ isBetween: function(value, lowBound, highBound) {
     return true;
 },
 
+boundary: function(length, pos, min, max){
+	console.log(length,pos,min,max)
+	return Math.min(Math.max(min+length, pos), max-length);
+},
+
 
 // RANDOMNESS
 // ==========

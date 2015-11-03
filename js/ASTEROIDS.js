@@ -188,11 +188,16 @@ var g_sprites = {};
 function preloadDone() {
 
     g_sprites.ship  = new Sprite(g_images.ship);
-    g_sprites.ship2 = new Sprite(g_images.ship2, 166, 3, 33, 15);
+    g_sprites.ship2 = new Sprite(g_images.ship2, 166, 2, 33, 15);
+    g_sprites.ship3 = [];
+    for(var i = 100; i <= 233; i+= 33.25){
+        g_sprites.ship3.push(new Sprite(g_images.ship2, i, 2, 33.25, 15));
+    }
+
     g_sprites.rock  = new Sprite(g_images.rock);
     g_sprites.laserCharge = [];
-    for(var i = 0; i <= 266; i += 33){
-        g_sprites.laserCharge.push(new Sprite(g_images.ship2, i, 51, 33, 32));
+    for(var i = 0; i <= 266; i += 33.25){
+        g_sprites.laserCharge.push(new Sprite(g_images.ship2, i, 51, 33.25, 32));
     }
 
     g_sprites.bullet = new Sprite(g_images.ship2, 248,88,17,6);

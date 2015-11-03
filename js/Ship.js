@@ -22,7 +22,7 @@ function Ship(descr) {
     
     // Default sprite, if not otherwise specified
     this.sprite = this.sprite || g_sprites.ship;
-    this.sprites = this.sprites;
+    this.sprites = this.sprites || g_sprites.ship3;
     
     // Set normal drawing scale, and warp state off
     this._scale = 1;
@@ -55,6 +55,7 @@ Ship.prototype.launchVel = 10;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
+Ship.prototype.spriteIndex = 2;
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -186,15 +187,23 @@ Ship.prototype.computeSubStep = function (du) {
 		nextY -= this.speed * du;
 	}
 	else if(keys[this.KEY_DOWNWARD]){
+        this.moveDown();
 		nextY += this.speed * du;
 	}
+    else{
+        this.spriteIndex = 2;
+    }
     this.keepWithinBounds(nextX, nextY);
     //this.wrapPosition();
     
 };
 
 Ship.prototype.moveUp = function() {
+    this.spriteIndex = 4;
+};
 
+Ship.prototype.moveDown = function() {
+    this.spriteIndex = 0;
 };
 
 Ship.prototype.keepWithinBounds = function(nextX, nextY) {
@@ -383,8 +392,9 @@ Ship.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
-    this.sprite.drawWrappedCentredAt(
-	   ctx, this.cx, this.cy, this.rotation
+
+    this.sprites[this.spriteIndex].drawWrappedCentredAt(
+       ctx, this.cx, this.cy, this.rotation
     );
     if( !this.notChargingLaser() ) {
         g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(

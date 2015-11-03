@@ -37,10 +37,10 @@ Ship.prototype.rememberResets = function () {
     this.reset_rotation = this.rotation;
 };
 
-Ship.prototype.KEY_THRUST = 'W'.charCodeAt(0);
-Ship.prototype.KEY_RETRO  = 'S'.charCodeAt(0);
-Ship.prototype.KEY_LEFT   = 'A'.charCodeAt(0);
-Ship.prototype.KEY_RIGHT  = 'D'.charCodeAt(0);
+Ship.prototype.KEY_THRUST = 'D'.charCodeAt(0);
+Ship.prototype.KEY_RETRO  = 'A'.charCodeAt(0);
+Ship.prototype.KEY_UPWARD   = 'W'.charCodeAt(0);
+Ship.prototype.KEY_DOWNWARD  = 'S'.charCodeAt(0);
 
 Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
 
@@ -53,6 +53,7 @@ Ship.prototype.velY = 0;
 Ship.prototype.launchVel = 2;
 Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
+Ship.prototype.speed = 3;
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -162,21 +163,29 @@ Ship.prototype.update = function (du) {
 
 Ship.prototype.computeSubStep = function (du) {
     
-    var thrust = this.computeThrustMag();
+    //var thrust = this.computeThrustMag();
 
     // Apply thrust directionally, based on our rotation
-    var accelX = +Math.sin(this.rotation) * thrust;
-    var accelY = -Math.cos(this.rotation) * thrust;
+    //var accelX = +Math.sin(this.rotation) * thrust;
+    //var accelY = -Math.cos(this.rotation) * thrust;
     
-    accelY += this.computeGravity();
+    //accelY += this.computeGravity();
 
-    this.applyAccel(accelX, accelY, du);
-    
+    //this.applyAccel(accelX, accelY, du);
+    if(keys[this.KEY_THRUST]){
+		this.cx += this.speed; 
+	}
+	else if(keys[this.KEY_RETRO]){
+		this.cx -= this.speed; 
+	}
+	if(keys[this.KEY_UPWARD]){
+		this.cy -= this.speed; 
+	}
+	else if(keys[this.KEY_DOWNWARD]){
+		this.cy += this.speed; 
+	}
     this.wrapPosition();
     
-    if (thrust === 0 || g_allowMixedActions) {
-        this.updateRotation(du);
-    }
 };
 
 var NOMINAL_GRAVITY = 0.12;
@@ -262,17 +271,17 @@ Ship.prototype.maybeFireBullet = function (du) {
 
     if (this.enoughTimeBetweenBullets(du)) {
         
-        var dX = +Math.sin(this.rotation);
-        var dY = -Math.cos(this.rotation);
+        //var dX = +Math.sin(this.rotation);
+        //var dY = -Math.cos(this.rotation);
         var launchDist = this.getRadius() * 1.2;
         
         var relVel = this.launchVel;
-        var relVelX = dX * relVel;
-        var relVelY = dY * relVel;
+        var relVelX = relVel;
+        var relVelY = 0;
 
         entityManager.fireBullet(
-           this.cx + dX * launchDist, this.cy + dY * launchDist,
-           this.velX + relVelX, this.velY + relVelY,
+           this.cx + launchDist, this.cy,
+           relVelX, relVelY,
            this.rotation);
            
     }

@@ -23,6 +23,7 @@ function Ship(descr) {
     // Default sprite, if not otherwise specified
     this.sprite = this.sprite || g_sprites.ship;
     this.sprites = this.sprites || g_sprites.ship3;
+    this.lasor = this.lasor || g_sprites.lasor;
     
     // Set normal drawing scale, and warp state off
     this._scale = 1;
@@ -38,12 +39,12 @@ Ship.prototype.rememberResets = function () {
     this.reset_rotation = this.rotation;
 };
 
-Ship.prototype.KEY_THRUST = 'D'.charCodeAt(0);
-Ship.prototype.KEY_RETRO  = 'A'.charCodeAt(0);
-Ship.prototype.KEY_UPWARD   = 'W'.charCodeAt(0);
+Ship.prototype.KEY_THRUST    = 'D'.charCodeAt(0);
+Ship.prototype.KEY_RETRO     = 'A'.charCodeAt(0);
+Ship.prototype.KEY_UPWARD    = 'W'.charCodeAt(0);
 Ship.prototype.KEY_DOWNWARD  = 'S'.charCodeAt(0);
 
-Ship.prototype.KEY_FIRE   = ' '.charCodeAt(0);
+Ship.prototype.KEY_FIRE      = ' '.charCodeAt(0);
 
 // Initial, inheritable, default values
 Ship.prototype.rotation = 0;
@@ -396,11 +397,25 @@ Ship.prototype.render = function (ctx) {
     this.sprites[this.spriteIndex].drawWrappedCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
+
     if( !this.notChargingLaser() ) {
         g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(
             ctx, this.cx+this.sprite.width, this.cy, this.rotation
         );
     }
 
+    // if( !this.notChargingLaser() ) {
+    //     g_sprites.test.drawClippedCenteredAt(
+    //         this.chargeSprite*33.25, 
+    //         51, 
+    //         33.25, 
+    //         32, 
+    //         this.cx+this.sprite.width, 
+    //         this.cy, 
+    //         this.rotation
+    //     );
+    // }
+    g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
+    g_animatedSprites.laser.cycleAnimationAt(ctx, this.cx+this.sprite.width*2, this.cy);
     this.sprite.scale = origScale;
 };

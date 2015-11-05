@@ -398,24 +398,16 @@ Ship.prototype.render = function (ctx) {
        ctx, this.cx, this.cy, this.rotation
     );
 
-    if( !this.notChargingLaser() ) {
-        g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(
-            ctx, this.cx+this.sprite.width, this.cy, this.rotation
-        );
-    }
-
     // if( !this.notChargingLaser() ) {
-    //     g_sprites.test.drawClippedCenteredAt(
-    //         this.chargeSprite*33.25, 
-    //         51, 
-    //         33.25, 
-    //         32, 
-    //         this.cx+this.sprite.width, 
-    //         this.cy, 
-    //         this.rotation
+    //     g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(
+    //         ctx, this.cx+this.sprite.width, this.cy, this.rotation
     //     );
     // }
-    g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
-    g_animatedSprites.laser.cycleAnimationAt(ctx, this.cx+this.sprite.width*2, this.cy);
+
+    if( !this.notChargingLaser() ) {
+        g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
+        g_animatedSprites.laser.cycleAnimationAt(ctx, this.cx+this.sprite.width*2, this.cy);
+    }
+    g_animatedSprites.deathExplosion.cycleAnimationAt(ctx, 50, 50);
     this.sprite.scale = origScale;
 };

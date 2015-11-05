@@ -206,6 +206,7 @@ function preloadDone() {
     }
 
     g_animatedSprites.laserCharge = new AnimationSprite(g_images.sheet1, 0, 51, 33.25, 32, 0, 8);
+    g_animatedSprites.deathExplosion = new AnimationSprite(g_images.sheet1, 267, 296,32,30, 5, 6);
     g_animatedSprites.laser = new AnimationSprite(g_images.sheet1, 200, 120, 32.5, 12, 10, 2);
 
     g_sprites.bullet = new Sprite(g_images.sheet1, 248,88,17,6);

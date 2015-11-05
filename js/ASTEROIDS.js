@@ -204,9 +204,15 @@ function preloadDone() {
     for(var i = 0; i <= 266; i += 33.25){
         g_sprites.laserCharge.push(new Sprite(g_images.sheet1, i, 51, 33.25, 32));
     }
+    g_sprites.deathExplosion = [];
+    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 267, 304, 19, 16));
+    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 217, 300, 27, 21));
+    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 182, 296, 32, 27));
+    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 146, 295, 32, 29));
+    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 108, 295, 31, 31));
+    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 71, 295, 33, 31));
 
     g_animatedSprites.laserCharge = new AnimationSprite(g_images.sheet1, 0, 51, 33.25, 32, 0, 8);
-    g_animatedSprites.deathExplosion = new AnimationSprite(g_images.sheet1, 267, 296,32,30, 5, 6);
     g_animatedSprites.laser = new AnimationSprite(g_images.sheet1, 200, 120, 32.5, 12, 10, 2);
 
     g_sprites.bullet = new Sprite(g_images.sheet1, 248,88,17,6);

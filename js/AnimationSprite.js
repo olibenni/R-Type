@@ -1,3 +1,15 @@
+/**
+ * This class is purely for sprites that are off the same size and
+ * are only used as animation but not an object that can interact with anything.
+ * Examples: chargeup laser animation, death explosions etc
+ * @param {Image} image
+ * @param {Number} sx    Start of the first sprite x pos
+ * @param {Number} sy    Start of the first sprite y pos
+ * @param {Number} sw    width of each sprite in the animation
+ * @param {Number} sh    height of each sprite in the animation
+ * @param {Number} delay some delay between sprite change
+ * @param {Number} count number of sprites in the animation
+ */
 function AnimationSprite(image, sx, sy, sw, sh, delay, count) {
     this.image = image;
     this.sx = sx;

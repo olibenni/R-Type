@@ -27,9 +27,10 @@ var entityManager = {
 
 // "PRIVATE" DATA
 
-_rocks   : [],
-_bullets : [],
-_ships   : [],
+_rocks      : [],
+_bullets    : [],
+_ships      : [],
+_animations : [],
 
 _bShowRocks : true,
 
@@ -87,7 +88,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._rocks, this._bullets, this._ships];
+    this._categories = [this._rocks, this._bullets, this._ships, this._animations];
 },
 
 init: function() {
@@ -112,6 +113,10 @@ generateRock : function(descr) {
 
 generateShip : function(descr) {
     this._ships.push(new Ship(descr));
+},
+
+createExplosion : function(descr) {
+    this._animations.push(new Explosion(descr));
 },
 
 killNearestShip : function(xPos, yPos) {

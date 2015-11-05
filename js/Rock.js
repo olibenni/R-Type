@@ -64,6 +64,12 @@ Rock.prototype.update = function (du) {
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
+        entityManager.createExplosion({
+            cx    : this.cx, 
+            cy    : this.cy,
+            scale : this.scale,
+            sprites : g_sprites.deathExplosion
+        });
         return entityManager.KILL_ME_NOW;
     }
 

@@ -331,7 +331,6 @@ Ship.prototype.isLaserIsFullyCharged = function() {
 };
 
 Ship.prototype.chargeLaser = function(du) {
-    console.log("CHARGING LASOR MY LORD");
     this.laserCharge += du;
     if( !this.notChargingLaser() ){
         this.playChargingAnimation(du)
@@ -408,6 +407,6 @@ Ship.prototype.render = function (ctx) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
         g_animatedSprites.laser.cycleAnimationAt(ctx, this.cx+this.sprite.width*2, this.cy);
     }
-    g_animatedSprites.deathExplosion.cycleAnimationAt(ctx, 50, 50);
+    // g_sprites.deathExplosion.cycleAnimationAt(ctx, 50, 50);
     this.sprite.scale = origScale;
 };

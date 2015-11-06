@@ -57,6 +57,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
 Ship.prototype.spriteIndex = 2;
+Ship.prototype.powerUps = {blue : true, red : false, misseles : false};
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -309,6 +310,20 @@ Ship.prototype.maybeFireBullet = function (du) {
                relVelX, relVelY,
                0
             );
+			//Shoot powerups if activated
+			if(this.powerUps.blue == true){
+				var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
+				entityManager.fireLaserBullet(
+				this.cx + launchDist, this.cy+this.getRadius(),
+				blueSpeed,blueSpeed,
+				0.25*Math.PI
+				);
+				entityManager.fireLaserBullet(
+				this.cx + launchDist, this.cy-this.getRadius(),
+				blueSpeed,-blueSpeed,
+				1.75*Math.PI
+				);
+			}
             this.chargeLaser(du);
     } else if( this.isLaserIsFullyCharged() ) {
         this.fireLaser();
@@ -354,7 +369,9 @@ Ship.prototype.playChargingAnimation = function(du) {
 
 
 
-
+Ship.prototype.setSpeed = function (x){
+	this.speed = x;
+};
 
 
 Ship.prototype.getRadius = function () {

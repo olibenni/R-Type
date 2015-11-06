@@ -26,7 +26,7 @@ with suitable 'data' and 'methods'.
 var entityManager = {
 
 // "PRIVATE" DATA
-
+_bg 		: [],
 _rocks      : [],
 _bullets    : [],
 _ships      : [],
@@ -35,6 +35,10 @@ _animations : [],
 _bShowRocks : true,
 
 // "PRIVATE" METHODS
+
+_generateBgs : function() {
+	this.generateBg();
+},
 
 _generateRocks : function() {
     var i,
@@ -88,10 +92,11 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._rocks, this._bullets, this._ships, this._animations];
+    this._categories = [this._bg, this._rocks, this._bullets, this._ships, this._animations];
 },
 
 init: function() {
+	this._generateBgs();
     this._generateRocks();
     //this._generateShip();
 },
@@ -105,6 +110,10 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
 
         rotation : rotation
     }));
+},
+
+generateBg : function(descr) {
+	this._bg.push(new backGround(descr));
 },
 
 generateRock : function(descr) {

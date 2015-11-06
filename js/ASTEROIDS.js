@@ -83,7 +83,7 @@ function gatherInputs() {
 function updateSimulation(du) {
     
     processDiagnostics();
-    
+
     entityManager.update(du);
 };
 
@@ -159,9 +159,9 @@ function processDiagnostics() {
 // GAME-SPECIFIC RENDERING
 
 function renderSimulation(ctx) {
-
+	
     entityManager.render(ctx);
-
+	
     if (g_renderSpatialDebug) spatialManager.render(ctx);
 }
 
@@ -177,7 +177,8 @@ function requestPreloads() {
     var requiredImages = {
         ship   : "https://notendur.hi.is/~pk/308G/images/ship.png",
         sheet1  : "./images/r-typesheet1.gif",
-        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png"
+        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
+		starField: "./images/starfield.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -187,6 +188,7 @@ var g_sprites = {};
 var g_animatedSprites = {};
 
 function preloadDone() {
+
     g_sprites.test = new Sprite(g_images.sheet1);
     g_sprites.ship  = new Sprite(g_images.ship);
     g_sprites.ship2 = new Sprite(g_images.sheet1, 166, 2, 33, 15);
@@ -214,10 +216,13 @@ function preloadDone() {
 
     g_animatedSprites.laserCharge = new AnimationSprite(g_images.sheet1, 0, 51, 33.25, 32, 0, 8);
     g_animatedSprites.laser = new AnimationSprite(g_images.sheet1, 200, 120, 32.5, 12, 10, 2);
+	
 
     g_sprites.bullet = new Sprite(g_images.sheet1, 248,88,17,6);
     g_sprites.bullet.scale = 1;
-
+	
+	g_sprites.starField = new Sprite(g_images.starField);
+	
     entityManager.init();
     createInitialShips();
 

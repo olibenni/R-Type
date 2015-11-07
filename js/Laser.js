@@ -13,12 +13,12 @@
 
 
 // A generic contructor which accepts an arbitrary descriptor object
-function Bullet(descr) {
+function Laser(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
 
-    // Make a noise when I am created (i.e. fired)
+
     this.fireSound.play();
     
 /*
@@ -29,25 +29,25 @@ function Bullet(descr) {
 
 }
 
-Bullet.prototype = new Entity();
+Laser.prototype = new Entity();
 
 // HACKED-IN AUDIO (no preloading)
-Bullet.prototype.fireSound = new Audio(
+Laser.prototype.fireSound = new Audio(
     "sounds/bulletFire.ogg");
-Bullet.prototype.zappedSound = new Audio(
+Laser.prototype.zappedSound = new Audio(
     "sounds/bulletZapped.ogg");
     
 // Initial, inheritable, default values
-Bullet.prototype.rotation = 0;
-Bullet.prototype.cx = 200;
-Bullet.prototype.cy = 200;
-Bullet.prototype.velX = 1;
-Bullet.prototype.velY = 1;
+Laser.prototype.rotation = 0;
+Laser.prototype.cx = 200;
+Laser.prototype.cy = 200;
+Laser.prototype.velX = 1;
+Laser.prototype.velY = 1;
 
 // Convert times from milliseconds to "nominal" time units.
-Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
+Laser.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
-Bullet.prototype.update = function (du) {
+Laser.prototype.update = function (du) {
 
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
@@ -84,26 +84,26 @@ Bullet.prototype.update = function (du) {
 
 };
 
-Bullet.prototype.getRadius = function () {
+Laser.prototype.getRadius = function () {
     return 4;
 };
 
-Bullet.prototype.takeBulletHit = function () {
-    //this.kill();
+Laser.prototype.takeBulletHit = function () {
+    this.kill();
     
     // Make a noise when I am zapped by another bullet
-    //this.zappedSound.play();
+    this.zappedSound.play();
 };
 
-Bullet.prototype.render = function (ctx) {
+Laser.prototype.render = function (ctx) {
 
-    var fadeThresh = Bullet.prototype.lifeSpan / 3;
+    var fadeThresh = Laser.prototype.lifeSpan / 3;
 
     if (this.lifeSpan < fadeThresh) {
         ctx.globalAlpha = this.lifeSpan / fadeThresh;
     }
 
-    g_sprites.bullet.drawCentredAt(
+    g_sprites.laser.drawCentredAt(
         ctx, this.cx, this.cy, this.rotation
     );
 

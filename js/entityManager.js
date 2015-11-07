@@ -107,7 +107,16 @@ fireBullet: function(cx, cy, velX, velY, rotation) {
         cy   : cy,
         velX : velX,
         velY : velY,
+        rotation : rotation
+    }));
+},
 
+fireLaserBullet: function(cx, cy, velX, velY, rotation) {
+    this._bullets.push(new LaserBullet({
+        cx   : cx,
+        cy   : cy,
+        velX : velX,
+        velY : velY,
         rotation : rotation
     }));
 },

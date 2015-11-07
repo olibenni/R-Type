@@ -13,7 +13,7 @@
 
 
 // A generic contructor which accepts an arbitrary descriptor object
-function Bullet(descr) {
+function LaserBullet(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
@@ -29,25 +29,25 @@ function Bullet(descr) {
 
 }
 
-Bullet.prototype = new Entity();
+LaserBullet.prototype = new Entity();
 
 // HACKED-IN AUDIO (no preloading)
-Bullet.prototype.fireSound = new Audio(
+LaserBullet.prototype.fireSound = new Audio(
     "sounds/bulletFire.ogg");
-Bullet.prototype.zappedSound = new Audio(
+LaserBullet.prototype.zappedSound = new Audio(
     "sounds/bulletZapped.ogg");
     
 // Initial, inheritable, default values
-Bullet.prototype.rotation = 0;
-Bullet.prototype.cx = 200;
-Bullet.prototype.cy = 200;
-Bullet.prototype.velX = 1;
-Bullet.prototype.velY = 1;
+LaserBullet.prototype.rotation = 0;
+LaserBullet.prototype.cx = 200;
+LaserBullet.prototype.cy = 200;
+LaserBullet.prototype.velX = 1;
+LaserBullet.prototype.velY = 1;
 
 // Convert times from milliseconds to "nominal" time units.
-Bullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
+LaserBullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
-Bullet.prototype.update = function (du) {
+LaserBullet.prototype.update = function (du) {
 
     // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
@@ -84,20 +84,20 @@ Bullet.prototype.update = function (du) {
 
 };
 
-Bullet.prototype.getRadius = function () {
+LaserBullet.prototype.getRadius = function () {
     return 4;
 };
 
-Bullet.prototype.takeBulletHit = function () {
+LaserBullet.prototype.takeBulletHit = function () {
     //this.kill();
     
     // Make a noise when I am zapped by another bullet
     //this.zappedSound.play();
 };
 
-Bullet.prototype.render = function (ctx) {
+LaserBullet.prototype.render = function (ctx) {
 
-    var fadeThresh = Bullet.prototype.lifeSpan / 3;
+    var fadeThresh = this.lifeSpan / 3;
 
     if (this.lifeSpan < fadeThresh) {
         ctx.globalAlpha = this.lifeSpan / fadeThresh;

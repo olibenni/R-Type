@@ -53,6 +53,12 @@ function createInitialShips() {
         cy : 200,
 		sprite : g_sprites.ship2
     });
+	
+	 entityManager.generatePowerUp({
+        cx : 400,
+        cy : 200,
+		sprite : g_sprites.powerup
+    });
     
 }
 
@@ -178,7 +184,8 @@ function requestPreloads() {
         ship   : "https://notendur.hi.is/~pk/308G/images/ship.png",
         sheet1  : "./images/r-typesheet1.gif",
         rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
-		starField: "./images/starfield.png"
+		starField: "./images/starfield.png",
+		sheet3  : "./images/r-typesheet3.gif"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
@@ -217,9 +224,10 @@ function preloadDone() {
     g_animatedSprites.laserCharge = new AnimationSprite(g_images.sheet1, 0, 51, 33.25, 32, 0, 8);
     g_animatedSprites.laser = new AnimationSprite(g_images.sheet1, 200, 120, 32.5, 12, 10, 2);
 	
-
     g_sprites.bullet = new Sprite(g_images.sheet1, 248,88,17,6);
     g_sprites.bullet.scale = 1;
+	
+	g_sprites.powerUp = new Sprite(g_images.sheet3, 153, 1, 17, 16);
 	
 	g_sprites.starField = new Sprite(g_images.starField);
 	

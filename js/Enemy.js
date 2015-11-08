@@ -33,9 +33,12 @@ Enemy.prototype.velY = 0;
 Enemy.prototype.numSubSteps = 1;
 Enemy.prototype.lives = 3;
 Enemy.prototype.spriteIndex = 0;
+Enemy.prototype.lifeTime = 0;
 
 Enemy.prototype.update = function (du) {
-    
+    this.lifeTime += du;
+    this.computeVelChanges(du);
+    this.computeSprite(du);
     // Unregister and check for death
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
@@ -52,16 +55,42 @@ Enemy.prototype.update = function (du) {
 
     // Handle firing
     this.maybeFireBullet(du);
-
+    this.outOfBounds();
     spatialManager.register(this);
 };
+
+Enemy.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
+Enemy.prototype.elapsedDelay = 0;
+Enemy.prototype.computeSprite = function(du) {
+    this.elapsedDelay += du;
+    if(this.elapsedDelay >= this.delay) {
+        this.elapsedDelay = 0;
+        this.spriteIndex = (this.spriteIndex + 1) % this.sprites.length;
+    }
+}
+Enemy.prototype.computeVelChanges = function(du) {
+    if(this.lifeTime < 100) {
+        this.velY = 1;
+    } else if(this.lifeTime < 150) {
+        this.velY = -1;
+    } else if(this.lifeTime < 200) {
+        this.velY = 1;
+    } else if(this.lifeTime < 300) {
+        this.velY = -1;
+    }
+}
 
 Enemy.prototype.computeSubStep = function (du) {
 
     var nextX = this.cx + this.velX * du;
-    var nextY = this.cy; 
+    var nextY = this.cy + this.velY * du; 
     this.cx = nextX;
+    this.cy = nextY;
 };
+
+Enemy.prototype.outOfBounds = function() {
+    if(this.cx <= 0) this.kill();
+}
 
 Enemy.prototype.moveUp = function() {
     this.spriteIndex = 4;
@@ -117,6 +146,8 @@ Enemy.prototype.render = function (ctx) {
     this.sprites[this.spriteIndex].drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
+
+    // g_animatedSprites.enemy1.cycleAnimationAt(ctx, this.cx, this.cy);
 
     this.sprite.scale = origScale;
 };

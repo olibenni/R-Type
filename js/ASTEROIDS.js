@@ -61,13 +61,16 @@ function createInitialShips() {
 		sprite : g_sprites.powerup
     });
 
-    entityManager.generateEnemy({
-        cx : 600,
-        cy : 250,
-        sprite : g_sprites.enemy1[0],
-        sprites : g_sprites.enemy1,
-        scale : 1
-    });
+    for(var i = 0; i < 6; i++){
+        entityManager.generateEnemy({
+            cx : 600+i*20,
+            cy : 250+i*20,
+            sprite : g_sprites.enemy1[0],
+            sprites : g_sprites.enemy1,
+            scale : 1
+        });
+    }
+
     
 }
 

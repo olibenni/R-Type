@@ -31,6 +31,7 @@ _rocks      : [],
 _bullets    : [],
 _ships      : [],
 _animations : [],
+_powerups	: [],
 
 _bShowRocks : true,
 
@@ -92,7 +93,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._bg, this._rocks, this._bullets, this._ships, this._animations];
+    this._categories = [this._bg, this._rocks, this._bullets, this._ships, this._animations, this._powerups];
 },
 
 init: function() {
@@ -127,6 +128,10 @@ generateBg : function(descr) {
 
 generateRock : function(descr) {
     this._rocks.push(new Rock(descr));
+},
+
+generatePowerUp : function(descr) {
+    this._powerups.push(new PowerUp(descr));
 },
 
 generateShip : function(descr) {

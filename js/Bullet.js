@@ -75,8 +75,10 @@ Bullet.prototype.update = function (du) {
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
-        if (canTakeHit) canTakeHit.call(hitEntity); 
-        return entityManager.KILL_ME_NOW;
+        if (canTakeHit) {
+			canTakeHit.call(hitEntity); 
+			return entityManager.KILL_ME_NOW;
+		}
     }
     
     // TODO: YOUR STUFF HERE! --- (Re-)Register

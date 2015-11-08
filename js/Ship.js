@@ -57,7 +57,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
 Ship.prototype.spriteIndex = 2;
-Ship.prototype.powerUps = {blue : true, red : false, misseles : false};
+Ship.prototype.powerUps = {blue : false, red : false, misseles : false};
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -156,10 +156,15 @@ Ship.prototype.update = function (du) {
     this.maybeFireBullet(du);
 
     // Handle collision
-    if(this.isColliding()) {
-        if(--this.lives === 0) return entityManager.KILL_ME_NOW;
-        this.warp();
-    }else {
+	var collision = this.isColliding();
+	if(collision){
+		if(collision.type != "PowerUp") {
+			if(--this.lives === 0) return entityManager.KILL_ME_NOW;
+			this.warp();
+		}else if(collision.type == "PowerUp"){
+			this.takePowerUp(collision.getPower())
+		}
+	}else {
         spatialManager.register(this);
     }
 
@@ -378,8 +383,13 @@ Ship.prototype.getRadius = function () {
     return (this.sprite.width / 2) * 0.9;
 };
 
-Ship.prototype.takeBulletHit = function () {
-    //this.warp();
+Ship.prototype.takePowerUp = function (powerUp) {
+    if(powerUp == "Blue"){
+		this.powerUps.blue = true;
+	}
+	if(powerUp == "Speed"){
+		this.setSpeed(5);
+	}
 };
 
 Ship.prototype.reset = function () {

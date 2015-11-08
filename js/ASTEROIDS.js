@@ -54,6 +54,12 @@ function createInitialShips() {
 		sprite : g_sprites.ship[2],
         sprites : g_sprites.ship
     });
+	
+	 entityManager.generatePowerUp({
+        cx : 400,
+        cy : 200,
+		sprite : g_sprites.powerup
+    });
     
 }
 
@@ -172,6 +178,7 @@ function requestPreloads() {
 
     var requiredImages = {
         sheet1  : "./images/r-typesheet1.gif",
+        sheet3  : "./images/r-typesheet3.gif",
         sheet5  : "./images/r-typesheet5.gif",
         rock   : "./images/rock.png",
 		starField: "./images/starfield.png"
@@ -186,6 +193,8 @@ var g_animatedSprites = {};
 function preloadDone() {
 
     createSprites(g_images, g_sprites, g_animatedSprites);
+
+
     entityManager.init();
     createInitialShips();
 

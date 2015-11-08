@@ -10,7 +10,8 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.enemy1 = [];
     animatedSprites.laserCharge = new AnimationSprite(images.sheet1, 0, 51, 33.25, 32, 0, 8);
     animatedSprites.laser = new AnimationSprite(images.sheet1, 200, 120, 32.5, 12, 10, 2);
-	
+	sprites.powerUp = new Sprite(images.sheet3, 153, 1, 17, 16);
+	sprites.starField = new Sprite(images.starField);
 
     for(var i = 100; i <= 233; i+= 33.25){
         sprites.ship.push(new Sprite(images.sheet1, i, 2, 33.25, 15));

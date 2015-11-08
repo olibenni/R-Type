@@ -51,7 +51,8 @@ function createInitialShips() {
     entityManager.generateShip({
         cx : 200,
         cy : 200,
-		sprite : g_sprites.ship2
+		sprite : g_sprites.ship[2],
+        sprites : g_sprites.ship
     });
     
 }
@@ -130,14 +131,9 @@ function processDiagnostics() {
         cx : g_mouseX,
         cy : g_mouseY,
         
-        sprite : g_sprites.ship});
-
-    if (eatKey(KEY_2)) entityManager.generateShip({
-        cx : g_mouseX,
-        cy : g_mouseY,
-        
-        sprite : g_sprites.ship2
-        });
+        sprite : g_sprites.ship[2],
+        sprites : g_sprites.ship
+    });
 
     if (eatKey(KEY_K)) entityManager.killNearestShip(
         g_mouseX, g_mouseY);
@@ -175,9 +171,9 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-        ship   : "https://notendur.hi.is/~pk/308G/images/ship.png",
         sheet1  : "./images/r-typesheet1.gif",
-        rock   : "https://notendur.hi.is/~pk/308G/images/rock.png",
+        sheet5  : "./images/r-typesheet5.gif",
+        rock   : "./images/rock.png",
 		starField: "./images/starfield.png"
     };
 
@@ -189,40 +185,7 @@ var g_animatedSprites = {};
 
 function preloadDone() {
 
-    g_sprites.test = new Sprite(g_images.sheet1);
-    g_sprites.ship  = new Sprite(g_images.ship);
-    g_sprites.ship2 = new Sprite(g_images.sheet1, 166, 2, 33, 15);
-
-    // When ship is moving up and down
-    g_sprites.ship3 = [];
-    for(var i = 100; i <= 233; i+= 33.25){
-        g_sprites.ship3.push(new Sprite(g_images.sheet1, i, 2, 33.25, 15));
-    }
-
-    g_sprites.rock  = new Sprite(g_images.rock);
-
-
-    g_sprites.laserCharge = [];
-    for(var i = 0; i <= 266; i += 33.25){
-        g_sprites.laserCharge.push(new Sprite(g_images.sheet1, i, 51, 33.25, 32));
-    }
-    g_sprites.deathExplosion = [];
-    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 267, 304, 19, 16));
-    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 217, 300, 27, 21));
-    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 182, 296, 32, 27));
-    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 146, 295, 32, 29));
-    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 108, 295, 31, 31));
-    g_sprites.deathExplosion.push(new Sprite(g_images.sheet1, 71, 295, 33, 31));
-
-    g_animatedSprites.laserCharge = new AnimationSprite(g_images.sheet1, 0, 51, 33.25, 32, 0, 8);
-    g_animatedSprites.laser = new AnimationSprite(g_images.sheet1, 200, 120, 32.5, 12, 10, 2);
-	
-
-    g_sprites.bullet = new Sprite(g_images.sheet1, 248,88,17,6);
-    g_sprites.bullet.scale = 1;
-	
-	g_sprites.starField = new Sprite(g_images.starField);
-	
+    createSprites(g_images, g_sprites, g_animatedSprites);
     entityManager.init();
     createInitialShips();
 

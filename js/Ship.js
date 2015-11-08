@@ -22,7 +22,7 @@ function Ship(descr) {
     
     // Default sprite, if not otherwise specified
     this.sprite = this.sprite || g_sprites.ship;
-    this.sprites = this.sprites || g_sprites.ship3;
+    this.sprites = this.sprites || g_sprites.ship;
     this.lasor = this.lasor || g_sprites.lasor;
     
     // Set normal drawing scale, and warp state off
@@ -413,6 +413,8 @@ Ship.prototype.render = function (ctx) {
     this.sprites[this.spriteIndex].drawWrappedCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
+
+    g_sprites.enemy1[0].drawWrappedCentredAt(ctx, 50, 50, 0);
 
     // if( !this.notChargingLaser() ) {
     //     g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(

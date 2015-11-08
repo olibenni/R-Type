@@ -67,7 +67,7 @@ Rock.prototype.update = function (du) {
         entityManager.createExplosion({
             cx    : this.cx, 
             cy    : this.cy,
-            scale : this.scale,
+            scale : this.scale*2,
             sprites : g_sprites.deathExplosion
         });
         return entityManager.KILL_ME_NOW;

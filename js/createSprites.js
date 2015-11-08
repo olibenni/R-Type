@@ -6,6 +6,7 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.rock  = new Sprite(images.rock);
     sprites.laserCharge = [];
     sprites.deathExplosion = [];
+    sprites.bigDeathExplosion = [];
     sprites.starField = new Sprite(images.starField);
     sprites.enemy1 = [];
     animatedSprites.laserCharge = new AnimationSprite(images.sheet1, 0, 51, 33.25, 32, 0, 8);
@@ -31,6 +32,11 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.deathExplosion.push(new Sprite(images.sheet1, 146, 295, 32, 29));
     sprites.deathExplosion.push(new Sprite(images.sheet1, 108, 295, 31, 31));
     sprites.deathExplosion.push(new Sprite(images.sheet1, 71, 295, 33, 31));
+
+    sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 145, 46, 23, 22));
+    sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 113, 43, 27, 25));
+    sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 81, 41, 27, 28));
+    sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 43, 37, 29, 31));
 
     sprites.bullet = new Sprite(images.sheet1, 248,88,17,6);
     sprites.bullet.scale = 1;

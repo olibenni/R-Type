@@ -147,6 +147,10 @@ createExplosion : function(descr) {
     this._animations.push(new Explosion(descr));
 },
 
+createBigExplosion : function(descr) {
+    this._animations.push(new BigExplosion(descr));
+},
+
 killNearestShip : function(xPos, yPos) {
     var theShip = this._findNearestShip(xPos, yPos).theShip;
     if (theShip) {

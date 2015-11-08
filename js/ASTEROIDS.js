@@ -65,7 +65,8 @@ function createInitialShips() {
         cx : 600,
         cy : 250,
         sprite : g_sprites.enemy1[0],
-        sprites : g_sprites.enemy1
+        sprites : g_sprites.enemy1,
+        scale : 1
     });
     
 }
@@ -187,7 +188,8 @@ function requestPreloads() {
         sheet1  : "./images/r-typesheet1.gif",
         sheet3  : "./images/r-typesheet3.gif",
         sheet5  : "./images/r-typesheet5.gif",
-        rock   : "./images/rock.png",
+        sheet16 : "./images/r-typesheet16.gif",
+        rock    : "./images/rock.png",
 		starField: "./images/starfield.png"
     };
 

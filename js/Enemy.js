@@ -72,13 +72,22 @@ Enemy.prototype.moveDown = function() {
 };
 
 Enemy.prototype.takeBulletHit = function() {
-    if(--this.lives <= 0) this.kill();
-    entityManager.createExplosion({
-        cx    : this.cx, 
-        cy    : this.cy,
-        scale : this.scale,
-        sprites : g_sprites.deathExplosion
-    });
+    if(--this.lives <= 0) {
+        this.kill();
+        entityManager.createBigExplosion({
+            cx    : this.cx, 
+            cy    : this.cy,
+            scale : this.scale*2,
+            sprites : g_sprites.bigDeathExplosion
+        });
+    } else {
+        entityManager.createExplosion({
+            cx    : this.cx, 
+            cy    : this.cy,
+            scale : this.scale,
+            sprites : g_sprites.deathExplosion
+        });
+    }
 };
 
 Enemy.prototype.maybeFireBullet = function (du) {

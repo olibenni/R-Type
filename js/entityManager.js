@@ -30,6 +30,7 @@ _bg 		: [],
 _rocks      : [],
 _bullets    : [],
 _ships      : [],
+_enemies    : [],
 _animations : [],
 _powerups	: [],
 
@@ -93,7 +94,7 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._bg, this._rocks, this._bullets, this._ships, this._animations, this._powerups];
+    this._categories = [this._bg, this._rocks, this._bullets, this._ships, this._enemies, this._animations, this._powerups];
 },
 
 init: function() {
@@ -136,6 +137,10 @@ generatePowerUp : function(descr) {
 
 generateShip : function(descr) {
     this._ships.push(new Ship(descr));
+},
+
+generateEnemy : function(descr) {
+    this._enemies.push(new Enemy(descr));
 },
 
 createExplosion : function(descr) {

@@ -55,10 +55,17 @@ function createInitialShips() {
         sprites : g_sprites.ship
     });
 	
-	 entityManager.generatePowerUp({
+	entityManager.generatePowerUp({
         cx : 400,
         cy : 200,
 		sprite : g_sprites.powerup
+    });
+
+    entityManager.generateEnemy({
+        cx : 600,
+        cy : 250,
+        sprite : g_sprites.enemy1[0],
+        sprites : g_sprites.enemy1
     });
     
 }

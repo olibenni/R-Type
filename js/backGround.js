@@ -73,7 +73,6 @@ backGround.prototype.collides = function() {
 
 backGround.prototype.update = function(du) {
 	// move the background backward
-
 	if(this.tilesTop[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width ||
 		this.tilesBottom[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width) {
 		this.tileOffSetLeft -= this.speed;

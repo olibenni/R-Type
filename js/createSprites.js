@@ -9,13 +9,14 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.bigDeathExplosion = [];
     sprites.enemy1 = [];
 	sprites.enemy2 = new Sprite(images.sheet8, 6, 5, 24, 25);
+    sprites.enemyBullet = new Sprite(images.sheet43, 135, 5, 8, 7);
     animatedSprites.laserCharge = new AnimationSprite(images.sheet1, 0, 51, 33.25, 32, 0, 8);
     animatedSprites.laser = new AnimationSprite(images.sheet1, 200, 120, 32.5, 12, 10, 2);
-    animatedSprites.enemy1 = new AnimationSprite(images.sheet5, 5, 5, 21, 25, 30, 8);
 	sprites.powerUp = new Sprite(images.sheet3, 153, 1, 17, 16);
 	sprites.starField = new Sprite(images.starField);
 	sprites.wall = new Sprite(images.wall, 0, 0, 64, 23);
 	sprites.wall.scale = 1.6;
+    
 	
     for(var i = 100; i <= 233; i+= 33.25){
         sprites.ship.push(new Sprite(images.sheet1, i, 2, 33.25, 15));
@@ -24,10 +25,6 @@ function createSprites(images, sprites, animatedSprites) {
     for(var i = 0; i <= 266; i += 33.25){
         sprites.laserCharge.push(new Sprite(images.sheet1, i, 51, 33.25, 32));
     }
-
-    // for(var i = 5; i <= 257; i+= 21){
-    // 	sprites.enemy1.push(new Sprite(images.sheet5, i, 5, 21, 25));
-    // }
 
     sprites.enemy1.push(new Sprite(images.sheet5, 5, 5, 21, 25));
     sprites.enemy1.push(new Sprite(images.sheet5, 37, 5, 21, 25));

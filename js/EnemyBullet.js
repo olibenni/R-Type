@@ -43,6 +43,9 @@ EnemyBullet.prototype.update = function (du) {
 
     this.cx += this.velX * du;
     this.cy += this.velY * du;
+    this.rotation += 0.5 * du;
+    this.rotation = util.wrapRange(this.rotation,
+                                   0, consts.FULL_CIRCLE);
 
     //
     // Handle collisions
@@ -73,7 +76,7 @@ EnemyBullet.prototype.render = function (ctx) {
         ctx.globalAlpha = this.lifeSpan / fadeThresh;
     }
 
-    g_sprites.bullet.drawCentredAt(
+    g_sprites.enemyBullet.drawCentredAt(
         ctx, this.cx, this.cy, this.rotation
     );
 

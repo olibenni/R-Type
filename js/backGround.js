@@ -76,19 +76,19 @@ backGround.prototype.update = function(du) {
 	if(this.tilesTop[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width ||
 		this.tilesBottom[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width) {
 		this.tileOffSetLeft -= this.speed;
-		//this.cx -= this.speed;		
+			
 	}
-	/*
+	this.cx -= this.speed;
 	if(this.cx <= 0) {
 		this.cx = g_canvas.width;
-	}*/
+	}
 };
  
 backGround.prototype.render = function(ctx) {
-	/*
+	
 	this.sprite.drawWrappedCentredAt(
 	ctx, this.cx, this.cy, this.rotation);
-	*/
+	
 	this.drawTilesTop(ctx);
 	this.drawTilesBottom(ctx);
 	

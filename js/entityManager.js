@@ -44,7 +44,7 @@ _generateBgs : function() {
 
 _generateRocks : function() {
     var i,
-        NUM_ROCKS = 4;
+        NUM_ROCKS = 0;
 
     for (i = 0; i < NUM_ROCKS; ++i) {
         this.generateRock();

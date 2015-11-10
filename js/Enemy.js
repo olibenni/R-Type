@@ -109,6 +109,13 @@ Enemy.prototype.takeBulletHit = function() {
             scale : this.scale*2,
             sprites : g_sprites.bigDeathExplosion
         });
+		if(util.spawnPowerUp()){
+			entityManager.generatePowerUp({
+				cx : this.cx,
+				cy : this.cy,
+				sprite : g_sprites.powerup
+			});
+		}
     } else {
         entityManager.createExplosion({
             cx    : this.cx, 

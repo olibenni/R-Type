@@ -35,7 +35,7 @@ Enemy2.prototype.numSubSteps = 1;
 Enemy2.prototype.lives = 3;
 Enemy2.prototype.spriteIndex = 0;
 Enemy2.prototype.lifeTime = 0;
-Enemy2.prototype.shootingSpeed = 2;
+Enemy2.prototype.shootingSpeed = 5;
 
 Enemy2.prototype.update = function (du) {
     this.lifeTime += du;
@@ -98,6 +98,13 @@ Enemy2.prototype.takeBulletHit = function() {
             scale : this.scale*2,
             sprites : g_sprites.bigDeathExplosion
         });
+		if(util.spawnPowerUp()){
+			entityManager.generatePowerUp({
+				cx : this.cx,
+				cy : this.cy,
+				sprite : g_sprites.powerup
+			});
+		}
     } else {
         entityManager.createExplosion({
             cx    : this.cx, 
@@ -110,17 +117,17 @@ Enemy2.prototype.takeBulletHit = function() {
 
 Enemy2.prototype.maybeFireBullet = function (du) {
     if(Math.random() * 10 > 9.9) {
-        var dX = -Math.sin(this.rotation);
-        var dY = +Math.cos(this.rotation);
-        var launchDist = this.getRadius() * 4;
+        var dX = +Math.cos(this.rotation);
+        var dY = +Math.sin(this.rotation);
+        var launchDist = this.getRadius() * 2;
         
         var relVel = this.shootingSpeed;
         var relVelX = dX * relVel;
         var relVelY = dY * relVel;
-		console.log(relVelX,relVelY)
+		console.log(this.cy, dY, this.rotation)
 
         entityManager.fireBullet(
-           this.cx - launchDist, this.cy,
+           this.cx - launchDist, this.cy +dY*this.getRadius()*2,
            relVelX, relVelY,
            this.rotation
         );

@@ -28,10 +28,10 @@ Enemy.prototype = new Entity();
 Enemy.prototype.rotation = 0;
 Enemy.prototype.cx = 200;
 Enemy.prototype.cy = 200;
-Enemy.prototype.velX = -2;
+Enemy.prototype.velX = -1.5;
 Enemy.prototype.velY = 0;
 Enemy.prototype.numSubSteps = 1;
-Enemy.prototype.lives = 3;
+Enemy.prototype.lives = 1;
 Enemy.prototype.spriteIndex = 0;
 Enemy.prototype.lifeTime = 0;
 

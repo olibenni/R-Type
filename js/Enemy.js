@@ -134,7 +134,7 @@ Enemy.prototype.maybeFireBullet = function (du) {
         var relVelX = -4;
         var relVelY = 0;
 
-        entityManager.fireBullet(
+        entityManager.fireEnemyBullet(
            this.cx - launchDist, this.cy,
            relVelX, relVelY,
            Math.PI

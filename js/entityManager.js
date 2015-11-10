@@ -103,6 +103,16 @@ init: function() {
     //this._generateShip();
 },
 
+fireEnemyBullet: function(cx, cy, velX, velY, rotation) {
+    this._bullets.push(new EnemyBullet({
+        cx   : cx,
+        cy   : cy,
+        velX : velX,
+        velY : velY,
+        rotation : rotation
+    }));
+},
+
 fireBullet: function(cx, cy, velX, velY, rotation) {
     this._bullets.push(new Bullet({
         cx   : cx,

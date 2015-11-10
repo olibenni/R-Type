@@ -125,7 +125,7 @@ Enemy2.prototype.maybeFireBullet = function (du) {
         var relVelX = dX * relVel;
         var relVelY = dY * relVel;
 		
-        entityManager.fireBullet(
+        entityManager.fireEnemyBullet(
            this.cx - launchDist, this.cy +dY*this.getRadius()*2,
            relVelX, relVelY,
            this.rotation

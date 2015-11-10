@@ -193,7 +193,8 @@ function requestPreloads() {
         sheet5  : "./images/r-typesheet5.gif",
         sheet16 : "./images/r-typesheet16.gif",
         rock    : "./images/rock.png",
-		starField: "./images/starfield.png"
+		starField: "./images/starfield.png",
+		wall 	: "./images/wall.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);

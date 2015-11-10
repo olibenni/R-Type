@@ -56,7 +56,7 @@ function createInitialShips() {
     });
 	
 	entityManager.generatePowerUp({
-        cx : 400,
+        cx : 230,
         cy : 200,
 		sprite : g_sprites.powerup
     });
@@ -67,6 +67,14 @@ function createInitialShips() {
             cy : 250+i*20,
             sprite : g_sprites.enemy1[0],
             sprites : g_sprites.enemy1,
+            scale : 1
+        });
+    }
+	for(var i = 0; i < 1; i++){
+        entityManager.generateEnemy2({
+            cx : 600+i*30,
+            cyStart : 200,
+            sprite : g_sprites.enemy2,
             scale : 1
         });
     }
@@ -191,6 +199,7 @@ function requestPreloads() {
         sheet1  : "./images/r-typesheet1.gif",
         sheet3  : "./images/r-typesheet3.gif",
         sheet5  : "./images/r-typesheet5.gif",
+		sheet8	: "./images/r-typesheet8.gif",
         sheet16 : "./images/r-typesheet16.gif",
         rock    : "./images/rock.png",
 		starField: "./images/starfield.png"

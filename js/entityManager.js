@@ -44,7 +44,7 @@ _generateBgs : function() {
 
 _generateRocks : function() {
     var i,
-        NUM_ROCKS = 4;
+        NUM_ROCKS = 0;
 
     for (i = 0; i < NUM_ROCKS; ++i) {
         this.generateRock();
@@ -141,6 +141,10 @@ generateShip : function(descr) {
 
 generateEnemy : function(descr) {
     this._enemies.push(new Enemy(descr));
+},
+
+generateEnemy2 : function(descr) {
+    this._enemies.push(new Enemy2(descr));
 },
 
 createExplosion : function(descr) {

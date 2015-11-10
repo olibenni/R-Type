@@ -41,6 +41,12 @@ boundary: function(length, pos, min, max){
 	return Math.min(Math.max(min+length, pos), max-length);
 },
 
+spawnPowerUp: function(){
+	if(Math.random() * 10 > 9){
+		return true;
+	}
+	return false;
+},
 
 // RANDOMNESS
 // ==========

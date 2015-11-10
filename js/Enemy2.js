@@ -13,32 +13,33 @@
 
 
 // A generic contructor which accepts an arbitrary descriptor object
-function Enemy(descr) {
+function Enemy2(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
+	
+	this.cy = this.cyStart;
     
     // Set normal drawing scale
     this._scale = 1;
 };
 
-Enemy.prototype = new Entity();
+Enemy2.prototype = new Entity();
 
 // Initial, inheritable, default values
-Enemy.prototype.rotation = 0;
-Enemy.prototype.cx = 200;
-Enemy.prototype.cy = 200;
-Enemy.prototype.velX = -1.5;
-Enemy.prototype.velY = 0;
-Enemy.prototype.numSubSteps = 1;
-Enemy.prototype.lives = 1;
-Enemy.prototype.spriteIndex = 0;
-Enemy.prototype.lifeTime = 0;
+Enemy2.prototype.rotation = 0;
+Enemy2.prototype.cx = 200;
+Enemy2.prototype.velX = -1;
+Enemy2.prototype.velY = 0;
+Enemy2.prototype.numSubSteps = 1;
+Enemy2.prototype.lives = 3;
+Enemy2.prototype.spriteIndex = 0;
+Enemy2.prototype.lifeTime = 0;
+Enemy2.prototype.shootingSpeed = 5;
 
-Enemy.prototype.update = function (du) {
+Enemy2.prototype.update = function (du) {
     this.lifeTime += du;
     this.computeVelChanges(du);
-    this.computeSprite(du);
     // Unregister and check for death
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
@@ -59,48 +60,36 @@ Enemy.prototype.update = function (du) {
     spatialManager.register(this);
 };
 
-Enemy.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
-Enemy.prototype.elapsedDelay = 0;
-Enemy.prototype.computeSprite = function(du) {
-    this.elapsedDelay += du;
-    if(this.elapsedDelay >= this.delay) {
-        this.elapsedDelay = 0;
-        this.spriteIndex = (this.spriteIndex + 1) % this.sprites.length;
-    }
-}
-Enemy.prototype.computeVelChanges = function(du) {
-    if(this.lifeTime < 100) {
-        this.velY = 1;
-    } else if(this.lifeTime < 150) {
-        this.velY = -1;
-    } else if(this.lifeTime < 200) {
-        this.velY = 1;
-    } else if(this.lifeTime < 300) {
-        this.velY = -1;
-    }
+Enemy2.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
+Enemy2.prototype.elapsedDelay = 0;
+
+Enemy2.prototype.computeVelChanges = function(du) {
+	
 }
 
-Enemy.prototype.computeSubStep = function (du) {
-
+Enemy2.prototype.computeSubStep = function (du) {
+	var values = Math.cos((this.cx % 100-50)/50*Math.PI)
+	var values2 = Math.sin((this.cx % 100-50)/50*Math.PI*-1);
     var nextX = this.cx + this.velX * du;
-    var nextY = this.cy + this.velY * du; 
+    var nextY = this.cyStart + values * 20; 
     this.cx = nextX;
     this.cy = nextY;
+	this.rotation = (((values2-1)/4)-0.75)*Math.PI
 };
 
-Enemy.prototype.outOfBounds = function() {
+Enemy2.prototype.outOfBounds = function() {
     if(this.cx <= 0) this.kill();
 }
 
-Enemy.prototype.moveUp = function() {
+Enemy2.prototype.moveUp = function() {
     this.spriteIndex = 4;
 };
 
-Enemy.prototype.moveDown = function() {
+Enemy2.prototype.moveDown = function() {
     this.spriteIndex = 0;
 };
 
-Enemy.prototype.takeBulletHit = function() {
+Enemy2.prototype.takeBulletHit = function() {
     if(--this.lives <= 0) {
         this.kill();
         entityManager.createBigExplosion({
@@ -126,31 +115,33 @@ Enemy.prototype.takeBulletHit = function() {
     }
 };
 
-Enemy.prototype.maybeFireBullet = function (du) {
+Enemy2.prototype.maybeFireBullet = function (du) {
     if(Math.random() * 10 > 9.9) {
+        var dX = +Math.cos(this.rotation);
+        var dY = +Math.sin(this.rotation);
         var launchDist = this.getRadius() * 2;
         
-        var relVel = this.launchVel;
-        var relVelX = -4;
-        var relVelY = 0;
-
+        var relVel = this.shootingSpeed;
+        var relVelX = dX * relVel;
+        var relVelY = dY * relVel;
+		
         entityManager.fireBullet(
-           this.cx - launchDist, this.cy,
+           this.cx - launchDist, this.cy +dY*this.getRadius()*2,
            relVelX, relVelY,
-           Math.PI
+           this.rotation
         );
     }
 };
 
-Enemy.prototype.getRadius = function () {
+Enemy2.prototype.getRadius = function () {
     return (this.sprite.width / 2) * 0.9;
 };
 
-Enemy.prototype.render = function (ctx) {
+Enemy2.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     this.sprite.scale = this._scale;
 
-    this.sprites[this.spriteIndex].drawCentredAt(
+    this.sprite.drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
 

@@ -40,7 +40,7 @@ PowerUp.prototype = new Entity();
 PowerUp.prototype.allPowers = ["Blue","Speed","Red","Missiles"]
 
 PowerUp.prototype.choosePower = function(){
-	var num = Math.floor(util.randRange(0,1.99));
+	var num = Math.floor(util.randRange(0,2.99));
 	this.power = this.allPowers[num];
 }
 

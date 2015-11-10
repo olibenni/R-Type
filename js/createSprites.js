@@ -8,6 +8,7 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.deathExplosion = [];
     sprites.bigDeathExplosion = [];
     sprites.enemy1 = [];
+	sprites.enemy2 = new Sprite(images.sheet8, 6, 5, 24, 25);
     animatedSprites.laserCharge = new AnimationSprite(images.sheet1, 0, 51, 33.25, 32, 0, 8);
     animatedSprites.laser = new AnimationSprite(images.sheet1, 200, 120, 32.5, 12, 10, 2);
     animatedSprites.enemy1 = new AnimationSprite(images.sheet5, 5, 5, 21, 25, 30, 8);

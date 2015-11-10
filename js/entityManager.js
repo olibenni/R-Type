@@ -143,6 +143,10 @@ generateEnemy : function(descr) {
     this._enemies.push(new Enemy(descr));
 },
 
+generateEnemy2 : function(descr) {
+    this._enemies.push(new Enemy2(descr));
+},
+
 createExplosion : function(descr) {
     this._animations.push(new Explosion(descr));
 },

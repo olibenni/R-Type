@@ -130,6 +130,8 @@ Ship.prototype._moveToASafePlace = function () {
     }
 };
     
+Ship.prototype.usedShield = false;
+
 Ship.prototype.update = function (du) {
 
     // Handle warping
@@ -158,13 +160,19 @@ Ship.prototype.update = function (du) {
     // Handle collision
 	var collision = this.isColliding();
 	if(collision){
-		if(collision.type != "PowerUp") {
+		if(collision.type != "PowerUp" && this.powerUps.red != true) {
 			if(--this.lives === 0) return entityManager.KILL_ME_NOW;
 			this.warp();
 		}else if(collision.type == "PowerUp"){
-			this.takePowerUp(collision.getPower())
+			this.takePowerUp(collision.getPower());
+		}else if(this.powerUps.red == true){
+			this.usedShield = true;
 		}
 	}else {
+		if(this.usedShield == true){
+			this.usedShield = false;
+			this.powerUps.red = false;
+		}
         spatialManager.register(this);
     }
 
@@ -390,6 +398,9 @@ Ship.prototype.takePowerUp = function (powerUp) {
 	if(powerUp == "Speed"){
 		this.setSpeed(5);
 	}
+	if(powerUp == "Red"){
+		this.powerUps.red = true;
+	}
 };
 
 Ship.prototype.reset = function () {
@@ -415,11 +426,26 @@ Ship.prototype.updateRotation = function (du) {
     }
 };
 
+Ship.prototype.drawShield = function(ctx){
+	var grd=ctx.createRadialGradient(this.cx,this.cy,0,this.cx,this.cy,this.getRadius());
+	grd.addColorStop(0,"rgba(0, 0, 255, 0.5)");
+	grd.addColorStop(1,"rgba(255, 255, 255, 0.5)");
+	ctx.beginPath();
+	ctx.arc(this.cx, this.cy, this.getRadius()+3, 0, Math.PI * 2);
+	ctx.stroke();
+	ctx.fillStyle = grd;
+	ctx.fill();
+};
+
 Ship.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this._scale;
-
+	
+	if(this.powerUps.red == true){
+		this.drawShield(ctx);
+	}
+	
     this.sprites[this.spriteIndex].drawWrappedCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );

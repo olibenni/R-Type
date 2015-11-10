@@ -70,7 +70,7 @@ function createInitialShips() {
             scale : 1
         });
     }
-	for(var i = 0; i < 1; i++){
+	for(var i = 0; i < 6; i++){
         entityManager.generateEnemy2({
             cx : 600+i*30,
             cyStart : 200,

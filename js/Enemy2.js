@@ -124,8 +124,7 @@ Enemy2.prototype.maybeFireBullet = function (du) {
         var relVel = this.shootingSpeed;
         var relVelX = dX * relVel;
         var relVelY = dY * relVel;
-		console.log(this.cy, dY, this.rotation)
-
+		
         entityManager.fireBullet(
            this.cx - launchDist, this.cy +dY*this.getRadius()*2,
            relVelX, relVelY,

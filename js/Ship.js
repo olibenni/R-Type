@@ -300,15 +300,24 @@ Ship.prototype.elapsedReloadingTime = 200 / NOMINAL_UPDATE_INTERVAL;
 
 // If 200ms have passed since last bullet, another bullet can be fired
 Ship.prototype.reloadingBullet = function(du) {
-    if(this.elapsedReloadingTime >= this.reloadTime && keys[this.KEY_FIRE]) {
+    this.elapsedReloadingTime += du;
+    if(this.elapsedReloadingTime >= this.reloadTime && !this.isHoldingTrigger() && keys[this.KEY_FIRE]) {
         this.elapsedReloadingTime = 0;
         return true;
     }
     return false;
 };
 
+Ship.prototype.didShootLastUpdate = false;
+Ship.prototype.isHoldingTrigger = function() {
+    if( this.didShootLastUpdate && keys[this.KEY_FIRE] ) {
+        return true;
+    }
+    this.didShootLastUpdate = false;
+    return false;
+};
+
 Ship.prototype.maybeFireBullet = function (du) {
-    this.elapsedReloadingTime += du;
     var launchDist = this.getRadius() * 1.2;
     
     var relVel = this.launchVel;
@@ -318,6 +327,7 @@ Ship.prototype.maybeFireBullet = function (du) {
     //Need to make sure we cant spam bullets, also if we are charging laser
     //we cannot fire bullets
     if (this.reloadingBullet(du) && !this.isChargingLaser()) {
+        this.didShootLastUpdate = true;
         entityManager.fireBullet(
            this.cx + launchDist, this.cy,
            relVelX, relVelY,
@@ -358,8 +368,9 @@ Ship.prototype.maybeFireBullet = function (du) {
     }
 };
 
+Ship.prototype.laserReloadTime = 500 / NOMINAL_UPDATE_INTERVAL;
 Ship.prototype.isChargingLaser = function() {
-    return this.laserCharge > this.reloadTime ;
+    return this.laserCharge > this.laserReloadTime ;
 };
 
 Ship.prototype.chargeLaser = function(du) {

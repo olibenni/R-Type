@@ -20,7 +20,7 @@ function Laser(descr) {
 
     this.fireSound.play();
     this.type = this.getType();
-    this.damage = this.type*3;
+    this.damage = this.type*this.type+1;
     this.lives = this.damage;
     console.log(this.damage);
 }
@@ -38,13 +38,13 @@ Laser.prototype.getType = function() {
     if(this.charge < 1000 / NOMINAL_UPDATE_INTERVAL) {
         return 1;
     } 
-    if(this.charge < 2000 / NOMINAL_UPDATE_INTERVAL) {
+    if(this.charge < 1750 / NOMINAL_UPDATE_INTERVAL) {
         return 2;
     }
     if(this.charge < 2500 / NOMINAL_UPDATE_INTERVAL) {
         return 3;
     }
-    return 5;
+    return 4;
 }
     
 // Initial, inheritable, default values
@@ -88,7 +88,7 @@ Laser.prototype.update = function (du) {
 };
 
 Laser.prototype.getRadius = function () {
-    return this.type * 2;
+    return this.type * 2.5;
 };
 
 

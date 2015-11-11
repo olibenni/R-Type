@@ -378,8 +378,9 @@ Ship.prototype.playChargingAnimation = function(du) {
     this.chargeSprite = (this.chargeSprite + 1) % 8;
 };
 
-
-
+Ship.prototype.getLives = function(){
+	return this.lives;
+};
 
 Ship.prototype.setSpeed = function (x){
 	this.speed = x;
@@ -449,7 +450,7 @@ Ship.prototype.render = function (ctx) {
        ctx, this.cx, this.cy, this.rotation
     );
 
-    g_sprites.enemy1[0].drawWrappedCentredAt(ctx, 50, 50, 0);
+    //g_sprites.enemy1[0].drawWrappedCentredAt(ctx, 50, 50, 0);
 
     // if( !this.notChargingLaser() ) {
     //     g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(

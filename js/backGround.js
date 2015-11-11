@@ -105,6 +105,10 @@ backGround.prototype.collides = function() {
 };
 */
 
+backGround.prototype.getSpeed = function(){
+	return this.speed;
+}
+
 backGround.prototype.update = function(du) {
 	// move the background backward
 	
@@ -140,10 +144,20 @@ backGround.prototype.checkTrigger = function(){
  
 backGround.prototype.render = function(ctx) {
 	
+	
 	this.sprite.drawWrappedCentredAt(
 	ctx, this.cx, this.cy, this.rotation);
-	
+	this.drawLives(ctx)
 	this.drawTilesTop(ctx);
 	this.drawTilesBottom(ctx);
 	
 };
+
+backGround.prototype.drawLives = function(ctx){
+	if(entityManager._ships[0]){
+		var lives = entityManager._ships[0].getLives();
+		for(var i = 0; i < lives; i++){
+			g_sprites.ship[3].drawCentredAt(ctx, 20+i*40,15,0);
+		}
+	}
+}

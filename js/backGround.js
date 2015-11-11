@@ -105,6 +105,10 @@ backGround.prototype.collides = function() {
 };
 */
 
+backGround.prototype.getSpeed = function(){
+	return this.speed;
+}
+
 backGround.prototype.update = function(du) {
 	// move the background backward
 	

@@ -22,7 +22,7 @@ function PowerUp(descr) {
     this.sprite = this.sprite || g_sprites.powerUp;
     this.scale  = this.scale  || 1;
 	this.rotation = this.rotation || 0;
-	this.xVel = this.speed || 0
+	this.xVel = this.speed || -entityManager._bg[0].getSpeed();
 	this.type = this.type || "PowerUp";
 	this.choosePower();
 

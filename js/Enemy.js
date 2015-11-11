@@ -100,8 +100,13 @@ Enemy.prototype.moveDown = function() {
     this.spriteIndex = 0;
 };
 
-Enemy.prototype.takeBulletHit = function() {
-    if(--this.lives <= 0) {
+Enemy.prototype.takeBulletHit = function(damage) {
+
+    var currentLives = this.lives;
+    this.lives -= damage;
+    var damageDealt = currentLives - Math.max(this.lives, 0);
+    
+    if(this.lives <= 0) {
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 
@@ -124,6 +129,7 @@ Enemy.prototype.takeBulletHit = function() {
             sprites : g_sprites.deathExplosion
         });
     }
+    return damageDealt;
 };
 
 Enemy.prototype.maybeFireBullet = function (du) {

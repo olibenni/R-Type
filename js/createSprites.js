@@ -12,6 +12,7 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.enemyBullet = new Sprite(images.sheet43, 135, 5, 8, 7);
     animatedSprites.laserCharge = new AnimationSprite(images.sheet1, 0, 51, 33.25, 32, 0, 8);
     animatedSprites.laser = new AnimationSprite(images.sheet1, 200, 120, 32.5, 12, 10, 2);
+    sprites.laser = new Sprite(images.sheet1, 200, 120, 32.5, 12);
 	sprites.powerUp = new Sprite(images.sheet3, 153, 1, 17, 16);
 	sprites.starField = new Sprite(images.starField);
 	sprites.wall = new Sprite(images.wall, 0, 0, 64, 23);

@@ -309,68 +309,67 @@ Ship.prototype.reloadingBullet = function(du) {
 
 Ship.prototype.maybeFireBullet = function (du) {
     this.elapsedReloadingTime += du;
-    if (this.reloadingBullet(du) && this.notChargingLaser()) {
-            //var dX = +Math.sin(this.rotation);
-            //var dY = -Math.cos(this.rotation);
-            var launchDist = this.getRadius() * 1.2;
-            
-            var relVel = this.launchVel;
-            var relVelX = relVel;
-            var relVelY = 0;
+    var launchDist = this.getRadius() * 1.2;
+    
+    var relVel = this.launchVel;
+    var relVelX = relVel;
+    var relVelY = 0;
 
-            entityManager.fireBullet(
-               this.cx + launchDist, this.cy,
-               relVelX, relVelY,
-               0
-            );
-			//Shoot powerups if activated
-			if(this.powerUps.blue == true){
-				var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
-				entityManager.fireLaserBullet(
+    //Need to make sure we cant spam bullets, also if we are charging laser
+    //we cannot fire bullets
+    if (this.reloadingBullet(du) && !this.isChargingLaser()) {
+        entityManager.fireBullet(
+           this.cx + launchDist, this.cy,
+           relVelX, relVelY,
+           0
+        );
+		//Shoot powerups if activated
+		if(this.powerUps.blue == true){
+			var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
+			entityManager.fireLaserBullet(
 				this.cx + launchDist, this.cy+this.getRadius(),
 				blueSpeed,blueSpeed,
 				0.25*Math.PI
-				);
-				entityManager.fireLaserBullet(
+			);
+			entityManager.fireLaserBullet(
 				this.cx + launchDist, this.cy-this.getRadius(),
 				blueSpeed,-blueSpeed,
 				1.75*Math.PI
-				);
-			}
-            this.chargeLaser(du);
-    } else if( this.isLaserIsFullyCharged() ) {
-        this.fireLaser();
-    } else if(keys[this.KEY_FIRE]) {
+			);
+		}
         this.chargeLaser(du);
-    } else {
+    } 
+    //Laser has been charging and space has been released = fire laser
+    else if( this.isChargingLaser() && !keys[this.KEY_FIRE] ) {
+        entityManager.fireLaser(
+           this.cx + launchDist, this.cy,
+           relVelX, relVelY,
+           0,
+           this.laserCharge
+        );
+        this.unchargeLaser();
+    }
+    //Still holding space since last bullet was fired, we are charging laser
+    else if(keys[this.KEY_FIRE]) {
+        this.chargeLaser(du);
+    } 
+    else {
         this.unchargeLaser();
     }
 };
 
-Ship.prototype.laserCharge = 0;
-Ship.prototype.laserFullChargeTime = 3000 / NOMINAL_UPDATE_INTERVAL;
-
-Ship.prototype.notChargingLaser = function() {
-    return this.laserCharge <= this.reloadTime ;
-};
-
-Ship.prototype.isLaserIsFullyCharged = function() {
-    return this.laserCharge >= this.laserFullChargeTime;
+Ship.prototype.isChargingLaser = function() {
+    return this.laserCharge > this.reloadTime ;
 };
 
 Ship.prototype.chargeLaser = function(du) {
     this.laserCharge += du;
-    if( !this.notChargingLaser() ){
+    if( this.isChargingLaser() ){
         this.playChargingAnimation(du)
     }
 };
 
 Ship.prototype.unchargeLaser = function() {
-    this.laserCharge = 0;
-};
-
-Ship.prototype.fireLaser = function() {
-    console.log("FIRING MY LASOR");
     this.laserCharge = 0;
 };
 
@@ -458,9 +457,8 @@ Ship.prototype.render = function (ctx) {
     //     );
     // }
 
-    if( !this.notChargingLaser() ) {
+    if( this.isChargingLaser() ) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
-        g_animatedSprites.laser.cycleAnimationAt(ctx, this.cx+this.sprite.width*2, this.cy);
     }
     // g_sprites.deathExplosion.cycleAnimationAt(ctx, 50, 50);
     this.sprite.scale = origScale;

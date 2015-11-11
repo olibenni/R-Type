@@ -75,7 +75,7 @@ LaserBullet.prototype.update = function (du) {
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
-        if (canTakeHit) canTakeHit.call(hitEntity); 
+        if (canTakeHit) canTakeHit.call(hitEntity, 1); 
         return entityManager.KILL_ME_NOW;
     }
     

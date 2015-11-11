@@ -133,6 +133,17 @@ fireLaserBullet: function(cx, cy, velX, velY, rotation) {
     }));
 },
 
+fireLaser: function(cx, cy, velX, velY, rotation, charge) {
+    this._bullets.push(new Laser({
+        cx   : cx,
+        cy   : cy,
+        velX : velX,
+        velY : velY,
+        rotation : rotation,
+        charge   : charge
+    }));
+},
+
 generateBg : function(descr) {
 	this._bg.push(new backGround(descr));
 },

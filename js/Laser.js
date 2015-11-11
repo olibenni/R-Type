@@ -18,15 +18,11 @@ function Laser(descr) {
     // Common inherited setup logic from Entity
     this.setup(descr);
 
-
     this.fireSound.play();
-    
-/*
-    // Diagnostics to check inheritance stuff
-    this._bulletProperty = true;
-    console.dir(this);
-*/
-
+    this.type = this.getType();
+    this.damage = this.type*3;
+    this.lives = this.damage;
+    console.log(this.damage);
 }
 
 Laser.prototype = new Entity();
@@ -36,6 +32,20 @@ Laser.prototype.fireSound = new Audio(
     "sounds/bulletFire.ogg");
 Laser.prototype.zappedSound = new Audio(
     "sounds/bulletZapped.ogg");
+
+Laser.prototype.getType = function() {
+    // Checks if laser has been charges for 1,2,3 or more seconds
+    if(this.charge < 1000 / NOMINAL_UPDATE_INTERVAL) {
+        return 1;
+    } 
+    if(this.charge < 2000 / NOMINAL_UPDATE_INTERVAL) {
+        return 2;
+    }
+    if(this.charge < 2500 / NOMINAL_UPDATE_INTERVAL) {
+        return 3;
+    }
+    return 5;
+}
     
 // Initial, inheritable, default values
 Laser.prototype.rotation = 0;
@@ -49,12 +59,10 @@ Laser.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
 
 Laser.prototype.update = function (du) {
 
-    // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
     }
-
 
     this.lifeSpan -= du;
     if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
@@ -62,38 +70,27 @@ Laser.prototype.update = function (du) {
     this.cx += this.velX * du;
     this.cy += this.velY * du;
 
-    //this.rotation += 1 * du;
-    //this.rotation = util.wrapRange(this.rotation,
-                                   //0, consts.FULL_CIRCLE);
-
-    //this.wrapPosition();
-    
-    // TODO? NO, ACTUALLY, I JUST DID THIS BIT FOR YOU! :-)
     //
     // Handle collisions
     //
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
-        if (canTakeHit) canTakeHit.call(hitEntity); 
-        return entityManager.KILL_ME_NOW;
+        if (canTakeHit) {
+            var damageDealt = canTakeHit.call(hitEntity, this.damage);
+            this.lives -= damageDealt;
+            if(this.lives <= 0) return entityManager.KILL_ME_NOW;
+        }
     }
     
-    // TODO: YOUR STUFF HERE! --- (Re-)Register
     spatialManager.register(this);
 
 };
 
 Laser.prototype.getRadius = function () {
-    return 4;
+    return this.type * 2;
 };
 
-Laser.prototype.takeBulletHit = function () {
-    this.kill();
-    
-    // Make a noise when I am zapped by another bullet
-    this.zappedSound.play();
-};
 
 Laser.prototype.render = function (ctx) {
 
@@ -103,9 +100,11 @@ Laser.prototype.render = function (ctx) {
         ctx.globalAlpha = this.lifeSpan / fadeThresh;
     }
 
-    g_sprites.laser.drawCentredAt(
-        ctx, this.cx, this.cy, this.rotation
-    );
+    // g_sprites.laser.drawCentredAt(
+    //     ctx, this.cx, this.cy, this.rotation
+    // );
+    //g_animatedSprites.laser[this.type].cycleAnimationAt(ctx, this.cx, this.cy);
+    g_animatedSprites.laser.cycleAnimationAt(ctx, this.cx, this.cy);
 
     ctx.globalAlpha = 1;
 };

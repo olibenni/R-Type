@@ -40,6 +40,7 @@ backGround.prototype.triggerCalls = {
 	}
 }
 backGround.prototype.curTrigger = 0;
+//triggers : Distance in game, triggerCall, y, number of enemies
 backGround.prototype.triggers = [
 	[250,1,200,6],
 	[300,2,300,6]

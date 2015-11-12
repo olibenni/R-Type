@@ -149,6 +149,10 @@ fireLaser: function(cx, cy, velX, velY, rotation, charge) {
     }));
 },
 
+clearBullets: function() {
+    this._bullets.splice(0,this._bullets.length);
+},
+
 generateTile : function(descr) {
 	this._tiles.push(new Tiles(descr));
 },

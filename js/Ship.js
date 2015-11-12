@@ -164,6 +164,7 @@ Ship.prototype.update = function (du) {
 		if(collision.type != "PowerUp" && !this.powerUps.red) {
 			if(--this.lives === 0) return entityManager.KILL_ME_NOW;
                 this.warp();
+                entityManager.clearBullets();
 		}else if(collision.type == "PowerUp"){
 			this.takePowerUp(collision.getPower());
 		}else if(this.powerUps.red){
@@ -409,7 +410,7 @@ Ship.prototype.drawShield = function(ctx){
 Ship.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
-    this.sprite.scale = this._scale;
+    this.sprites[this.spriteIndex].scale = this._scale;
 	
 	if(this.powerUps.red == true){
 		this.drawShield(ctx);

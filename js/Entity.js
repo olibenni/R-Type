@@ -46,13 +46,15 @@ Entity.prototype.setup = function (descr) {
     this._isDeadNow = false;
 };
 
-Entity.prototype.setPos = function (cx, cy) {
+Entity.prototype.setPos = function (cx, cy, width, height) {
     this.cx = cx;
     this.cy = cy;
+	this.width = width;
+	this.height = height;
 };
 
 Entity.prototype.getPos = function () {
-    return {posX : this.cx, posY : this.cy};
+    return {posX : this.cx, posY : this.cy, width : this.width, height : this.height};
 };
 
 Entity.prototype.getRadius = function () {

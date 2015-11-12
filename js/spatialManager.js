@@ -46,6 +46,8 @@ register: function(entity) {
     this._entities[spatialID] = {
         posX   : pos.posX,
         posY   : pos.posY,
+		width  : pos.width,
+		height : pos.height,
         radius : entity.getRadius(),
         entity : entity
     };
@@ -82,6 +84,11 @@ render: function(ctx) {
         var e = this._entities[ID];
         util.strokeCircle(ctx, e.posX, e.posY, e.radius);
     }
+	
+	for (var ID in this._entities) {
+		var e = this._entities[ID];
+		util.strokeRect(ctx, e.posX, e.posY, e.width, e.height);
+	}
     ctx.strokeStyle = oldStyle;
 }
 

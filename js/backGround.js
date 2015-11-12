@@ -7,13 +7,11 @@ function backGround(descr) {
 
 backGround.prototype = new Entity();
 
-backGround.prototype.speed = 1;
+backGround.prototype.speed = 0.5;
 backGround.prototype.cx = 0;
 backGround.prototype.cy = 0;
 backGround.prototype.rotation = 0;
 backGround.prototype.distance = 0;
-
-
 
 backGround.prototype.triggerCalls = {
 	enemy : function(y,amount){
@@ -38,7 +36,8 @@ backGround.prototype.triggerCalls = {
 			});
 		}
 	}
-}
+};
+
 backGround.prototype.curTrigger = 0;
 //triggers : Distance in game, triggerCall, y, number of enemies
 backGround.prototype.triggers = [
@@ -46,79 +45,16 @@ backGround.prototype.triggers = [
 	[300,2,300,6]
 ];
 
-backGround.prototype.tilesTop = [
-	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-	[1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1],
-	[1,1,1,1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,1],
-	[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
-];
-
-backGround.prototype.tilesBottom = [
-	[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-	[1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1],
-	[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1],
-	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-];
-
-backGround.prototype.tileWidth = 64*1.6;
-backGround.prototype.tileHeight = 23*1.6;
-backGround.prototype.tilePadding = 0;
-backGround.prototype.tileOffSetLeft = 0;
-backGround.prototype.tileOffSetTop = 32;
-backGround.prototype.tileOffSetBot = 380;
-
-backGround.prototype.drawTilesTop = function(ctx) {
-	for(var i = 0; i < this.tilesTop.length; i++) {
-		for(var j = 0; j < this.tilesTop[i].length; j++) {
-			if(this.tilesTop[i][j] == 1) {
-				var tilesX = (j * (this.tileWidth + this.tilePadding)) + this.tileOffSetLeft;
-				var tilesY = (i * (this.tileHeight + this.tilePadding)) + this.tileOffSetTop;
-				g_sprites.wall.drawCentredAt(ctx, tilesX + this.tileWidth/2, tilesY + this.tileHeight/2, 0);
-			}
-		}
-	}
-};
-
-backGround.prototype.drawTilesBottom = function(ctx) {
-	for(var i = 0; i < this.tilesBottom.length; i++) {
-		for(var j = 0; j < this.tilesBottom[i].length; j++) {
-			if(this.tilesBottom[i][j] == 1) {
-				var tilesX = (j * (this.tileWidth + this.tilePadding)) + this.tileOffSetLeft;
-				var tilesY = (i * (this.tileHeight + this.tilePadding)) + this.tileOffSetBot;
-				g_sprites.wall.drawCentredAt(ctx, tilesX + this.tileWidth/2, tilesY + this.tileHeight/2, Math.PI);				
-			}
-		}
-	}
-};
-
-/*
-backGround.prototype.collides = function() {
-	for(var i = 0; i < this.tiles.length; i++) {
-		for(var j = 0; j < this.tiles[i].length; j++) {
-			var tilesX = (j * (tileWidth + tilePadding)) + this.tileOffSetLeft;
-			var tilesY = (i * (tileHeight + tilePadding)) + tileOffSetTop;
-			if()
-				
-			}
-		}
-	}	
-};
-*/
-
-backGround.prototype.getSpeed = function(){
+backGround.prototype.getSpeed = function() {
 	return this.speed;
-}
+};
 
 backGround.prototype.update = function(du) {
 	// move the background backward
 	
 	this.checkTrigger();
-	if(this.tilesTop[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width ||
-		this.tilesBottom[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width) {
-		this.tileOffSetLeft -= this.speed;
-		this.distance ++;	
-	}
-	
+
+	this.distance++;
 	
 	this.cx -= this.speed;
 	if(this.cx <= 0) {
@@ -126,7 +62,7 @@ backGround.prototype.update = function(du) {
 	}
 };
 
-backGround.prototype.checkTrigger = function(){
+backGround.prototype.checkTrigger = function() {
 	
 	if(this.triggers[this.curTrigger][0] == this.distance){
 		var thisTrigger = this.triggers[this.curTrigger]
@@ -140,17 +76,15 @@ backGround.prototype.checkTrigger = function(){
 		if(this.curTrigger < this.triggers.length-1)
 		this.curTrigger += 1
 	}
-}
+};
  
 backGround.prototype.render = function(ctx) {
 	
-	
 	this.sprite.drawWrappedCentredAt(
 	ctx, this.cx, this.cy, this.rotation);
-	this.drawLives(ctx)
-	this.drawTilesTop(ctx);
-	this.drawTilesBottom(ctx);
 	
+	this.drawLives(ctx);
+
 };
 
 backGround.prototype.drawLives = function(ctx){
@@ -160,4 +94,4 @@ backGround.prototype.drawLives = function(ctx){
 			g_sprites.ship[3].drawCentredAt(ctx, 20+i*40,15,0);
 		}
 	}
-}
+};

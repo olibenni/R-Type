@@ -26,6 +26,7 @@ with suitable 'data' and 'methods'.
 var entityManager = {
 
 // "PRIVATE" DATA
+_tiles		: [],
 _bg 		: [],
 _rocks      : [],
 _bullets    : [],
@@ -37,6 +38,9 @@ _powerups	: [],
 _bShowRocks : true,
 
 // "PRIVATE" METHODS
+_generateTiles : function () {
+	this.generateTile();
+},
 
 _generateBgs : function() {
 	this.generateBg();
@@ -94,12 +98,13 @@ KILL_ME_NOW : -1,
 // i.e. thing which need `this` to be defined.
 //
 deferredSetup : function () {
-    this._categories = [this._bg, this._rocks, this._bullets, this._ships, this._enemies, this._animations, this._powerups];
+    this._categories = [this._bg, this._tiles, this._rocks, this._bullets, this._ships, this._enemies, this._animations, this._powerups];
 },
 
 init: function() {
 	this._generateBgs();
     this._generateRocks();
+	this._generateTiles();
     //this._generateShip();
 },
 
@@ -142,6 +147,10 @@ fireLaser: function(cx, cy, velX, velY, rotation, charge) {
         rotation : rotation,
         charge   : charge
     }));
+},
+
+generateTile : function(descr) {
+	this._tiles.push(new Tiles(descr));
 },
 
 generateBg : function(descr) {

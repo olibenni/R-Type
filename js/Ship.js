@@ -89,6 +89,7 @@ Ship.prototype._updateWarp = function (du) {
     
         this._scale = 1;
         this._isWarping = false;
+        this.powerUps.red = true;
         
         // Reregister me from my old posistion
         // ...so that I can be collided with again
@@ -163,7 +164,6 @@ Ship.prototype.update = function (du) {
 		if(collision.type != "PowerUp" && !this.powerUps.red) {
 			if(--this.lives === 0) return entityManager.KILL_ME_NOW;
                 this.warp();
-                this.powerUps.red = true;
 		}else if(collision.type == "PowerUp"){
 			this.takePowerUp(collision.getPower());
 		}else if(this.powerUps.red){

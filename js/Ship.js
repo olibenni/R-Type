@@ -384,6 +384,10 @@ Ship.prototype.unchargeLaser = function() {
     this.laserCharge = 0;
 };
 
+Ship.prototype.getLaserCharge = function(){
+	return this.laserCharge;
+};
+
 Ship.prototype.chargeSprite = 0;
 Ship.prototype.playChargingAnimation = function(du) {
     this.chargeSprite = (this.chargeSprite + 1) % 8;

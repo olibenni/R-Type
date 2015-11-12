@@ -42,7 +42,9 @@ backGround.prototype.curTrigger = 0;
 //triggers : Distance in game, triggerCall, y, number of enemies
 backGround.prototype.triggers = [
 	[250,1,200,6],
-	[300,2,300,6]
+	[350,2,300,6],
+	[500,1,200,6],
+	[600,2,300,6]
 ];
 
 backGround.prototype.getSpeed = function() {
@@ -83,8 +85,31 @@ backGround.prototype.render = function(ctx) {
 	this.sprite.drawWrappedCentredAt(
 	ctx, this.cx, this.cy, this.rotation);
 	
+	ctx.fillStyle = "black";
+	ctx.fillRect(0,0,600,32);
+	ctx.fillRect(0,526,600,78);
+	
+	this.drawLaserCharge(ctx);
+	
 	this.drawLives(ctx);
 
+};
+
+backGround.prototype.drawLaserCharge = function(ctx){
+		ctx.font = "20px sans-serif";
+		ctx.fillStyle = "white";
+		ctx.fillText("Charge", 200,550);
+		ctx.fillStyle = "blue";
+		ctx.fillRect(270, 535, 120, 20);
+		if(entityManager._ships[0]){
+			var charged = entityManager._ships[0].getLaserCharge();
+			if(charged < 30){charged = 0}
+			if(charged > 150){charged = 150}
+			ctx.fillStyle = "red";
+			if(charged > 30){
+				ctx.fillRect(270, 535, charged-30, 20);
+			}
+		}
 };
 
 backGround.prototype.drawLives = function(ctx){

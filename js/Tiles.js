@@ -7,7 +7,7 @@ function Tiles(descr) {
 
 Tiles.prototype = new Entity();
 
-Tiles.prototype.speed = 0.5;
+Tiles.prototype.speed = MAP_SPEED;
 Tiles.prototype.cx = 0;
 Tiles.prototype.cy = 0;
 Tiles.prototype.rotation = 0;

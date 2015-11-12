@@ -107,11 +107,11 @@ Ship.prototype._moveToASafePlace = function () {
 
     for (var attempts = 0; attempts < 100; ++attempts) {
     
-        var warpDistance = 100 + Math.random() * g_canvas.width /2;
+        var warpDistance = Math.random() * 100;
         var warpDirn = Math.random() * consts.FULL_CIRCLE;
         
-        this.cx = origX + warpDistance * Math.sin(warpDirn);
-        this.cy = origY - warpDistance * Math.cos(warpDirn);
+        this.cx = warpDistance * Math.abs(Math.sin(warpDirn));
+        this.cy = 200 + Math.cos(warpDirn)*100;
         
         this.wrapPosition();
         
@@ -160,12 +160,13 @@ Ship.prototype.update = function (du) {
     // Handle collision
 	var collision = this.isColliding();
 	if(collision){
-		if(collision.type != "PowerUp" && this.powerUps.red != true) {
+		if(collision.type != "PowerUp" && !this.powerUps.red) {
 			if(--this.lives === 0) return entityManager.KILL_ME_NOW;
-			this.warp();
+                this.warp();
+                this.powerUps.red = true;
 		}else if(collision.type == "PowerUp"){
 			this.takePowerUp(collision.getPower());
-		}else if(this.powerUps.red == true){
+		}else if(this.powerUps.red){
 			this.usedShield = true;
 		}
 	}else {
@@ -179,16 +180,6 @@ Ship.prototype.update = function (du) {
 };
 
 Ship.prototype.computeSubStep = function (du) {
-    
-    //var thrust = this.computeThrustMag();
-
-    // Apply thrust directionally, based on our rotation
-    //var accelX = +Math.sin(this.rotation) * thrust;
-    //var accelY = -Math.cos(this.rotation) * thrust;
-    
-    //accelY += this.computeGravity();
-
-    //this.applyAccel(accelX, accelY, du);
     var nextX = this.cx;
     var nextY = this.cy;
     if(keys[this.KEY_THRUST]){
@@ -208,9 +199,7 @@ Ship.prototype.computeSubStep = function (du) {
     else{
         this.spriteIndex = 2;
     }
-    this.keepWithinBounds(nextX, nextY);
-    //this.wrapPosition();
-    
+    this.keepWithinBounds(nextX, nextY);    
 };
 
 Ship.prototype.moveUp = function() {
@@ -250,48 +239,6 @@ Ship.prototype.computeThrustMag = function () {
     return thrust;
 };
 
-Ship.prototype.applyAccel = function (accelX, accelY, du) {
-    
-    // u = original velocity
-    var oldVelX = this.velX;
-    var oldVelY = this.velY;
-    
-    // v = u + at
-    this.velX += accelX * du;
-    this.velY += accelY * du; 
-
-    // v_ave = (u + v) / 2
-    var aveVelX = (oldVelX + this.velX) / 2;
-    var aveVelY = (oldVelY + this.velY) / 2;
-    
-    // Decide whether to use the average or not (average is best!)
-    var intervalVelX = g_useAveVel ? aveVelX : this.velX;
-    var intervalVelY = g_useAveVel ? aveVelY : this.velY;
-    
-    // s = s + v_ave * t
-    var nextX = this.cx + intervalVelX * du;
-    var nextY = this.cy + intervalVelY * du;
-    
-    // bounce
-    if (g_useGravity) {
-
-	var minY = g_sprites.ship.height / 2;
-	var maxY = g_canvas.height - minY;
-
-	// Ignore the bounce if the ship is already in
-	// the "border zone" (to avoid trapping them there)
-	if (this.cy > maxY || this.cy < minY) {
-	    // do nothing
-	} else if (nextY > maxY || nextY < minY) {
-            this.velY = oldVelY * -0.9;
-            intervalVelY = this.velY;
-        }
-    }
-    
-    // s = s + v_ave * t
-    this.cx += du * intervalVelX;
-    this.cy += du * intervalVelY;
-};
 
 // When timer is more than 200 we can fire bullets
 Ship.prototype.reloadTime = 200 / NOMINAL_UPDATE_INTERVAL;
@@ -442,6 +389,11 @@ Ship.prototype.updateRotation = function (du) {
 };
 
 Ship.prototype.drawShield = function(ctx){
+    ctx.save();
+
+    ctx.translate(this.cx, this.cy);
+    ctx.scale(this._scale, this._scale);
+    ctx.translate(-this.cx, -this.cy);
 	var grd=ctx.createRadialGradient(this.cx,this.cy,0,this.cx,this.cy,this.getRadius());
 	grd.addColorStop(0,"rgba(0, 0, 255, 0.5)");
 	grd.addColorStop(1,"rgba(255, 255, 255, 0.5)");
@@ -450,6 +402,8 @@ Ship.prototype.drawShield = function(ctx){
 	ctx.stroke();
 	ctx.fillStyle = grd;
 	ctx.fill();
+
+    ctx.restore();
 };
 
 Ship.prototype.render = function (ctx) {

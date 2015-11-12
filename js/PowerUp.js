@@ -22,7 +22,7 @@ function PowerUp(descr) {
     this.sprite = this.sprite || g_sprites.powerUp;
     this.scale  = this.scale  || 1;
 	this.rotation = this.rotation || 0;
-	this.xVel = this.speed || -entityManager._bg[0].getSpeed();
+	this.xVel = this.speed || MAP_SPEED;
 	this.type = this.type || "PowerUp";
 	this.choosePower();
 
@@ -52,7 +52,7 @@ PowerUp.prototype.update = function (du) {
         return entityManager.KILL_ME_NOW;
     }
 
-    this.cx += this.xVel
+    this.cx -= this.xVel
     // TODO: YOUR STUFF HERE! --- (Re-)Register
     spatialManager.register(this);
 };

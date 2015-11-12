@@ -407,6 +407,27 @@ Ship.prototype.drawShield = function(ctx){
     ctx.restore();
 };
 
+Ship.prototype.drawLaserCharge = function(ctx){
+		ctx.font = "20px sans-serif";
+		ctx.fillStyle = "white";
+		ctx.fillText("Charge", g_canvas.width/2-100,550);
+		ctx.fillStyle = "blue";
+		ctx.fillRect(g_canvas.width/2-30, 535, 120, 20);
+		var charged = this.laserCharge
+		if(charged < 30){charged = 0}
+		if(charged > 150){charged = 150}
+		ctx.fillStyle = "red";
+		if(charged > 30){
+			ctx.fillRect(g_canvas.width/2-30, 535, charged-30, 20);
+		}
+};
+
+Ship.prototype.drawLives = function(ctx){
+	for(var i = 0; i < this.lives; i++){
+		g_sprites.ship[3].drawCentredAt(ctx, 20+i*40,15,0);
+	}
+};
+
 Ship.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
@@ -427,7 +448,9 @@ Ship.prototype.render = function (ctx) {
     //         ctx, this.cx+this.sprite.width, this.cy, this.rotation
     //     );
     // }
-
+	this.drawLaserCharge(ctx);
+	this.drawLives(ctx);
+	
     if( this.isChargingLaser() ) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
     }

@@ -225,7 +225,7 @@ Ship.prototype.elapsedReloadingTime = 200 / NOMINAL_UPDATE_INTERVAL;
 // If 200ms have passed since last bullet, another bullet can be fired
 Ship.prototype.reloadingBullet = function(du) {
     this.elapsedReloadingTime += du;
-    // Check if bullet has been reloaded and if space has been released.
+	// Check if bullet has been reloaded and if space has been released.
     if(this.elapsedReloadingTime >= this.reloadTime && !this.isHoldingTrigger() && keys[this.KEY_FIRE]) {
         this.elapsedReloadingTime = 0;
         return true;

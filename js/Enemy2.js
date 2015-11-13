@@ -33,7 +33,6 @@ Enemy2.prototype.velX = -1;
 Enemy2.prototype.velY = 0;
 Enemy2.prototype.numSubSteps = 1;
 Enemy2.prototype.lives = 2;
-Enemy2.prototype.spriteIndex = 0;
 Enemy2.prototype.lifeTime = 0;
 Enemy2.prototype.shootingSpeed = 5;
 
@@ -80,14 +79,6 @@ Enemy2.prototype.computeSubStep = function (du) {
 Enemy2.prototype.outOfBounds = function() {
     if(this.cx <= 0) this.kill();
 }
-
-Enemy2.prototype.moveUp = function() {
-    this.spriteIndex = 4;
-};
-
-Enemy2.prototype.moveDown = function() {
-    this.spriteIndex = 0;
-};
 
 Enemy2.prototype.takeBulletHit = function(damage) {
 
@@ -151,8 +142,6 @@ Enemy2.prototype.render = function (ctx) {
     this.sprite.drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
-
-    // g_animatedSprites.enemy1.cycleAnimationAt(ctx, this.cx, this.cy);
 
     this.sprite.scale = origScale;
 };

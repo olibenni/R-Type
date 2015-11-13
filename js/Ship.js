@@ -225,6 +225,7 @@ Ship.prototype.elapsedReloadingTime = 200 / NOMINAL_UPDATE_INTERVAL;
 // If 200ms have passed since last bullet, another bullet can be fired
 Ship.prototype.reloadingBullet = function(du) {
     this.elapsedReloadingTime += du;
+    // Check if bullet has been reloaded and if space has been released.
     if(this.elapsedReloadingTime >= this.reloadTime && !this.isHoldingTrigger() && keys[this.KEY_FIRE]) {
         this.elapsedReloadingTime = 0;
         return true;
@@ -232,6 +233,7 @@ Ship.prototype.reloadingBullet = function(du) {
     return false;
 };
 
+//Stops ship from shooting bullets when trying to charge laser.
 Ship.prototype.didShootLastUpdate = false;
 Ship.prototype.isHoldingTrigger = function() {
     if( this.didShootLastUpdate && keys[this.KEY_FIRE] ) {
@@ -306,10 +308,6 @@ Ship.prototype.chargeLaser = function(du) {
 
 Ship.prototype.unchargeLaser = function() {
     this.laserCharge = 0;
-};
-
-Ship.prototype.getLaserCharge = function(){
-	return this.laserCharge;
 };
 
 Ship.prototype.chargeSprite = 0;
@@ -417,19 +415,12 @@ Ship.prototype.render = function (ctx) {
        ctx, this.cx, this.cy, this.rotation
     );
 
-    //g_sprites.enemy1[0].drawWrappedCentredAt(ctx, 50, 50, 0);
-
-    // if( !this.notChargingLaser() ) {
-    //     g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(
-    //         ctx, this.cx+this.sprite.width, this.cy, this.rotation
-    //     );
-    // }
 	this.drawLaserCharge(ctx);
 	this.drawLives(ctx);
 	
     if( this.isChargingLaser() ) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
     }
-    // g_sprites.deathExplosion.cycleAnimationAt(ctx, 50, 50);
+
     this.sprite.scale = origScale;
 };

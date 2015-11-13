@@ -151,9 +151,8 @@ fireLaser: function(cx, cy, velX, velY, rotation, charge) {
 
 clearBullets: function() {
     this._bullets.forEach(function(bullet){
-        spatialManager.unregister(bullet);
+        bullet.kill();
     });
-    this._bullets.splice(0,this._bullets.length);
 },
 
 generateTile : function(descr) {

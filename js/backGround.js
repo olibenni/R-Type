@@ -102,20 +102,5 @@ backGround.prototype.render = function(ctx) {
 	ctx.fillStyle = "black";
 	ctx.fillRect(0,0,g_canvas.width,32);
 	ctx.fillRect(0,526,g_canvas.width,78);
-	
-
-	
-	this.drawLives(ctx);
-
 };
 
-
-
-backGround.prototype.drawLives = function(ctx){
-	if(entityManager._ships[0]){
-		var lives = entityManager._ships[0].getLives();
-		for(var i = 0; i < lives; i++){
-			g_sprites.ship[3].drawCentredAt(ctx, 20+i*40,15,0);
-		}
-	}
-};

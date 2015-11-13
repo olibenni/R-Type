@@ -25,14 +25,6 @@ function PowerUp(descr) {
 	this.xVel = this.speed || MAP_SPEED;
 	this.type = this.type || "PowerUp";
 	this.choosePower();
-
-
-/*
-    // Diagnostics to check inheritance stuff
-    this._rockProperty = true;
-    console.dir(this);
-*/
-
 };
 
 PowerUp.prototype = new Entity();
@@ -46,14 +38,12 @@ PowerUp.prototype.choosePower = function(){
 
 PowerUp.prototype.update = function (du) {
 
-    // TODO: YOUR STUFF HERE! --- Unregister and check for death
     spatialManager.unregister(this);
 	 if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
     }
 
     this.cx -= this.xVel
-    // TODO: YOUR STUFF HERE! --- (Re-)Register
     spatialManager.register(this);
 };
 

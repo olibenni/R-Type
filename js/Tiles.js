@@ -95,7 +95,7 @@ Tiles.prototype.update = function(du) {
 	var top = this.tilesTop[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width;
 	var bot = this.tilesBottom[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width;
 	if( top || bot ) {
-		this.tileOffSetLeft -= this.speed;		
+		this.tileOffSetLeft -= this.speed * du;		
 	}
 	/*
 	var colli = this.collides(this.tileWidth, this.tileHeight, this.getRadius());

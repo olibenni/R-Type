@@ -190,11 +190,11 @@ Ship.prototype.computeSubStep = function (du) {
 		nextX -= this.speed * du;
 	}
 	if(keys[this.KEY_UPWARD]){
-        this.moveUp();
+        this.moveUpAnimation();
 		nextY -= this.speed * du;
 	}
 	else if(keys[this.KEY_DOWNWARD]){
-        this.moveDown();
+        this.moveDownAnimation();
 		nextY += this.speed * du;
 	}
     else{
@@ -203,41 +203,17 @@ Ship.prototype.computeSubStep = function (du) {
     this.keepWithinBounds(nextX, nextY);    
 };
 
-Ship.prototype.moveUp = function() {
+Ship.prototype.moveUpAnimation = function() {
     this.spriteIndex = 4;
 };
 
-Ship.prototype.moveDown = function() {
+Ship.prototype.moveDownAnimation = function() {
     this.spriteIndex = 0;
 };
 
 Ship.prototype.keepWithinBounds = function(nextX, nextY) {
     this.cx = util.boundary(this.sprite.width/2, nextX, 0, g_canvas.width); 
     this.cy = util.boundary(this.sprite.height/2, nextY, 0, g_canvas.height);
-};
-
-
-var NOMINAL_GRAVITY = 0.12;
-
-Ship.prototype.computeGravity = function () {
-    return g_useGravity ? NOMINAL_GRAVITY : 0;
-};
-
-var NOMINAL_THRUST = +0.2;
-var NOMINAL_RETRO  = -0.1;
-
-Ship.prototype.computeThrustMag = function () {
-    
-    var thrust = 0;
-    
-    if (keys[this.KEY_THRUST]) {
-        thrust += NOMINAL_THRUST;
-    }
-    if (keys[this.KEY_RETRO]) {
-        thrust += NOMINAL_RETRO;
-    }
-    
-    return thrust;
 };
 
 
@@ -300,7 +276,7 @@ Ship.prototype.maybeFireBullet = function (du) {
     //Laser has been charging and space has been released = fire laser
     else if( this.isChargingLaser() && !keys[this.KEY_FIRE] ) {
         entityManager.fireLaser(
-           this.cx + launchDist, this.cy,
+           this.cx + launchDist*2, this.cy,
            relVelX, relVelY,
            0,
            this.laserCharge

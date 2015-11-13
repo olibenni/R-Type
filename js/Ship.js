@@ -57,7 +57,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
 Ship.prototype.spriteIndex = 2;
-Ship.prototype.powerUps = {blue : false, red : false, misseles : false};
+Ship.prototype.powerUps = {blue : 3, red : 0, misseles : 0, speed : 0};
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -161,19 +161,19 @@ Ship.prototype.update = function (du) {
     // Handle collision
 	var collision = this.isColliding();
 	if(collision){
-		if(collision.type != "PowerUp" && !this.powerUps.red) {
+		if(collision.type != "PowerUp" && this.powerUps.red == 0) {
 			if(--this.lives === 0) return entityManager.KILL_ME_NOW;
                 this.warp();
                 entityManager.clearBullets();
 		}else if(collision.type == "PowerUp"){
 			this.takePowerUp(collision.getPower());
-		}else if(this.powerUps.red){
+		}else if(this.powerUps.red > 0){
 			this.usedShield = true;
 		}
 	}else {
 		if(this.usedShield == true){
 			this.usedShield = false;
-			this.powerUps.red = false;
+			this.powerUps.red -= 1;
 		}
         spatialManager.register(this);
     }
@@ -259,18 +259,9 @@ Ship.prototype.maybeFireBullet = function (du) {
         );
 		//Shoot powerups if activated
 		if(this.powerUps.blue == true){
-			var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
-			entityManager.fireLaserBullet(
-				this.cx + launchDist, this.cy+this.getRadius(),
-				blueSpeed,blueSpeed,
-				0.25*Math.PI
-			);
-			entityManager.fireLaserBullet(
-				this.cx + launchDist, this.cy-this.getRadius(),
-				blueSpeed,-blueSpeed,
-				1.75*Math.PI
-			);
+			this.fireBlue(launchDist);
 		}
+		
         this.chargeLaser(du);
     } 
     //Laser has been charging and space has been released = fire laser
@@ -291,6 +282,35 @@ Ship.prototype.maybeFireBullet = function (du) {
         this.unchargeLaser();
     }
 };
+
+Ship.prototype.fireBlue = function(launchDist){
+	var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
+		entityManager.fireLaserBullet(
+			this.cx + launchDist, this.cy+this.getRadius(),
+			blueSpeed,blueSpeed,
+			0.25*Math.PI
+		);
+		entityManager.fireLaserBullet(
+			this.cx + launchDist, this.cy-this.getRadius(),
+			blueSpeed,-blueSpeed,
+			1.75*Math.PI
+		);
+		if(this.powerUps.blue > 1){
+			//blueSpeed = 
+		}
+		if(this.powerUps.blue > 2){
+			entityManager.fireLaserBullet(
+				this.cx, this.cy+this.getRadius(),
+				0,this.speed,
+				0.5*Math.PI
+			);
+			entityManager.fireLaserBullet(
+				this.cx, this.cy-this.getRadius(),
+				0,-this.speed,
+				1.5*Math.PI
+			);
+		}
+}
 
 Ship.prototype.laserReloadTime = 500 / NOMINAL_UPDATE_INTERVAL;
 Ship.prototype.isChargingLaser = function() {
@@ -317,12 +337,9 @@ Ship.prototype.playChargingAnimation = function(du) {
     this.chargeSprite = (this.chargeSprite + 1) % 8;
 };
 
-Ship.prototype.getLives = function(){
-	return this.lives;
-};
 
-Ship.prototype.setSpeed = function (x){
-	this.speed = x;
+Ship.prototype.addSpeed = function (x){
+	this.speed += x;
 };
 
 
@@ -332,13 +349,19 @@ Ship.prototype.getRadius = function () {
 
 Ship.prototype.takePowerUp = function (powerUp) {
     if(powerUp == "Blue"){
-		this.powerUps.blue = true;
+		if(this.powerUps.blue < 3){
+			this.powerUps.blue += 1;
+		}
 	}
 	if(powerUp == "Speed"){
-		this.setSpeed(5);
+		if(this.powerUps.speed < 3){
+			this.addSpeed(1);
+		}
 	}
 	if(powerUp == "Red"){
-		this.powerUps.red = true;
+		if(this.powerUps.red < 3){
+			this.powerUps.red += 1;
+		}
 	}
 };
 
@@ -366,14 +389,16 @@ Ship.prototype.updateRotation = function (du) {
 };
 
 Ship.prototype.drawShield = function(ctx){
+    var shieldColors = ["rgba(255, 0, 0, 0.2)","rgba(0, 255, 0, 0.2)","rgba(0, 0, 255, 0.4)"]
+	var red = this.powerUps.red-1;
     ctx.save();
-
+	
     ctx.translate(this.cx, this.cy);
     ctx.scale(this._scale, this._scale);
     ctx.translate(-this.cx, -this.cy);
 	var grd=ctx.createRadialGradient(this.cx,this.cy,0,this.cx,this.cy,this.getRadius());
-	grd.addColorStop(0,"rgba(0, 0, 255, 0.5)");
-	grd.addColorStop(1,"rgba(255, 255, 255, 0.5)");
+	grd.addColorStop(0,"rgba(255, 255, 255, 0.5)");
+	grd.addColorStop(1, shieldColors[red]);
 	ctx.beginPath();
 	ctx.arc(this.cx, this.cy, this.getRadius()+3, 0, Math.PI * 2);
 	ctx.stroke();
@@ -409,7 +434,7 @@ Ship.prototype.render = function (ctx) {
     // pass my scale into the sprite, for drawing
     this.sprites[this.spriteIndex].scale = this._scale;
 	
-	if(this.powerUps.red == true){
+	if(this.powerUps.red > 0){
 		this.drawShield(ctx);
 	}
 	

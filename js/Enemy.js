@@ -32,8 +32,8 @@ Enemy.prototype.velX = -1.5;
 Enemy.prototype.velY = 0;
 Enemy.prototype.numSubSteps = 1;
 Enemy.prototype.lives = 1;
-Enemy.prototype.spriteIndex = 0;
 Enemy.prototype.lifeTime = 0;
+Enemy.prototype.spriteIndex = 0;
 
 Enemy.prototype.update = function (du) {
     this.lifeTime += du;
@@ -44,7 +44,6 @@ Enemy.prototype.update = function (du) {
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
     }
-
 
     // Perform movement substeps
     var steps = this.numSubSteps;
@@ -91,14 +90,6 @@ Enemy.prototype.computeSubStep = function (du) {
 Enemy.prototype.outOfBounds = function() {
     if(this.cx <= 0) this.kill();
 }
-
-Enemy.prototype.moveUp = function() {
-    this.spriteIndex = 4;
-};
-
-Enemy.prototype.moveDown = function() {
-    this.spriteIndex = 0;
-};
 
 Enemy.prototype.takeBulletHit = function(damage) {
 
@@ -159,8 +150,6 @@ Enemy.prototype.render = function (ctx) {
     this.sprites[this.spriteIndex].drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
-
-    // g_animatedSprites.enemy1.cycleAnimationAt(ctx, this.cx, this.cy);
 
     this.sprite.scale = origScale;
 };

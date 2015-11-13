@@ -64,6 +64,11 @@ Laser.prototype.getLength = function() {
 Laser.prototype.getRadius = function () {
     return this.typeInfo[this.type].radius;
 };
+
+Laser.prototype.getSprite = function () {
+    return this.type - 1;
+};
+
 // Initial, inheritable, default values
 Laser.prototype.rotation = 0;
 Laser.prototype.cx = 200;
@@ -112,11 +117,7 @@ Laser.prototype.render = function (ctx) {
         ctx.globalAlpha = this.lifeSpan / fadeThresh;
     }
 
-    // g_sprites.laser.drawCentredAt(
-    //     ctx, this.cx, this.cy, this.rotation
-    // );
-    //g_animatedSprites.laser[this.type].cycleAnimationAt(ctx, this.cx, this.cy);
-    g_animatedSprites.laser[this.type-1].cycleAnimationAt(ctx, this.cx-this.getLength()/2+this.getRadius(), this.cy);
+    g_animatedSprites.laser[this.getSprite()].cycleAnimationAt(ctx, this.cx-this.getLength()/2+this.getRadius(), this.cy);
 
     ctx.globalAlpha = 1;
 };

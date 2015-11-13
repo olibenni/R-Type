@@ -103,28 +103,13 @@ backGround.prototype.render = function(ctx) {
 	ctx.fillRect(0,0,g_canvas.width,32);
 	ctx.fillRect(0,526,g_canvas.width,78);
 	
-	this.drawLaserCharge(ctx);
+
 	
 	this.drawLives(ctx);
 
 };
 
-backGround.prototype.drawLaserCharge = function(ctx){
-		ctx.font = "20px sans-serif";
-		ctx.fillStyle = "white";
-		ctx.fillText("Charge", g_canvas.width/2-100,550);
-		ctx.fillStyle = "blue";
-		ctx.fillRect(g_canvas.width/2-30, 535, 120, 20);
-		if(entityManager._ships[0]){
-			var charged = entityManager._ships[0].getLaserCharge();
-			if(charged < 30){charged = 0}
-			if(charged > 150){charged = 150}
-			ctx.fillStyle = "red";
-			if(charged > 30){
-				ctx.fillRect(g_canvas.width/2-30, 535, charged-30, 20);
-			}
-		}
-};
+
 
 backGround.prototype.drawLives = function(ctx){
 	if(entityManager._ships[0]){

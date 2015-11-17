@@ -75,8 +75,10 @@ LaserBullet.prototype.update = function (du) {
     var hitEntity = this.findHitEntity();
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
-        if (canTakeHit) canTakeHit.call(hitEntity, 1); 
-        return entityManager.KILL_ME_NOW;
+        if (canTakeHit) {
+			canTakeHit.call(hitEntity, 1); 
+			return entityManager.KILL_ME_NOW;
+		}
     }
     
     // TODO: YOUR STUFF HERE! --- (Re-)Register
@@ -84,16 +86,20 @@ LaserBullet.prototype.update = function (du) {
 
 };
 
+LaserBullet.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+    entityManager.createExplosion({
+        cx    : this.cx, 
+        cy    : this.cy,
+        scale : this.scale,
+        sprites : g_sprites.deathExplosion
+    });
+};
+
 LaserBullet.prototype.getRadius = function () {
     return 4;
 };
 
-LaserBullet.prototype.takeBulletHit = function () {
-    //this.kill();
-    
-    // Make a noise when I am zapped by another bullet
-    //this.zappedSound.play();
-};
 
 LaserBullet.prototype.render = function (ctx) {
 

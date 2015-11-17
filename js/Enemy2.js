@@ -59,6 +59,16 @@ Enemy2.prototype.update = function (du) {
     spatialManager.register(this);
 };
 
+Enemy2.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+    entityManager.createBigExplosion({
+        cx    : this.cx, 
+        cy    : this.cy,
+        scale : this.scale*2,
+        sprites : g_sprites.bigDeathExplosion
+    });
+};
+
 Enemy2.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
 Enemy2.prototype.elapsedDelay = 0;
 
@@ -87,6 +97,7 @@ Enemy2.prototype.takeBulletHit = function(damage) {
     var damageDealt = currentLives - Math.max(this.lives, 0);
 
     if(this.lives <= 0) {
+		Score.addScore(20);
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 

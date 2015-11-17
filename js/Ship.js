@@ -89,7 +89,7 @@ Ship.prototype._updateWarp = function (du) {
     
         this._scale = 1;
         this._isWarping = false;
-        this.powerUps.red = true;
+        this.powerUps.red = 1;
         
         // Reregister me from my old posistion
         // ...so that I can be collided with again
@@ -134,8 +134,8 @@ Ship.prototype._moveToASafePlace = function () {
 Ship.prototype.usedShield = false;
 
 Ship.prototype.update = function (du) {
-    this.nextTest();
 
+    this.nextTest();
     // Handle warping
     if (this._isWarping) {
         this._updateWarp(du);
@@ -180,6 +180,14 @@ Ship.prototype.update = function (du) {
     }
 
 };
+
+Ship.prototype.wallCollision = function(){
+	if(--this.lives == 0) this._isDeadNow = true;
+	else{
+		this.warp();
+		entityManager.clearBullets();
+	}
+}
 
 Ship.prototype.computeSubStep = function (du) {
     var nextX = this.cx;
@@ -261,6 +269,7 @@ Ship.prototype.maybeFireBullet = function (du) {
            0
         );
 		//Shoot powerups if activated
+		
 		if(this.powerUps.blue > 0){
 			this.fireBlue(launchDist);
 		}
@@ -286,7 +295,8 @@ Ship.prototype.maybeFireBullet = function (du) {
 };
 
 Ship.prototype.fireBlue = function(launchDist){
-	var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
+	var blueSpeed = Math.sqrt(this.launchVel*this.launchVel * 2)/2
+	
 	entityManager.fireLaserBullet(
 		this.cx + launchDist, this.cy+this.getRadius(),
 		blueSpeed,blueSpeed,
@@ -297,16 +307,31 @@ Ship.prototype.fireBlue = function(launchDist){
 		blueSpeed,-blueSpeed,
 		1.75*Math.PI
 	);
+	
 	if(this.powerUps.blue > 1){
+		var blueSpeedY = (this.launchVel * Math.sin((22.5*Math.PI)/180))/ Math.sin((90*Math.PI)/180) 
+		var blueSpeedX = (this.launchVel * Math.sin((67.5*Math.PI)/180))/ Math.sin((90*Math.PI)/180)
 		entityManager.fireLaserBullet(
-			this.cx, this.cy+this.getRadius(),
-			0,this.launchVel,
-			0.5*Math.PI
+			this.cx + launchDist, this.cy+this.getRadius()/2,
+			blueSpeedX,blueSpeedY,
+			0.125*Math.PI
 		);
 		entityManager.fireLaserBullet(
-			this.cx, this.cy-this.getRadius(),
-			0,-this.launchVel,
-			1.5*Math.PI
+			this.cx + launchDist, this.cy-this.getRadius()/2,
+			blueSpeedX,-blueSpeedY,
+			1.875*Math.PI
+		);
+	}
+	if(this.powerUps.blue > 2){
+		entityManager.fireLaserBullet(
+			this.cx, this.cy+launchDist,
+			blueSpeedY,blueSpeedX,
+			0.375*Math.PI
+		);
+		entityManager.fireLaserBullet(
+			this.cx, this.cy-launchDist,
+			blueSpeedY,-blueSpeedX,
+			1.675*Math.PI
 		);
 	}
 };
@@ -333,7 +358,7 @@ Ship.prototype.playChargingAnimation = function(du) {
 };
 
 Ship.prototype.addSpeed = function (x){
-	this.speed += x;
+		this.speed += x;
 };
 
 
@@ -349,6 +374,7 @@ Ship.prototype.takePowerUp = function (powerUp) {
 	}
 	if(powerUp == "Speed"){
 		if(this.powerUps.speed < 3){
+			this.powerUps.speed += 1;
 			this.addSpeed(1);
 		}
 	}
@@ -427,6 +453,37 @@ Ship.prototype.nextTest = function(){
     this.testindex = (this.testindex + 1) % g_sprites.boss.length;
 };
 
+Ship.prototype.drawPowerUps = function(ctx){
+	var radius = 30;
+	var x = g_canvas.width/2 + 140
+	var y = g_canvas.height-35
+	ctx.save();
+	ctx.line = 5;
+	
+	ctx.beginPath();
+	ctx.arc(x, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Blue"
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.arc(x+(radius+5)*2, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Red"
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.arc(x+(radius+5)*4, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Grey"
+	ctx.stroke();
+	
+	ctx.font = "40px sans-serif";
+	ctx.fillStyle = "white";
+	
+	ctx.fillText(this.powerUps.blue, x-11,y+13);
+	ctx.fillText(this.powerUps.red, x+(radius+5)*2-11,y+13);
+	ctx.fillText(this.powerUps.speed, x+(radius+5)*4-11,y+13);
+	ctx.restore();
+}
+
 Ship.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
@@ -442,12 +499,13 @@ Ship.prototype.render = function (ctx) {
 
 	this.drawLaserCharge(ctx);
 	this.drawLives(ctx);
+	this.drawPowerUps(ctx);
 	
     if( this.isChargingLaser() ) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
     }
-    g_sprites.bossBullet.drawCentredAt(ctx, 500, 250, 0);
-    g_sprites.boss[this.testindex].drawCentredAt(ctx, 300, 200, 0);
+    // g_sprites.bossBullet.drawCentredAt(ctx, 500, 250, 0);
+    // g_sprites.boss[this.testindex].drawCentredAt(ctx, 300, 200, 0);
 
     this.sprite.scale = origScale;
 };

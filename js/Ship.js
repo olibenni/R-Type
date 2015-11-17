@@ -89,7 +89,7 @@ Ship.prototype._updateWarp = function (du) {
     
         this._scale = 1;
         this._isWarping = false;
-        this.powerUps.red = true;
+        this.powerUps.red = 1;
         
         // Reregister me from my old posistion
         // ...so that I can be collided with again
@@ -356,7 +356,7 @@ Ship.prototype.playChargingAnimation = function(du) {
 };
 
 Ship.prototype.addSpeed = function (x){
-	this.speed += x;
+		this.speed += x;
 };
 
 
@@ -372,6 +372,7 @@ Ship.prototype.takePowerUp = function (powerUp) {
 	}
 	if(powerUp == "Speed"){
 		if(this.powerUps.speed < 3){
+			this.powerUps.speed += 1;
 			this.addSpeed(1);
 		}
 	}
@@ -445,6 +446,37 @@ Ship.prototype.drawLives = function(ctx){
 	}
 };
 
+Ship.prototype.drawPowerUps = function(ctx){
+	var radius = 30;
+	var x = g_canvas.width/2 + 140
+	var y = g_canvas.height-35
+	ctx.save();
+	ctx.line = 5;
+	
+	ctx.beginPath();
+	ctx.arc(x, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Blue"
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.arc(x+(radius+5)*2, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Red"
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.arc(x+(radius+5)*4, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Grey"
+	ctx.stroke();
+	
+	ctx.font = "40px sans-serif";
+	ctx.fillStyle = "white";
+	
+	ctx.fillText(this.powerUps.blue, x-11,y+13);
+	ctx.fillText(this.powerUps.red, x+(radius+5)*2-11,y+13);
+	ctx.fillText(this.powerUps.speed, x+(radius+5)*4-11,y+13);
+	ctx.restore();
+}
+
 Ship.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
@@ -460,6 +492,7 @@ Ship.prototype.render = function (ctx) {
 
 	this.drawLaserCharge(ctx);
 	this.drawLives(ctx);
+	this.drawPowerUps(ctx);
 	
     if( this.isChargingLaser() ) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);

@@ -53,33 +53,7 @@ function createInitialShips() {
         cy : 200,
 		sprite : g_sprites.ship[2],
         sprites : g_sprites.ship
-    });
-	
-	entityManager.generatePowerUp({
-        cx : 230,
-        cy : 200,
-		sprite : g_sprites.powerup
-    });
-
-    for(var i = 0; i < 6; i++){
-        entityManager.generateEnemy({
-            cx : 600+i*20,
-            cy : 250+i*20,
-            sprite : g_sprites.enemy1[0],
-            sprites : g_sprites.enemy1,
-            scale : 1
-        });
-    }
-	for(var i = 0; i < 6; i++){
-        entityManager.generateEnemy2({
-            cx : 600+i*30,
-            cyStart : 200,
-            sprite : g_sprites.enemy2,
-            scale : 1
-        });
-    }
-
-    
+    });  
 }
 
 // =============

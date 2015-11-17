@@ -15,7 +15,7 @@ backGround.prototype.distance = 0;
 
 backGround.prototype.triggerCalls = {
 	enemy1 : function(y,amount){
-		for(var i = 0; i < 6; i++){
+		for(var i = 0; i < amount; i++){
 			entityManager.generateEnemy({
 				cx : g_canvas.width+i*20,
 				cy : y+i*20,
@@ -27,7 +27,7 @@ backGround.prototype.triggerCalls = {
 	},
 	
 	enemy2 : function(y,amount){
-		for(var i = 0; i < 6; i++){
+		for(var i = 0; i < amount; i++){
 			entityManager.generateEnemy2({
 				cx : g_canvas.width+i*30,
 				cyStart : y,
@@ -42,10 +42,6 @@ backGround.prototype.curTrigger = 0;
 backGround.prototype.triggerIndex = 0;
 //triggers : Distance in game, triggerCall, y, number of enemies
 backGround.prototype.triggers = [
-	// [250,1,200,6],
-	// [350,2,300,6],
-	// [500,1,200,6],
-	// [600,2,300,6]
 	{dist: 250, enemyType: "enemy1", y: 200, amount: 6},
 	{dist: 400, enemyType: "enemy2", y: 300, amount: 6},
 	{dist: 550, enemyType: "enemy1", y: 200, amount: 6},
@@ -60,6 +56,7 @@ backGround.prototype.update = function(du) {
 	// move the background backward
 	
 	this.checkTrigger();
+	this.addRandomEnemies();
 
 	this.distance += this.speed * du;
 	
@@ -77,20 +74,16 @@ backGround.prototype.checkTrigger = function() {
 			this.triggerIndex++;
 		}
 	}
-	
-	// if(this.triggers[this.curTrigger][0] == this.distance){
-	// 	var thisTrigger = this.triggers[this.curTrigger]
-	// 	if(thisTrigger[1] == 1){
-	// 		this.triggerCalls.enemy(thisTrigger[2],thisTrigger[3]);
-	// 	}
-	// 	else if(thisTrigger[1]== 2){
-	// 		this.triggerCalls.enemy2(thisTrigger[2],thisTrigger[3]);
-	// 	}
-		
-	// 	if(this.curTrigger < this.triggers.length-1)
-	// 	this.curTrigger += 1
-	// }
 };
+
+backGround.prototype.addRandomEnemies = function(){
+	if(util.randRange(0,10) > 9.9){
+		var enemyType = Math.floor(util.randRange(0,1.999));
+		var enemies = ["enemy1","enemy2"]
+		console.log(enemyType)
+		this.triggerCalls[enemies[enemyType]](util.randRange(200,400),1);
+	}
+}
  
 backGround.prototype.render = function(ctx) {
 

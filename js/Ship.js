@@ -429,9 +429,13 @@ Ship.prototype.drawLaserCharge = function(ctx){
 		ctx.font = "20px sans-serif";
 		ctx.fillStyle = "white";
 		ctx.fillText("Charge", g_canvas.width/2-100,550);
-		ctx.fillStyle = "blue";
-		ctx.fillRect(g_canvas.width/2-30, 535, 120, 20);
-		var charged = this.laserCharge
+		ctx.beginPath();
+		ctx.save();
+		ctx.strokeStyle = 'White';
+		ctx.strokeRect(g_canvas.width/2-30, 535, 120, 20);
+		ctx.closePath();
+		ctx.restore();
+		var charged = this.laserCharge;
 		if(charged < 30){charged = 0}
 		if(charged > 150){charged = 150}
 		ctx.fillStyle = "red";

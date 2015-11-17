@@ -1,7 +1,5 @@
 function backGround(descr) {
 	this.setup(descr);
-		
-
 	
 	this.sprite = this.sprite || g_sprites.starField;
 	this.scale = this.scale || 1;
@@ -9,27 +7,11 @@ function backGround(descr) {
 
 backGround.prototype = new Entity();
 
-backGround.prototype.music = new Audio (
-	"sounds/MusicLoop1.ogg");
-backGround.prototype.music1 = new Audio (
-	"sounds/CoinDrop.ogg");
-
 backGround.prototype.speed = MAP_SPEED;
 backGround.prototype.cx = 0;
 backGround.prototype.cy = 0;
 backGround.prototype.rotation = 0;
 backGround.prototype.distance = 0;
-
-backGround.prototype.musicLoop = function () {
-	var count = 0;
-	if(count % 4 >= 2 ) {
-		this.music.play();
-	} else {
-		this.music1.play();
-	}
-	count++;
-	console.log(count);
-};
 
 backGround.prototype.triggerCalls = {
 	enemy1 : function(y,amount){
@@ -72,7 +54,6 @@ backGround.prototype.getSpeed = function() {
 
 backGround.prototype.update = function(du) {
 	// move the background backward
-	this.musicLoop();
 	
 	this.checkTrigger();
 	this.addRandomEnemies();

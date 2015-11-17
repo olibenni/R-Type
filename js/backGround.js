@@ -110,9 +110,7 @@ backGround.prototype.render = function(ctx) {
 
 	this.sprite.drawWrappedCentredAt(
 		ctx, this.cx, this.cy, this.rotation);
-	this.sprite.drawWrappedCentredAt(
-		ctx, this.cx + this.sprite.width, this.cy, this.rotation);
-	
+
 	ctx.fillStyle = "black";
 	ctx.fillRect(0,0,g_canvas.width,32);
 	ctx.fillRect(0,526,g_canvas.width,78);

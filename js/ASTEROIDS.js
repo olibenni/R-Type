@@ -178,7 +178,7 @@ function requestPreloads() {
         sheet30 : "./images/r-typesheet30.gif",
         sheet43 : "./images/r-typesheet43.gif",
         rock    : "./images/rock.png",
-		starField: "./images/starfield.png",
+		starField: "./images/starfield2.png",
 		wall 	: "./images/wall.png"
     };
 

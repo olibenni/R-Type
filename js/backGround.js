@@ -75,7 +75,7 @@ backGround.prototype.update = function(du) {
 		this.cx = g_canvas.width;
 	}
 };
-
+ 
 backGround.prototype.checkTrigger = function() {
 	var info = this.triggers[this.triggerIndex];
 	if(info){
@@ -87,7 +87,7 @@ backGround.prototype.checkTrigger = function() {
 };
 
 backGround.prototype.addRandomEnemies = function(){
-	if(util.randRange(0,10) > 9.9){
+	if(util.randRange(0,10) > 9.95){
 		var enemyType = Math.floor(util.randRange(0,1.999));
 		var enemies = ["enemy1","enemy2"]
 		console.log(enemyType)

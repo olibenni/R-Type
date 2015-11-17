@@ -30,7 +30,7 @@ Boss.prototype.cx = 200;
 Boss.prototype.velX = -1;
 Boss.prototype.velY = 0;
 Boss.prototype.numSubSteps = 1;
-Boss.prototype.lives = 10;
+Boss.prototype.lives = 150;
 Boss.prototype.lifeTime = 0;
 Boss.prototype.shootingSpeed = 5;
 Boss.prototype.spriteIndex = 0;
@@ -105,7 +105,17 @@ Boss.prototype.runFetusPhase = function(du) {
 Boss.prototype.runFigthingPhase = function(du) {
    // Handle firing
     this.maybeFireBullet(du);
+    this.runFetusFightingAnimation(du);
     spatialManager.register(this);
+};
+
+Boss.prototype.fetusBulletDelay = 5000 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.elapsedDelayBetweenFetusBullets = 0;
+Boss.prototype.runFetusFightingAnimation = function(du) {
+    this.elapsedDelayBetweenFetusBullets += du;
+    if(this.elapsedDelayBetweenFetusBullets > this.fetusBulletDelay){
+        this.elapsedDelayBetweenFetusBullets = 0;
+    }
 };
 
 Boss.prototype.takeBulletHit = function(damage) {
@@ -134,23 +144,33 @@ Boss.prototype.takeBulletHit = function(damage) {
     return damageDealt;
 };
 
+Boss.prototype.delayBetweenBullets = 2000 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.elapsedDelayBetweenBullets = 0;
 Boss.prototype.maybeFireBullet = function (du) {
-    if(Math.random() * 10 > 9.9) {
-        var dX = +Math.cos(this.rotation);
-        var dY = +Math.sin(this.rotation);
+    this.elapsedDelayBetweenBullets += du;
+    if(this.elapsedDelayBetweenBullets > this.delayBetweenBullets) {
+        this.elapsedDelayBetweenBullets = 0;
+        var launchDeg = this.getLaunchDeg();
         var launchDist = this.getRadius() * 2;
-        
-        var relVel = this.shootingSpeed;
-        var relVelX = dX * relVel;
-        var relVelY = dY * relVel;
-		
-        entityManager.fireEnemyBullet(
-           this.cx - launchDist, this.cy +dY*this.getRadius()*2,
-           -relVelX, relVelY,
-           this.rotation
-        );
+		for(var i= 0; i < 26; i++){
+            var xspeed = -this.shootingSpeed  *  Math.cos( (launchDeg-i)*Math.PI/180 );
+            var yspeed =  this.shootingSpeed  *  Math.sin( (launchDeg-i)*Math.PI/180 );
+            entityManager.fireEnemyBullet(
+               this.cx - launchDist, this.cy-25,
+                xspeed, 
+                yspeed,
+               this.rotation
+            );
+        }
     }
 };
+
+Boss.prototype.getLaunchDeg = function() {
+    var random = Math.random() * 3;
+    if(random < 1) return -13;
+    if(random < 2) return 13;
+    return 39;
+}
 
 Boss.prototype.getRadius = function () {
     return 20;

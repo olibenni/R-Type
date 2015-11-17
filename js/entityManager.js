@@ -183,6 +183,10 @@ generateEnemy2 : function(descr) {
     this._enemies.push(new Enemy2(descr));
 },
 
+generateBoss : function(descr) {
+    this._enemies.push(new Boss(descr));
+},
+
 createExplosion : function(descr) {
     this._animations.push(new Explosion(descr));
 },

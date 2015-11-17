@@ -116,7 +116,8 @@ Tiles.prototype.getCollisionEntity = function() {
 	for(i = 0; i < bullets.length; ++i) {
 		var pos = bullets[i].getPos();
 		if(this.collides(pos.posX, pos.posY, bullets[i].getRadius())) {
-			bullets[i].wallCollision();
+			var canHitWall = bullets[i].wallCollision;
+			if(canHitWall) canHitWall.call(bullets[i]);
 		}
 	}
 };

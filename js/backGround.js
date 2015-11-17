@@ -35,6 +35,15 @@ backGround.prototype.triggerCalls = {
 				scale : 1
 			});
 		}
+	},
+
+	boss : function(y, amount){
+		entityManager.generateBoss({
+			cx : g_canvas.width,
+			cy : y,
+			sprite : g_sprites.boss,
+			width : g_sprites.boss[0].width
+		});
 	}
 };
 
@@ -42,10 +51,11 @@ backGround.prototype.curTrigger = 0;
 backGround.prototype.triggerIndex = 0;
 //triggers : Distance in game, triggerCall, y, number of enemies
 backGround.prototype.triggers = [
-	{dist: 250, enemyType: "enemy1", y: 200, amount: 6},
-	{dist: 400, enemyType: "enemy2", y: 300, amount: 6},
-	{dist: 550, enemyType: "enemy1", y: 200, amount: 6},
-	{dist: 700, enemyType: "enemy2", y: 300, amount: 6}
+	{dist: 250,  enemyType: "enemy1", y: 200, amount: 6},
+	{dist: 400,  enemyType: "enemy2", y: 300, amount: 6},
+	{dist: 550,  enemyType: "enemy1", y: 200, amount: 6},
+	{dist: 700,  enemyType: "enemy2", y: 300, amount: 6},
+	{dist: 600, enemyType: "boss",   y: 300, amount: 1}
 ];
 
 backGround.prototype.getSpeed = function() {

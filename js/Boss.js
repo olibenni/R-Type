@@ -30,9 +30,10 @@ Boss.prototype.cx = 200;
 Boss.prototype.velX = -1;
 Boss.prototype.velY = 0;
 Boss.prototype.numSubSteps = 1;
-Boss.prototype.lives = 2;
+Boss.prototype.lives = 10;
 Boss.prototype.lifeTime = 0;
 Boss.prototype.shootingSpeed = 5;
+Boss.prototype.spriteIndex = 0;
 
 Boss.prototype.update = function (du) {
     this.lifeTime += du;
@@ -42,13 +43,70 @@ Boss.prototype.update = function (du) {
         return entityManager.KILL_ME_NOW;
     }
 
-    // Handle firing
+    this.handlePhase(du);
+};
+
+Boss.prototype.inPosition = function() {
+    return this.cx+this.width/2 < g_canvas.width;
+};
+
+Boss.prototype.currentPhase = "entrancePhase";
+Boss.prototype.handlePhase = function(du) {
+    if(this.currentPhase === "entrancePhase"){
+        this.runEnteringPhase(du);
+    }
+    else if(this.currentPhase === "fetusPhase"){
+        this.runFetusPhase(du);
+    }
+    else if(this.currentPhase === "figthingPhase"){
+        this.runFigthingPhase(du);
+    }
+};
+
+
+Boss.prototype.entranceDelay = 400 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.elapsedDelay = 0;
+Boss.prototype.spriteIncrement = 1;
+Boss.prototype.runEnteringPhase = function(du) {
+    if( !this.inPosition() ) {
+        this.cx += this.velX*du;
+    }
+    
+    this.runEntranceAnimation(du);
+    
+    if(this.lifeTime > 5000/NOMINAL_UPDATE_INTERVAL){
+        this.currentPhase = "fetusPhase";
+        this.spriteIndex = 8;
+    }
+};
+
+Boss.prototype.runEntranceAnimation = function(du) {
+    this.elapsedDelay += du;
+    if(this.elapsedDelay > this.entranceDelay){
+        if(this.spriteIndex == 4){ this.spriteIncrement = 1;}
+        else if(this.spriteIndex == 7){ this.spriteIncrement = -1;}
+        this.spriteIndex += this.spriteIncrement;
+        this.elapsedDelay = 0;
+    }
+};
+
+Boss.prototype.fetusDelay = 100 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.runFetusPhase = function(du) {
+    this.elapsedDelay += du;
+    if(this.elapsedDelay > this.fetusDelay){
+        this.spriteIndex += 1;
+        this.elapsedDelay = 0;
+    }
+    if(this.spriteIndex === this.sprite.length){
+        this.spriteIndex = 24;
+        this.currentPhase = "figthingPhase";
+    }
+};
+Boss.prototype.runFigthingPhase = function(du) {
+   // Handle firing
     this.maybeFireBullet(du);
     spatialManager.register(this);
 };
-
-Boss.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
-Boss.prototype.elapsedDelay = 0;
 
 Boss.prototype.takeBulletHit = function(damage) {
 
@@ -88,7 +146,7 @@ Boss.prototype.maybeFireBullet = function (du) {
 		
         entityManager.fireEnemyBullet(
            this.cx - launchDist, this.cy +dY*this.getRadius()*2,
-           relVelX, relVelY,
+           -relVelX, relVelY,
            this.rotation
         );
     }

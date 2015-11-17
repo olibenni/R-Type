@@ -36,6 +36,9 @@ Enemy2.prototype.lives = 2;
 Enemy2.prototype.lifeTime = 0;
 Enemy2.prototype.shootingSpeed = 5;
 
+Enemy2.prototype.deadSound = new Audio (
+	"sounds/Blast2.ogg");
+
 Enemy2.prototype.update = function (du) {
     this.lifeTime += du;
     this.computeVelChanges(du);
@@ -61,6 +64,7 @@ Enemy2.prototype.update = function (du) {
 
 Enemy2.prototype.wallCollision = function () {
 	this._isDeadNow = true;
+	this.deadSound.play();
     entityManager.createBigExplosion({
         cx    : this.cx, 
         cy    : this.cy,
@@ -98,6 +102,7 @@ Enemy2.prototype.takeBulletHit = function(damage) {
 
     if(this.lives <= 0) {
 		Score.addScore(20);
+		this.deadSound.play();
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 
@@ -113,6 +118,7 @@ Enemy2.prototype.takeBulletHit = function(damage) {
 			});
 		}
     } else {
+		this.deadSound.play();
         entityManager.createExplosion({
             cx    : this.cx, 
             cy    : this.cy,

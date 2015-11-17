@@ -13,6 +13,16 @@ backGround.prototype.cy = 0;
 backGround.prototype.rotation = 0;
 backGround.prototype.distance = 0;
 
+backGround.prototype.sound1 = new Audio (
+	"sounds/MusicLoop1.ogg");
+backGround.prototype.sound2 = new Audio (
+	"sounds/MusicLoop2.ogg");
+
+backGround.prototype.playSounds = function () {
+	this.sound1.volume = 0.3;
+	this.sound1.play();
+};
+
 backGround.prototype.triggerCalls = {
 	enemy1 : function(y,amount){
 		for(var i = 0; i < amount; i++){
@@ -64,7 +74,8 @@ backGround.prototype.getSpeed = function() {
 
 backGround.prototype.update = function(du) {
 	// move the background backward
-	
+	this.playSounds();
+
 	this.checkTrigger();
 	this.addRandomEnemies();
 
@@ -99,9 +110,7 @@ backGround.prototype.render = function(ctx) {
 
 	this.sprite.drawWrappedCentredAt(
 		ctx, this.cx, this.cy, this.rotation);
-	this.sprite.drawWrappedCentredAt(
-		ctx, this.cx + this.sprite.width, this.cy, this.rotation);
-	
+
 	ctx.fillStyle = "black";
 	ctx.fillRect(0,0,g_canvas.width,32);
 	ctx.fillRect(0,526,g_canvas.width,78);

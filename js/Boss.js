@@ -35,6 +35,9 @@ Boss.prototype.lifeTime = 0;
 Boss.prototype.shootingSpeed = 5;
 Boss.prototype.spriteIndex = 0;
 
+Boss.prototype.deadSound = new Audio (
+	"sounds/rtypeDie.ogg");
+
 Boss.prototype.update = function (du) {
     this.lifeTime += du;
     // Unregister and check for death
@@ -125,6 +128,7 @@ Boss.prototype.takeBulletHit = function(damage) {
     var damageDealt = currentLives - Math.max(this.lives, 0);
 
     if(this.lives <= 0) {
+		this.deadSound.play();
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 
@@ -133,6 +137,7 @@ Boss.prototype.takeBulletHit = function(damage) {
             sprites : g_sprites.bigDeathExplosion
         });
     } else {
+		this.deadSound.play();
         entityManager.createExplosion({
             cx    : this.cx, 
             cy    : this.cy,

@@ -35,6 +35,9 @@ Enemy.prototype.lives = 1;
 Enemy.prototype.lifeTime = 0;
 Enemy.prototype.spriteIndex = 0;
 
+Enemy.prototype.deadSound = new Audio (
+	"sounds/Blast1.ogg");
+
 Enemy.prototype.update = function (du) {
     this.lifeTime += du;
     this.computeVelChanges(du);
@@ -58,9 +61,9 @@ Enemy.prototype.update = function (du) {
     spatialManager.register(this);
 };
 
-
 Enemy.prototype.wallCollision = function () {
 	this._isDeadNow = true;
+	this.deadSound.play();
 	entityManager.createBigExplosion({
          cx    : this.cx, 
          cy    : this.cy,
@@ -110,6 +113,7 @@ Enemy.prototype.takeBulletHit = function(damage) {
     
     if(this.lives <= 0) {
 		Score.addScore(10);
+		this.deadSound.play();
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 
@@ -125,6 +129,7 @@ Enemy.prototype.takeBulletHit = function(damage) {
 			});
 		}
     } else {
+		this.deadSound.play();
         entityManager.createExplosion({
             cx    : this.cx, 
             cy    : this.cy,

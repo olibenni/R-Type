@@ -28,7 +28,7 @@ Laser.prototype = new Entity();
 
 // HACKED-IN AUDIO (no preloading)
 Laser.prototype.fireSound = new Audio(
-    "sounds/bulletFire.ogg");
+    "sounds/Lazer1.ogg");
 Laser.prototype.zappedSound = new Audio(
     "sounds/bulletZapped.ogg");
 

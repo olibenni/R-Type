@@ -61,8 +61,10 @@ Ship.prototype.powerUps = {blue : 0, red : 0, misseles : 0, speed : 0};
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
-    "sounds/shipWarp.ogg");
-
+    "sounds/Wobwobwob.ogg");
+Ship.prototype.lazerSound = new Audio (
+	"sounds/Lazer2.ogg");
+	
 Ship.prototype.warp = function () {
 
     this._isWarping = true;
@@ -277,7 +279,8 @@ Ship.prototype.maybeFireBullet = function (du) {
     } 
     //Laser has been charging and space has been released = fire laser
     else if( this.isChargingLaser() && !keys[this.KEY_FIRE] ) {
-        entityManager.fireLaser(
+        this.lazerSound.play();
+		entityManager.fireLaser(
            this.cx + launchDist*2, this.cy,
            relVelX, relVelY,
            0,
@@ -431,12 +434,16 @@ Ship.prototype.drawLaserCharge = function(ctx){
 		ctx.font = "20px sans-serif";
 		ctx.fillStyle = "white";
 		ctx.fillText("Charge", g_canvas.width/2-100,550);
-		ctx.fillStyle = "blue";
-		ctx.fillRect(g_canvas.width/2-30, 535, 120, 20);
+		ctx.beginPath();
+		ctx.save();
+		ctx.strokeStyle = 'white';
+		ctx.strokeRect(g_canvas.width/2-30, 535, 120, 20);
+		ctx.closePath();
+		ctx.restore();
 		var charged = this.laserCharge
 		if(charged < 30){charged = 0}
 		if(charged > 150){charged = 150}
-		ctx.fillStyle = "red";
+		ctx.fillStyle = "blue";
 		if(charged > 30){
 			ctx.fillRect(g_canvas.width/2-30, 535, charged-30, 20);
 		}

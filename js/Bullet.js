@@ -33,7 +33,7 @@ Bullet.prototype = new Entity();
 
 // HACKED-IN AUDIO (no preloading)
 Bullet.prototype.fireSound = new Audio(
-    "sounds/Lazer1.ogg");
+    "sounds/bulletFire.ogg");
 Bullet.prototype.zappedSound = new Audio(
     "sounds/bulletZapped.ogg");
     

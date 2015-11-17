@@ -134,7 +134,6 @@ Ship.prototype._moveToASafePlace = function () {
 Ship.prototype.usedShield = false;
 
 Ship.prototype.update = function (du) {
-
     // Handle warping
     if (this._isWarping) {
         this._updateWarp(du);
@@ -179,6 +178,14 @@ Ship.prototype.update = function (du) {
     }
 
 };
+
+Ship.prototype.wallCollision = function(){
+	if(--this.lives == 0) this._isDeadNow = true;
+	else{
+		this.warp();
+		entityManager.clearBullets();
+	}
+}
 
 Ship.prototype.computeSubStep = function (du) {
     var nextX = this.cx;
@@ -260,6 +267,7 @@ Ship.prototype.maybeFireBullet = function (du) {
            0
         );
 		//Shoot powerups if activated
+		
 		if(this.powerUps.blue > 0){
 			this.fireBlue(launchDist);
 		}
@@ -285,32 +293,45 @@ Ship.prototype.maybeFireBullet = function (du) {
 };
 
 Ship.prototype.fireBlue = function(launchDist){
-	var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
+	var blueSpeed = Math.sqrt(this.launchVel*this.launchVel * 2)/2
+	
+	entityManager.fireLaserBullet(
+		this.cx + launchDist, this.cy+this.getRadius(),
+		blueSpeed,blueSpeed,
+		0.25*Math.PI
+	);
+	entityManager.fireLaserBullet(
+		this.cx + launchDist, this.cy-this.getRadius(),
+		blueSpeed,-blueSpeed,
+		1.75*Math.PI
+	);
+	
+	if(this.powerUps.blue > 1){
+		var blueSpeedY = (this.launchVel * Math.sin((22.5*Math.PI)/180))/ Math.sin((90*Math.PI)/180) 
+		var blueSpeedX = (this.launchVel * Math.sin((67.5*Math.PI)/180))/ Math.sin((90*Math.PI)/180)
 		entityManager.fireLaserBullet(
-			this.cx + launchDist, this.cy+this.getRadius(),
-			blueSpeed,blueSpeed,
-			0.25*Math.PI
+			this.cx + launchDist, this.cy+this.getRadius()/2,
+			blueSpeedX,blueSpeedY,
+			0.125*Math.PI
 		);
 		entityManager.fireLaserBullet(
-			this.cx + launchDist, this.cy-this.getRadius(),
-			blueSpeed,-blueSpeed,
-			1.75*Math.PI
+			this.cx + launchDist, this.cy-this.getRadius()/2,
+			blueSpeedX,-blueSpeedY,
+			1.875*Math.PI
 		);
-		if(this.powerUps.blue > 1){
-			//blueSpeed = 
-		}
-		if(this.powerUps.blue > 2){
-			entityManager.fireLaserBullet(
-				this.cx, this.cy+this.getRadius(),
-				0,this.speed,
-				0.5*Math.PI
-			);
-			entityManager.fireLaserBullet(
-				this.cx, this.cy-this.getRadius(),
-				0,-this.speed,
-				1.5*Math.PI
-			);
-		}
+	}
+	if(this.powerUps.blue > 2){
+		entityManager.fireLaserBullet(
+			this.cx, this.cy+launchDist,
+			blueSpeedY,blueSpeedX,
+			0.375*Math.PI
+		);
+		entityManager.fireLaserBullet(
+			this.cx, this.cy-launchDist,
+			blueSpeedY,-blueSpeedX,
+			1.675*Math.PI
+		);
+	}
 };
 
 Ship.prototype.laserReloadTime = 500 / NOMINAL_UPDATE_INTERVAL;

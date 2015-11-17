@@ -9,7 +9,9 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.bigDeathExplosion = [];
     sprites.enemy1 = [];
 	sprites.enemy2 = new Sprite(images.sheet8, 6, 5, 24, 25);
+    sprites.boss = [];
     sprites.enemyBullet = new Sprite(images.sheet43, 135, 5, 8, 7);
+    sprites.bossBullet = new Sprite(images.sheet30, 575, 2061, 23, 23);
     animatedSprites.laserCharge = new AnimationSprite(images.sheet1, 0, 51, 33.25, 32, 0, 8);
     animatedSprites.laser = []; 
     sprites.laser = new Sprite(images.sheet1, 200, 120, 32.5, 12);
@@ -25,6 +27,12 @@ function createSprites(images, sprites, animatedSprites) {
 
     for(var i = 0; i <= 266; i += 33.25){
         sprites.laserCharge.push(new Sprite(images.sheet1, i, 51, 33.25, 32));
+    }
+
+    for(var col = 2; col < 1915; col+= 212.666) {    
+        for(var row = 27; row < 668; row+= 162){
+            sprites.boss.push(new Sprite(images.sheet30, row, col, 162, 212.666));
+        }
     }
 
     animatedSprites.laser.push(new AnimationSprite(images.sheet1, 200, 120, 33, 12, 10, 2));

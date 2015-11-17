@@ -134,6 +134,7 @@ Ship.prototype._moveToASafePlace = function () {
 Ship.prototype.usedShield = false;
 
 Ship.prototype.update = function (du) {
+    this.nextTest();
 
     // Handle warping
     if (this._isWarping) {
@@ -286,31 +287,28 @@ Ship.prototype.maybeFireBullet = function (du) {
 
 Ship.prototype.fireBlue = function(launchDist){
 	var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
+	entityManager.fireLaserBullet(
+		this.cx + launchDist, this.cy+this.getRadius(),
+		blueSpeed,blueSpeed,
+		0.25*Math.PI
+	);
+	entityManager.fireLaserBullet(
+		this.cx + launchDist, this.cy-this.getRadius(),
+		blueSpeed,-blueSpeed,
+		1.75*Math.PI
+	);
+	if(this.powerUps.blue > 1){
 		entityManager.fireLaserBullet(
-			this.cx + launchDist, this.cy+this.getRadius(),
-			blueSpeed,blueSpeed,
-			0.25*Math.PI
+			this.cx, this.cy+this.getRadius(),
+			0,this.launchVel,
+			0.5*Math.PI
 		);
 		entityManager.fireLaserBullet(
-			this.cx + launchDist, this.cy-this.getRadius(),
-			blueSpeed,-blueSpeed,
-			1.75*Math.PI
+			this.cx, this.cy-this.getRadius(),
+			0,-this.launchVel,
+			1.5*Math.PI
 		);
-		if(this.powerUps.blue > 1){
-			//blueSpeed = 
-		}
-		if(this.powerUps.blue > 2){
-			entityManager.fireLaserBullet(
-				this.cx, this.cy+this.getRadius(),
-				0,this.speed,
-				0.5*Math.PI
-			);
-			entityManager.fireLaserBullet(
-				this.cx, this.cy-this.getRadius(),
-				0,-this.speed,
-				1.5*Math.PI
-			);
-		}
+	}
 };
 
 Ship.prototype.laserReloadTime = 500 / NOMINAL_UPDATE_INTERVAL;
@@ -424,6 +422,11 @@ Ship.prototype.drawLives = function(ctx){
 	}
 };
 
+Ship.prototype.testindex = 0;
+Ship.prototype.nextTest = function(){
+    this.testindex = (this.testindex + 1) % g_sprites.boss.length;
+};
+
 Ship.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
@@ -443,6 +446,8 @@ Ship.prototype.render = function (ctx) {
     if( this.isChargingLaser() ) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
     }
+    g_sprites.bossBullet.drawCentredAt(ctx, 500, 250, 0);
+    g_sprites.boss[this.testindex].drawCentredAt(ctx, 300, 200, 0);
 
     this.sprite.scale = origScale;
 };

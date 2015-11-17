@@ -39,10 +39,10 @@ Ship.prototype.rememberResets = function () {
     this.reset_rotation = this.rotation;
 };
 
-Ship.prototype.KEY_THRUST    = 'D'.charCodeAt(0);
-Ship.prototype.KEY_RETRO     = 'A'.charCodeAt(0);
-Ship.prototype.KEY_UPWARD    = 'W'.charCodeAt(0);
-Ship.prototype.KEY_DOWNWARD  = 'S'.charCodeAt(0);
+Ship.prototype.KEY_THRUST    = 39;
+Ship.prototype.KEY_RETRO     = 37;
+Ship.prototype.KEY_UPWARD    = 38;
+Ship.prototype.KEY_DOWNWARD  = 40;
 
 Ship.prototype.KEY_FIRE      = ' '.charCodeAt(0);
 

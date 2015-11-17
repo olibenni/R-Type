@@ -86,6 +86,16 @@ Bullet.prototype.update = function (du) {
 
 };
 
+Bullet.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+    entityManager.createExplosion({
+        cx    : this.cx, 
+        cy    : this.cy,
+        scale : this.scale,
+        sprites : g_sprites.deathExplosion
+    });
+};
+
 Bullet.prototype.getRadius = function () {
     return 4;
 };

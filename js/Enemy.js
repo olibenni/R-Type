@@ -58,6 +58,16 @@ Enemy.prototype.update = function (du) {
     spatialManager.register(this);
 };
 
+Enemy.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+	entityManager.createBigExplosion({
+         cx    : this.cx, 
+         cy    : this.cy,
+         scale : this.scale*2,
+         sprites : g_sprites.bigDeathExplosion
+    });
+};
+
 Enemy.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
 Enemy.prototype.elapsedDelay = 0;
 Enemy.prototype.computeSprite = function(du) {

@@ -86,6 +86,16 @@ LaserBullet.prototype.update = function (du) {
 
 };
 
+LaserBullet.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+    entityManager.createExplosion({
+        cx    : this.cx, 
+        cy    : this.cy,
+        scale : this.scale,
+        sprites : g_sprites.deathExplosion
+    });
+};
+
 LaserBullet.prototype.getRadius = function () {
     return 4;
 };

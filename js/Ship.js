@@ -134,6 +134,8 @@ Ship.prototype._moveToASafePlace = function () {
 Ship.prototype.usedShield = false;
 
 Ship.prototype.update = function (du) {
+
+    this.nextTest();
     // Handle warping
     if (this._isWarping) {
         this._updateWarp(du);
@@ -446,6 +448,11 @@ Ship.prototype.drawLives = function(ctx){
 	}
 };
 
+Ship.prototype.testindex = 0;
+Ship.prototype.nextTest = function(){
+    this.testindex = (this.testindex + 1) % g_sprites.boss.length;
+};
+
 Ship.prototype.drawPowerUps = function(ctx){
 	var radius = 30;
 	var x = g_canvas.width/2 + 140
@@ -497,6 +504,8 @@ Ship.prototype.render = function (ctx) {
     if( this.isChargingLaser() ) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
     }
+    // g_sprites.bossBullet.drawCentredAt(ctx, 500, 250, 0);
+    // g_sprites.boss[this.testindex].drawCentredAt(ctx, 300, 200, 0);
 
     this.sprite.scale = origScale;
 };

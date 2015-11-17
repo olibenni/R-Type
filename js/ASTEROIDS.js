@@ -175,6 +175,7 @@ function requestPreloads() {
         sheet5  : "./images/r-typesheet5.gif",
 		sheet8	: "./images/r-typesheet8.gif",
         sheet16 : "./images/r-typesheet16.gif",
+        sheet30 : "./images/r-typesheet30.gif",
         sheet43 : "./images/r-typesheet43.gif",
         rock    : "./images/rock.png",
 		starField: "./images/starfield.png",

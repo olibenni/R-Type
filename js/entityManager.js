@@ -101,7 +101,7 @@ deferredSetup : function () {
     this._categories = [this._bg, this._tiles, this._rocks, this._bullets, this._ships, this._enemies, this._animations, this._powerups];
 },
 
-init: function() {
+init: function() {	
 	this._generateBgs();
     this._generateRocks();
 	this._generateTiles();
@@ -244,7 +244,7 @@ update: function(du) {
 },
 
 render: function(ctx) {
-
+	
     var debugX = 10, debugY = 100;
 
     for (var c = 0; c < this._categories.length; ++c) {
@@ -263,6 +263,8 @@ render: function(ctx) {
         }
         debugY += 10;
     }
+	
+	Score.render(ctx);
 }
 
 }

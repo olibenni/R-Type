@@ -58,6 +58,7 @@ Enemy.prototype.update = function (du) {
     spatialManager.register(this);
 };
 
+
 Enemy.prototype.wallCollision = function () {
 	this._isDeadNow = true;
 	entityManager.createBigExplosion({
@@ -108,6 +109,7 @@ Enemy.prototype.takeBulletHit = function(damage) {
     var damageDealt = currentLives - Math.max(this.lives, 0);
     
     if(this.lives <= 0) {
+		Score.addScore(10);
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 

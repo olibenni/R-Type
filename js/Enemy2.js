@@ -97,6 +97,7 @@ Enemy2.prototype.takeBulletHit = function(damage) {
     var damageDealt = currentLives - Math.max(this.lives, 0);
 
     if(this.lives <= 0) {
+		Score.addScore(20);
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 

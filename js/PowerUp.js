@@ -29,7 +29,7 @@ function PowerUp(descr) {
 
 PowerUp.prototype = new Entity();
 
-PowerUp.prototype.allPowers = ["Blue","Speed","Red","Missiles"]
+PowerUp.prototype.allPowers = ["Blue","Speed","Red","Missiles"];
 
 PowerUp.prototype.choosePower = function(){
 	var num = Math.floor(util.randRange(0,2.99));
@@ -43,7 +43,7 @@ PowerUp.prototype.update = function (du) {
         return entityManager.KILL_ME_NOW;
     }
 
-    this.cx -= this.xVel
+    this.cx -= this.xVel;
     spatialManager.register(this);
 };
 

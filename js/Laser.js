@@ -109,6 +109,16 @@ Laser.prototype.update = function (du) {
 
 };
 
+Laser.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+    entityManager.createExplosion({
+        cx    : this.cx, 
+        cy    : this.cy,
+        scale : this.scale,
+        sprites : g_sprites.deathExplosion
+    });
+};
+
 Laser.prototype.render = function (ctx) {
 
     var fadeThresh = Laser.prototype.lifeSpan / 3;

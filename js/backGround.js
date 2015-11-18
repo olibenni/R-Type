@@ -61,11 +61,16 @@ backGround.prototype.curTrigger = 0;
 backGround.prototype.triggerIndex = 0;
 //triggers : Distance in game, triggerCall, y, number of enemies
 backGround.prototype.triggers = [
-	{dist: 250,  enemyType: "enemy1", y: 200, amount: 6},
-	{dist: 400,  enemyType: "enemy2", y: 300, amount: 6},
-	{dist: 550,  enemyType: "enemy1", y: 200, amount: 6},
-	{dist: 700,  enemyType: "enemy2", y: 300, amount: 6},
-	{dist: 600, enemyType: "boss",   y: 300, amount: 1}
+	{dist: 150,  enemyType: "enemy1", y: 200, amount: 6},
+	{dist: 350,  enemyType: "enemy1", y: 200, amount: 3},
+	{dist: 350,  enemyType: "enemy1", y: 250, amount: 3},
+	{dist: 750,  enemyType: "enemy2", y: 300, amount: 6},
+	{dist: 1400,  enemyType: "enemy1", y: 200, amount: 6},
+	{dist: 1500,  enemyType: "enemy2", y: 300, amount: 6},
+	{dist: 2200,  enemyType: "enemy2", y: 200, amount: 6},
+	{dist: 2200,  enemyType: "enemy2", y: 400, amount: 6},
+	{dist: 2750,  enemyType: "enemy1", y: 175, amount: 9},
+	{dist: 3500, enemyType: "boss",   y: 300, amount: 1}
 ];
 
 backGround.prototype.getSpeed = function() {
@@ -98,7 +103,7 @@ backGround.prototype.checkTrigger = function() {
 };
 
 backGround.prototype.addRandomEnemies = function(){
-	if(util.randRange(0,10) > 9.95){
+	if(util.randRange(0,10) > 11){
 		var enemyType = Math.floor(util.randRange(0,1.999));
 		var enemies = ["enemy1","enemy2"]
 		console.log(enemyType)

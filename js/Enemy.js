@@ -88,14 +88,12 @@ Enemy.prototype.computeSprite = function(du) {
         this.spriteIndex = (this.spriteIndex + 1) % this.sprites.length;
     }
 }
+Enemy.prototype.dirChangeDelay = 200;
+Enemy.prototype.elapsedDirChangeDelay = 0;
 Enemy.prototype.computeVelChanges = function(du) {
-    if(this.lifeTime < 100) {
+    if(this.lifeTime % 200 < 100){
         this.velY = 1;
-    } else if(this.lifeTime < 150) {
-        this.velY = -1;
-    } else if(this.lifeTime < 200) {
-        this.velY = 1;
-    } else if(this.lifeTime < 300) {
+    }else{
         this.velY = -1;
     }
 }

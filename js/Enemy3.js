@@ -35,6 +35,16 @@ Enemy3.prototype.lives = 2;
 Enemy3.prototype.spriteIndex = 0;
 Enemy3.prototype.lifeTime = 0;
 
+Enemy3.prototype.deadSound = new Audio (
+	"sounds/Blast1.ogg");
+Enemy3.prototype.fireSound = new Audio (
+	"sounds/Lazer1.ogg");
+
+Enemy3.prototype.playSounds = function () {
+		this.fireSound.volume = 0.1;
+		this.fireSound.play();
+};
+
 Enemy3.prototype.update = function (du) {
     this.lifeTime += du;
     this.computeVelChanges(du);
@@ -107,6 +117,8 @@ Enemy3.prototype.takeBulletHit = function(damage) {
     var damageDealt = currentLives - Math.max(this.lives, 0);
     
     if(this.lives <= 0) {
+		Score.addScore(40);
+		this.deadSound.play();
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 
@@ -122,6 +134,7 @@ Enemy3.prototype.takeBulletHit = function(damage) {
 			});
 		}
     } else {
+		this.deadSound.play();
         entityManager.createExplosion({
             cx    : this.cx, 
             cy    : this.cy,
@@ -139,7 +152,9 @@ Enemy3.prototype.maybeFireBullet = function (du) {
         var relVel = this.launchVel;
         var relVelX = -4;
         var relVelY = 0;
-
+		
+		this.playSounds();
+		
         entityManager.fireEnemyBullet(
            this.cx - launchDist, this.cy,
            relVelX, relVelY,

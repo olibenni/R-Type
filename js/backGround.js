@@ -19,7 +19,7 @@ backGround.prototype.sound2 = new Audio (
 	"sounds/MusicLoop2.ogg");
 
 backGround.prototype.playSounds = function () {
-	this.sound1.volume = 0.3;
+	this.sound1.volume = 0.2;
 	this.sound1.play();
 };
 

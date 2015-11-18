@@ -37,6 +37,13 @@ Boss.prototype.spriteIndex = 0;
 
 Boss.prototype.deadSound = new Audio (
 	"sounds/rtypeDie.ogg");
+Boss.prototype.fireSound = new Audio (
+	"sounds/Lazer3.ogg");
+
+Boss.prototype.playSounds = function () {
+		this.fireSound.volume = 0.3;
+		this.fireSound.play();
+};
 
 Boss.prototype.update = function (du) {
     this.lifeTime += du;
@@ -128,6 +135,7 @@ Boss.prototype.takeBulletHit = function(damage) {
     var damageDealt = currentLives - Math.max(this.lives, 0);
 
     if(this.lives <= 0) {
+		Score.addScore(500);
 		this.deadSound.play();
         this.kill();
         entityManager.createBigExplosion({
@@ -158,6 +166,7 @@ Boss.prototype.maybeFireBullet = function (du) {
         var launchDeg = this.getLaunchDeg();
         var launchDist = this.getRadius() * 2;
 		for(var i= 0; i < 26; i++){
+			this.playSounds();
             var xspeed = -this.shootingSpeed  *  Math.cos( (launchDeg-i)*Math.PI/180 );
             var yspeed =  this.shootingSpeed  *  Math.sin( (launchDeg-i)*Math.PI/180 );
             entityManager.fireEnemyBullet(

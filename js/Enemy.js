@@ -37,6 +37,13 @@ Enemy.prototype.spriteIndex = 0;
 
 Enemy.prototype.deadSound = new Audio (
 	"sounds/Blast1.ogg");
+Enemy.prototype.fireSound = new Audio (
+	"sounds/Lazer1.ogg");
+
+Enemy.prototype.playSounds = function () {
+		this.fireSound.volume = 0.1;
+		this.fireSound.play();
+};
 
 Enemy.prototype.update = function (du) {
     this.lifeTime += du;
@@ -147,7 +154,9 @@ Enemy.prototype.maybeFireBullet = function (du) {
         var relVel = this.launchVel;
         var relVelX = -4;
         var relVelY = 0;
-
+		
+		this.playSounds();
+		
         entityManager.fireEnemyBullet(
            this.cx - launchDist, this.cy,
            relVelX, relVelY,

@@ -57,7 +57,7 @@ LaserBullet.prototype.update = function (du) {
 
 
     this.lifeSpan -= du;
-    if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
+    if (this.cx > g_canvas.width+50) return entityManager.KILL_ME_NOW;
 
     this.cx += this.velX * du;
     this.cy += this.velY * du;

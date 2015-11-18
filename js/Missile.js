@@ -35,7 +35,7 @@ Missile.prototype.zappedSound = new Audio(
     
 // Initial, inheritable, default values
 Missile.prototype.rotation = 0;
-Missile.prototype.velX = 0.1;
+Missile.prototype.velX = 1;
 Missile.prototype.velY = 0;
 
 
@@ -46,10 +46,8 @@ Missile.prototype.update = function (du) {
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
     }
-
-	
 	this.getEnemy();
-    if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
+    if (this.cx > g_canvas.width+50) return entityManager.KILL_ME_NOW;
 
 	if(this.vel > this.velX){
 		this.velX *= 1.08;
@@ -83,10 +81,11 @@ Missile.prototype.update = function (du) {
 };
 
 Missile.prototype.getYVel = function(){
-	if(this.cx > this.enemy.cx){
-		this.velY = -1;
-	}else if(this.cx < this.enemy.cx){
-		this.velY = 1;
+	console.log(this.enemy.cx, this.enemy.cy)
+	if(this.cy - this.enemy.cy > this.getRadius()){
+		this.velY = -this.vel/2;
+	}else if(this.cy - this.enemy.cy < -this.getRadius()){
+		this.velY = this.vel/2;
 	}else{
 		this.velY = 0;
 	}
@@ -107,7 +106,7 @@ Missile.prototype.wallCollision = function () {
 };
 
 Missile.prototype.getRadius = function () {
-    return this.width/2;
+    return this.vel*1.2;
 };
 
 

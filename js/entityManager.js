@@ -138,11 +138,12 @@ fireLaserBullet: function(cx, cy, velX, velY, rotation) {
     }));
 },
 
-fireMissile: function(cx,cy,vel){
+fireMissile: function(cx,cy,vel,rotation){
 	this._bullets.push(new Missile({
 		cx	: cx,
 		cy	: cy,
-		vel : vel
+		vel : vel,
+		rotation : rotation
 	}));
 },
 
@@ -231,7 +232,7 @@ toggleRocks: function() {
 
 getOneEnemy: function(x) {
 	for(var i = 0; i <this._enemies.length; i++){
-			if(this._enemies[i].cx > x){
+			if(this._enemies[i].cx > x && this._enemies[i].cx < g_canvas.width){
 				return this._enemies[i];
 			}
 	}

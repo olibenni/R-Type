@@ -342,7 +342,7 @@ Ship.prototype.fireBlue = function(launchDist){
 
 Ship.prototype.fireMissile = function(launchDist){
 	entityManager.fireMissile(
-		this.cx, this.cy-launchDist,5
+		this.cx, this.cy-launchDist*2,5,0
 	)
 }
 

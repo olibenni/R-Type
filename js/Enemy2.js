@@ -33,9 +33,11 @@ Enemy2.prototype.velX = -1;
 Enemy2.prototype.velY = 0;
 Enemy2.prototype.numSubSteps = 1;
 Enemy2.prototype.lives = 2;
-Enemy2.prototype.spriteIndex = 0;
 Enemy2.prototype.lifeTime = 0;
 Enemy2.prototype.shootingSpeed = 5;
+
+Enemy2.prototype.deadSound = new Audio (
+	"sounds/Blast2.ogg");
 
 Enemy2.prototype.update = function (du) {
     this.lifeTime += du;
@@ -60,6 +62,17 @@ Enemy2.prototype.update = function (du) {
     spatialManager.register(this);
 };
 
+Enemy2.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+	this.deadSound.play();
+    entityManager.createBigExplosion({
+        cx    : this.cx, 
+        cy    : this.cy,
+        scale : this.scale*2,
+        sprites : g_sprites.bigDeathExplosion
+    });
+};
+
 Enemy2.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
 Enemy2.prototype.elapsedDelay = 0;
 
@@ -81,14 +94,6 @@ Enemy2.prototype.outOfBounds = function() {
     if(this.cx <= 0) this.kill();
 }
 
-Enemy2.prototype.moveUp = function() {
-    this.spriteIndex = 4;
-};
-
-Enemy2.prototype.moveDown = function() {
-    this.spriteIndex = 0;
-};
-
 Enemy2.prototype.takeBulletHit = function(damage) {
 
     var currentLives = this.lives;
@@ -96,6 +101,8 @@ Enemy2.prototype.takeBulletHit = function(damage) {
     var damageDealt = currentLives - Math.max(this.lives, 0);
 
     if(this.lives <= 0) {
+		Score.addScore(20);
+		this.deadSound.play();
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 
@@ -111,6 +118,7 @@ Enemy2.prototype.takeBulletHit = function(damage) {
 			});
 		}
     } else {
+		this.deadSound.play();
         entityManager.createExplosion({
             cx    : this.cx, 
             cy    : this.cy,
@@ -151,8 +159,6 @@ Enemy2.prototype.render = function (ctx) {
     this.sprite.drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
-
-    // g_animatedSprites.enemy1.cycleAnimationAt(ctx, this.cx, this.cy);
 
     this.sprite.scale = origScale;
 };

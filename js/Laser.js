@@ -20,16 +20,15 @@ function Laser(descr) {
 
     this.fireSound.play();
     this.type = this.getType();
-    this.damage = this.type*this.type+1;
-    this.lives = this.damage;
-    console.log(this.damage);
+    this.lives = this.getDamage();
+    console.log(this.getDamage());
 }
 
 Laser.prototype = new Entity();
 
 // HACKED-IN AUDIO (no preloading)
 Laser.prototype.fireSound = new Audio(
-    "sounds/bulletFire.ogg");
+    "sounds/Lazer1.ogg");
 Laser.prototype.zappedSound = new Audio(
     "sounds/bulletZapped.ogg");
 
@@ -45,8 +44,31 @@ Laser.prototype.getType = function() {
         return 3;
     }
     return 4;
-}
-    
+};
+
+Laser.prototype.typeInfo = {
+    1: {length: 33, radius: 2.5, damage: 2 },
+    2: {length: 48, radius: 5,   damage: 5 },
+    3: {length: 64, radius: 7.5, damage: 10},
+    4: {length: 80, radius: 10,  damage: 20}
+};
+
+Laser.prototype.getDamage = function() {
+    return this.typeInfo[this.type].damage;
+};
+
+Laser.prototype.getLength = function() {
+    return this.typeInfo[this.type].length;
+};
+
+Laser.prototype.getRadius = function () {
+    return this.typeInfo[this.type].radius;
+};
+
+Laser.prototype.getSprite = function () {
+    return this.type - 1;
+};
+
 // Initial, inheritable, default values
 Laser.prototype.rotation = 0;
 Laser.prototype.cx = 200;
@@ -77,7 +99,7 @@ Laser.prototype.update = function (du) {
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
         if (canTakeHit) {
-            var damageDealt = canTakeHit.call(hitEntity, this.damage);
+            var damageDealt = canTakeHit.call(hitEntity, this.getDamage());
             this.lives -= damageDealt;
             if(this.lives <= 0) return entityManager.KILL_ME_NOW;
         }
@@ -87,11 +109,6 @@ Laser.prototype.update = function (du) {
 
 };
 
-Laser.prototype.getRadius = function () {
-    return this.type * 2.5;
-};
-
-
 Laser.prototype.render = function (ctx) {
 
     var fadeThresh = Laser.prototype.lifeSpan / 3;
@@ -100,11 +117,7 @@ Laser.prototype.render = function (ctx) {
         ctx.globalAlpha = this.lifeSpan / fadeThresh;
     }
 
-    // g_sprites.laser.drawCentredAt(
-    //     ctx, this.cx, this.cy, this.rotation
-    // );
-    //g_animatedSprites.laser[this.type].cycleAnimationAt(ctx, this.cx, this.cy);
-    g_animatedSprites.laser.cycleAnimationAt(ctx, this.cx, this.cy);
+    g_animatedSprites.laser[this.getSprite()].cycleAnimationAt(ctx, this.cx-this.getLength()/2+this.getRadius(), this.cy);
 
     ctx.globalAlpha = 1;
 };

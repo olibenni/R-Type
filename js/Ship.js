@@ -39,10 +39,10 @@ Ship.prototype.rememberResets = function () {
     this.reset_rotation = this.rotation;
 };
 
-Ship.prototype.KEY_THRUST    = 'D'.charCodeAt(0);
-Ship.prototype.KEY_RETRO     = 'A'.charCodeAt(0);
-Ship.prototype.KEY_UPWARD    = 'W'.charCodeAt(0);
-Ship.prototype.KEY_DOWNWARD  = 'S'.charCodeAt(0);
+Ship.prototype.KEY_THRUST    = 39;
+Ship.prototype.KEY_RETRO     = 37;
+Ship.prototype.KEY_UPWARD    = 38;
+Ship.prototype.KEY_DOWNWARD  = 40;
 
 Ship.prototype.KEY_FIRE      = ' '.charCodeAt(0);
 
@@ -57,12 +57,14 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
 Ship.prototype.spriteIndex = 2;
-Ship.prototype.powerUps = {blue : false, red : false, misseles : false};
+Ship.prototype.powerUps = {blue : 0, red : 0, misseles : 0, speed : 0};
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
-    "sounds/shipWarp.ogg");
-
+    "sounds/Wobwobwob.ogg");
+Ship.prototype.lazerSound = new Audio (
+	"sounds/Lazer2.ogg");
+	
 Ship.prototype.warp = function () {
 
     this._isWarping = true;
@@ -89,6 +91,7 @@ Ship.prototype._updateWarp = function (du) {
     
         this._scale = 1;
         this._isWarping = false;
+        this.powerUps.red = 1;
         
         // Reregister me from my old posistion
         // ...so that I can be collided with again
@@ -134,6 +137,7 @@ Ship.prototype.usedShield = false;
 
 Ship.prototype.update = function (du) {
 
+    this.nextTest();
     // Handle warping
     if (this._isWarping) {
         this._updateWarp(du);
@@ -160,24 +164,32 @@ Ship.prototype.update = function (du) {
     // Handle collision
 	var collision = this.isColliding();
 	if(collision){
-		if(collision.type != "PowerUp" && !this.powerUps.red) {
+		if(collision.type != "PowerUp" && this.powerUps.red == 0) {
 			if(--this.lives === 0) return entityManager.KILL_ME_NOW;
                 this.warp();
-                this.powerUps.red = true;
+                entityManager.clearBullets();
 		}else if(collision.type == "PowerUp"){
 			this.takePowerUp(collision.getPower());
-		}else if(this.powerUps.red){
+		}else if(this.powerUps.red > 0){
 			this.usedShield = true;
 		}
 	}else {
 		if(this.usedShield == true){
 			this.usedShield = false;
-			this.powerUps.red = false;
+			this.powerUps.red -= 1;
 		}
         spatialManager.register(this);
     }
 
 };
+
+Ship.prototype.wallCollision = function(){
+	if(--this.lives == 0) this._isDeadNow = true;
+	else{
+		this.warp();
+		entityManager.clearBullets();
+	}
+}
 
 Ship.prototype.computeSubStep = function (du) {
     var nextX = this.cx;
@@ -189,11 +201,11 @@ Ship.prototype.computeSubStep = function (du) {
 		nextX -= this.speed * du;
 	}
 	if(keys[this.KEY_UPWARD]){
-        this.moveUp();
+        this.moveUpAnimation();
 		nextY -= this.speed * du;
 	}
 	else if(keys[this.KEY_DOWNWARD]){
-        this.moveDown();
+        this.moveDownAnimation();
 		nextY += this.speed * du;
 	}
     else{
@@ -202,41 +214,17 @@ Ship.prototype.computeSubStep = function (du) {
     this.keepWithinBounds(nextX, nextY);    
 };
 
-Ship.prototype.moveUp = function() {
+Ship.prototype.moveUpAnimation = function() {
     this.spriteIndex = 4;
 };
 
-Ship.prototype.moveDown = function() {
+Ship.prototype.moveDownAnimation = function() {
     this.spriteIndex = 0;
 };
 
 Ship.prototype.keepWithinBounds = function(nextX, nextY) {
     this.cx = util.boundary(this.sprite.width/2, nextX, 0, g_canvas.width); 
     this.cy = util.boundary(this.sprite.height/2, nextY, 0, g_canvas.height);
-};
-
-
-var NOMINAL_GRAVITY = 0.12;
-
-Ship.prototype.computeGravity = function () {
-    return g_useGravity ? NOMINAL_GRAVITY : 0;
-};
-
-var NOMINAL_THRUST = +0.2;
-var NOMINAL_RETRO  = -0.1;
-
-Ship.prototype.computeThrustMag = function () {
-    
-    var thrust = 0;
-    
-    if (keys[this.KEY_THRUST]) {
-        thrust += NOMINAL_THRUST;
-    }
-    if (keys[this.KEY_RETRO]) {
-        thrust += NOMINAL_RETRO;
-    }
-    
-    return thrust;
 };
 
 
@@ -248,6 +236,7 @@ Ship.prototype.elapsedReloadingTime = 200 / NOMINAL_UPDATE_INTERVAL;
 // If 200ms have passed since last bullet, another bullet can be fired
 Ship.prototype.reloadingBullet = function(du) {
     this.elapsedReloadingTime += du;
+	// Check if bullet has been reloaded and if space has been released.
     if(this.elapsedReloadingTime >= this.reloadTime && !this.isHoldingTrigger() && keys[this.KEY_FIRE]) {
         this.elapsedReloadingTime = 0;
         return true;
@@ -255,6 +244,7 @@ Ship.prototype.reloadingBullet = function(du) {
     return false;
 };
 
+//Stops ship from shooting bullets when trying to charge laser.
 Ship.prototype.didShootLastUpdate = false;
 Ship.prototype.isHoldingTrigger = function() {
     if( this.didShootLastUpdate && keys[this.KEY_FIRE] ) {
@@ -281,25 +271,17 @@ Ship.prototype.maybeFireBullet = function (du) {
            0
         );
 		//Shoot powerups if activated
-		if(this.powerUps.blue == true){
-			var blueSpeed = Math.sqrt(this.speed*this.speed * 2)
-			entityManager.fireLaserBullet(
-				this.cx + launchDist, this.cy+this.getRadius(),
-				blueSpeed,blueSpeed,
-				0.25*Math.PI
-			);
-			entityManager.fireLaserBullet(
-				this.cx + launchDist, this.cy-this.getRadius(),
-				blueSpeed,-blueSpeed,
-				1.75*Math.PI
-			);
+		
+		if(this.powerUps.blue > 0){
+			this.fireBlue(launchDist);
 		}
         this.chargeLaser(du);
     } 
     //Laser has been charging and space has been released = fire laser
     else if( this.isChargingLaser() && !keys[this.KEY_FIRE] ) {
-        entityManager.fireLaser(
-           this.cx + launchDist, this.cy,
+        this.lazerSound.play();
+		entityManager.fireLaser(
+           this.cx + launchDist*2, this.cy,
            relVelX, relVelY,
            0,
            this.laserCharge
@@ -313,6 +295,48 @@ Ship.prototype.maybeFireBullet = function (du) {
     else {
         this.unchargeLaser();
     }
+};
+
+Ship.prototype.fireBlue = function(launchDist){
+	var blueSpeed = Math.sqrt(this.launchVel*this.launchVel * 2)/2
+	
+	entityManager.fireLaserBullet(
+		this.cx + launchDist, this.cy+this.getRadius(),
+		blueSpeed,blueSpeed,
+		0.25*Math.PI
+	);
+	entityManager.fireLaserBullet(
+		this.cx + launchDist, this.cy-this.getRadius(),
+		blueSpeed,-blueSpeed,
+		1.75*Math.PI
+	);
+	
+	if(this.powerUps.blue > 1){
+		var blueSpeedY = (this.launchVel * Math.sin((22.5*Math.PI)/180))/ Math.sin((90*Math.PI)/180) 
+		var blueSpeedX = (this.launchVel * Math.sin((67.5*Math.PI)/180))/ Math.sin((90*Math.PI)/180)
+		entityManager.fireLaserBullet(
+			this.cx + launchDist, this.cy+this.getRadius()/2,
+			blueSpeedX,blueSpeedY,
+			0.125*Math.PI
+		);
+		entityManager.fireLaserBullet(
+			this.cx + launchDist, this.cy-this.getRadius()/2,
+			blueSpeedX,-blueSpeedY,
+			1.875*Math.PI
+		);
+	}
+	if(this.powerUps.blue > 2){
+		entityManager.fireLaserBullet(
+			this.cx, this.cy+launchDist,
+			blueSpeedY,blueSpeedX,
+			0.375*Math.PI
+		);
+		entityManager.fireLaserBullet(
+			this.cx, this.cy-launchDist,
+			blueSpeedY,-blueSpeedX,
+			1.675*Math.PI
+		);
+	}
 };
 
 Ship.prototype.laserReloadTime = 500 / NOMINAL_UPDATE_INTERVAL;
@@ -331,21 +355,13 @@ Ship.prototype.unchargeLaser = function() {
     this.laserCharge = 0;
 };
 
-Ship.prototype.getLaserCharge = function(){
-	return this.laserCharge;
-};
-
 Ship.prototype.chargeSprite = 0;
 Ship.prototype.playChargingAnimation = function(du) {
     this.chargeSprite = (this.chargeSprite + 1) % 8;
 };
 
-Ship.prototype.getLives = function(){
-	return this.lives;
-};
-
-Ship.prototype.setSpeed = function (x){
-	this.speed = x;
+Ship.prototype.addSpeed = function (x){
+		this.speed += x;
 };
 
 
@@ -355,13 +371,20 @@ Ship.prototype.getRadius = function () {
 
 Ship.prototype.takePowerUp = function (powerUp) {
     if(powerUp == "Blue"){
-		this.powerUps.blue = true;
+		if(this.powerUps.blue < 3){
+			this.powerUps.blue += 1;
+		}
 	}
 	if(powerUp == "Speed"){
-		this.setSpeed(5);
+		if(this.powerUps.speed < 3){
+			this.powerUps.speed += 1;
+			this.addSpeed(1);
+		}
 	}
 	if(powerUp == "Red"){
-		this.powerUps.red = true;
+		if(this.powerUps.red < 3){
+			this.powerUps.red += 1;
+		}
 	}
 };
 
@@ -389,29 +412,91 @@ Ship.prototype.updateRotation = function (du) {
 };
 
 Ship.prototype.drawShield = function(ctx){
-    ctx.save();
-
+	var shieldColors = ["rgba(255, 0, 0, 0.2)","rgba(0, 255, 0, 0.2)","rgba(0, 0, 255, 0.4)"]
+	var red = this.powerUps.red-1;
+    
+	ctx.save();	
     ctx.translate(this.cx, this.cy);
     ctx.scale(this._scale, this._scale);
     ctx.translate(-this.cx, -this.cy);
 	var grd=ctx.createRadialGradient(this.cx,this.cy,0,this.cx,this.cy,this.getRadius());
-	grd.addColorStop(0,"rgba(0, 0, 255, 0.5)");
-	grd.addColorStop(1,"rgba(255, 255, 255, 0.5)");
+	grd.addColorStop(0,"rgba(255, 255, 255, 0.5)");
+	grd.addColorStop(1, shieldColors[red]);
 	ctx.beginPath();
 	ctx.arc(this.cx, this.cy, this.getRadius()+3, 0, Math.PI * 2);
 	ctx.stroke();
 	ctx.fillStyle = grd;
 	ctx.fill();
-
     ctx.restore();
 };
+
+Ship.prototype.drawLaserCharge = function(ctx){
+		ctx.font = "20px sans-serif";
+		ctx.fillStyle = "white";
+		ctx.fillText("Charge", g_canvas.width/2-100,550);
+		ctx.beginPath();
+		ctx.save();
+		ctx.strokeStyle = 'white';
+		ctx.strokeRect(g_canvas.width/2-30, 535, 120, 20);
+		ctx.closePath();
+		ctx.restore();
+		var charged = this.laserCharge
+		if(charged < 30){charged = 0}
+		if(charged > 150){charged = 150}
+		ctx.fillStyle = "blue";
+		if(charged > 30){
+			ctx.fillRect(g_canvas.width/2-30, 535, charged-30, 20);
+		}
+};
+
+Ship.prototype.drawLives = function(ctx){
+	for(var i = 0; i < this.lives; i++){
+		g_sprites.ship[3].drawCentredAt(ctx, 20+i*40,15,0);
+	}
+};
+
+Ship.prototype.testindex = 0;
+Ship.prototype.nextTest = function(){
+    this.testindex = (this.testindex + 1) % g_sprites.boss.length;
+};
+
+Ship.prototype.drawPowerUps = function(ctx){
+	var radius = 30;
+	var x = g_canvas.width/2 + 140
+	var y = g_canvas.height-35
+	ctx.save();
+	ctx.line = 5;
+	
+	ctx.beginPath();
+	ctx.arc(x, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Blue"
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.arc(x+(radius+5)*2, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Red"
+	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.arc(x+(radius+5)*4, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Grey"
+	ctx.stroke();
+	
+	ctx.font = "40px sans-serif";
+	ctx.fillStyle = "white";
+	
+	ctx.fillText(this.powerUps.blue, x-11,y+13);
+	ctx.fillText(this.powerUps.red, x+(radius+5)*2-11,y+13);
+	ctx.fillText(this.powerUps.speed, x+(radius+5)*4-11,y+13);
+	ctx.restore();
+}
 
 Ship.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
-    this.sprite.scale = this._scale;
+    this.sprites[this.spriteIndex].scale = this._scale;
 	
-	if(this.powerUps.red == true){
+	if(this.powerUps.red > 0){
 		this.drawShield(ctx);
 	}
 	
@@ -419,17 +504,15 @@ Ship.prototype.render = function (ctx) {
        ctx, this.cx, this.cy, this.rotation
     );
 
-    //g_sprites.enemy1[0].drawWrappedCentredAt(ctx, 50, 50, 0);
-
-    // if( !this.notChargingLaser() ) {
-    //     g_sprites.laserCharge[this.chargeSprite].drawWrappedCentredAt(
-    //         ctx, this.cx+this.sprite.width, this.cy, this.rotation
-    //     );
-    // }
-
+	this.drawLaserCharge(ctx);
+	this.drawLives(ctx);
+	this.drawPowerUps(ctx);
+	
     if( this.isChargingLaser() ) {
         g_animatedSprites.laserCharge.cycleAnimationAt(ctx, this.cx+this.sprite.width, this.cy);
     }
-    // g_sprites.deathExplosion.cycleAnimationAt(ctx, 50, 50);
+    // g_sprites.bossBullet.drawCentredAt(ctx, 500, 250, 0);
+    // g_sprites.boss[this.testindex].drawCentredAt(ctx, 300, 200, 0);
+
     this.sprite.scale = origScale;
 };

@@ -53,33 +53,7 @@ function createInitialShips() {
         cy : 200,
 		sprite : g_sprites.ship[2],
         sprites : g_sprites.ship
-    });
-	
-	entityManager.generatePowerUp({
-        cx : 230,
-        cy : 200,
-		sprite : g_sprites.powerup
-    });
-
-    for(var i = 0; i < 6; i++){
-        entityManager.generateEnemy({
-            cx : 600+i*20,
-            cy : 250+i*20,
-            sprite : g_sprites.enemy1[0],
-            sprites : g_sprites.enemy1,
-            scale : 1
-        });
-    }
-	for(var i = 0; i < 6; i++){
-        entityManager.generateEnemy2({
-            cx : 600+i*30,
-            cyStart : 200,
-            sprite : g_sprites.enemy2,
-            scale : 1
-        });
-    }
-
-    
+    });  
 }
 
 // =============
@@ -201,9 +175,10 @@ function requestPreloads() {
         sheet5  : "./images/r-typesheet5.gif",
 		sheet8	: "./images/r-typesheet8.gif",
         sheet16 : "./images/r-typesheet16.gif",
+        sheet30 : "./images/r-typesheet30.gif",
         sheet43 : "./images/r-typesheet43.gif",
         rock    : "./images/rock.png",
-		starField: "./images/starfield.png",
+		starField: "./images/starfield2.png",
 		wall 	: "./images/wall.png"
     };
 

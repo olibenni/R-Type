@@ -32,8 +32,11 @@ Enemy.prototype.velX = -1.5;
 Enemy.prototype.velY = 0;
 Enemy.prototype.numSubSteps = 1;
 Enemy.prototype.lives = 1;
-Enemy.prototype.spriteIndex = 0;
 Enemy.prototype.lifeTime = 0;
+Enemy.prototype.spriteIndex = 0;
+
+Enemy.prototype.deadSound = new Audio (
+	"sounds/Blast1.ogg");
 
 Enemy.prototype.update = function (du) {
     this.lifeTime += du;
@@ -44,7 +47,6 @@ Enemy.prototype.update = function (du) {
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
     }
-
 
     // Perform movement substeps
     var steps = this.numSubSteps;
@@ -57,6 +59,17 @@ Enemy.prototype.update = function (du) {
     this.maybeFireBullet(du);
     this.outOfBounds();
     spatialManager.register(this);
+};
+
+Enemy.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+	this.deadSound.play();
+	entityManager.createBigExplosion({
+         cx    : this.cx, 
+         cy    : this.cy,
+         scale : this.scale*2,
+         sprites : g_sprites.bigDeathExplosion
+    });
 };
 
 Enemy.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
@@ -92,14 +105,6 @@ Enemy.prototype.outOfBounds = function() {
     if(this.cx <= 0) this.kill();
 }
 
-Enemy.prototype.moveUp = function() {
-    this.spriteIndex = 4;
-};
-
-Enemy.prototype.moveDown = function() {
-    this.spriteIndex = 0;
-};
-
 Enemy.prototype.takeBulletHit = function(damage) {
 
     var currentLives = this.lives;
@@ -107,6 +112,8 @@ Enemy.prototype.takeBulletHit = function(damage) {
     var damageDealt = currentLives - Math.max(this.lives, 0);
     
     if(this.lives <= 0) {
+		Score.addScore(10);
+		this.deadSound.play();
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 
@@ -122,6 +129,7 @@ Enemy.prototype.takeBulletHit = function(damage) {
 			});
 		}
     } else {
+		this.deadSound.play();
         entityManager.createExplosion({
             cx    : this.cx, 
             cy    : this.cy,
@@ -159,8 +167,6 @@ Enemy.prototype.render = function (ctx) {
     this.sprites[this.spriteIndex].drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
-
-    // g_animatedSprites.enemy1.cycleAnimationAt(ctx, this.cx, this.cy);
 
     this.sprite.scale = origScale;
 };

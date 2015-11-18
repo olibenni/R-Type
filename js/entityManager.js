@@ -101,7 +101,7 @@ deferredSetup : function () {
     this._categories = [this._bg, this._tiles, this._rocks, this._bullets, this._ships, this._enemies, this._animations, this._powerups];
 },
 
-init: function() {
+init: function() {	
 	this._generateBgs();
     this._generateRocks();
 	this._generateTiles();
@@ -149,6 +149,12 @@ fireLaser: function(cx, cy, velX, velY, rotation, charge) {
     }));
 },
 
+clearBullets: function() {
+    this._bullets.forEach(function(bullet){
+        bullet.kill();
+    });
+},
+
 generateTile : function(descr) {
 	this._tiles.push(new Tiles(descr));
 },
@@ -175,6 +181,10 @@ generateEnemy : function(descr) {
 
 generateEnemy2 : function(descr) {
     this._enemies.push(new Enemy2(descr));
+},
+
+generateBoss : function(descr) {
+    this._enemies.push(new Boss(descr));
 },
 
 createExplosion : function(descr) {
@@ -238,7 +248,7 @@ update: function(du) {
 },
 
 render: function(ctx) {
-
+	
     var debugX = 10, debugY = 100;
 
     for (var c = 0; c < this._categories.length; ++c) {
@@ -257,6 +267,8 @@ render: function(ctx) {
         }
         debugY += 10;
     }
+	
+	Score.render(ctx);
 }
 
 }

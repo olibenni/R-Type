@@ -28,18 +28,12 @@ EnemyBullet.prototype.cy = 200;
 EnemyBullet.prototype.velX = 1;
 EnemyBullet.prototype.velY = 1;
 
-// Convert times from milliseconds to "nominal" time units.
-EnemyBullet.prototype.lifeSpan = 3000 / NOMINAL_UPDATE_INTERVAL;
-
 EnemyBullet.prototype.update = function (du) {
 
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
     }
-
-    this.lifeSpan -= du;
-    if (this.lifeSpan < 0) return entityManager.KILL_ME_NOW;
 
     this.cx += this.velX * du;
     this.cy += this.velY * du;
@@ -58,9 +52,23 @@ EnemyBullet.prototype.update = function (du) {
 			return entityManager.KILL_ME_NOW;
 		}
     }
-
+    this.outOfBounds();
     spatialManager.register(this);
 
+};
+
+EnemyBullet.prototype.outOfBounds = function() {
+    if(this.cx <= 0) this.kill();
+};
+
+EnemyBullet.prototype.wallCollision = function () {
+	this._isDeadNow = true;
+    entityManager.createExplosion({
+        cx    : this.cx, 
+        cy    : this.cy,
+        scale : this.scale,
+        sprites : g_sprites.deathExplosion
+    });
 };
 
 EnemyBullet.prototype.getRadius = function () {

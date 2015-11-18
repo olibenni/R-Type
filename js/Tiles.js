@@ -7,7 +7,7 @@ function Tiles(descr) {
 
 Tiles.prototype = new Entity();
 
-Tiles.prototype.speed = MAP_SPEED;
+Tiles.prototype.speed = TILE_SPEED;
 Tiles.prototype.cx = 0;
 Tiles.prototype.cy = 0;
 Tiles.prototype.rotation = 0;
@@ -58,34 +58,66 @@ Tiles.prototype.drawTilesBottom = function(ctx) {
 		}
 	}
 };
-/*
+
 Tiles.prototype.collides = function(nextX, nextY, radius) {
-	for(var i = 0; i < this.tilesTop.length; i++) {
-		for(var j = 0; j < this.tilesTop[i].length; j++) {
-			var tilesX = (j * (this.tileWidth + this.tilePadding)) + this.tileOffSetLeft;
-			var tilesY = (i * (this.tileHeight + this.tilePadding)) + this.tileOffSetTop;
-			if(this.nextX > tilesX && this.nextX < tilesX+this.tileWidth &&
-			nextY > tilesY && nextY < tilesY+this.tileHeight) {
-				return true;				
+	
+	var rowLeft = Math.floor((nextX - radius)/this.tileWidth - this.tileOffSetLeft/this.tileWidth);
+	var rowRight = Math.floor((nextX + radius)/this.tileWidth - this.tileOffSetLeft/this.tileWidth);
+	var colUp = Math.floor((nextY - radius)/this.tileHeight - this.tileOffSetTop/this.tileHeight);
+	var colDown = Math.floor((nextY + radius)/this.tileHeight - this.tileOffSetBot/this.tileHeight);
+	if(nextY <= g_canvas.height/2) {
+		if(this.tilesTop[colUp]){
+			if(this.tilesTop[colUp][rowLeft]){
+				if(this.tilesTop[colUp][rowLeft] == 1){
+					return true;
+				}
 			}
-			return false;
+			if(this.tilesTop[colUp][rowRight]){
+				if(this.tilesTop[colUp][rowRight] == 1){
+					return true;
+				}
+			}
 		}
-	}	
+	} else {
+		if(this.tilesBottom[colDown]) {
+			if(this.tilesBottom[colDown][rowLeft]){
+				if(this.tilesBottom[colDown][rowLeft] == 1) {
+					return true;
+				}
+			}
+			if(this.tilesBottom[colDown][rowRight]) {
+				if(this.tilesBottom[colDown][rowRight] == 1) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 };
-*/
-Tiles.prototype.getPos = function() {
-	for(var i = 0; i < this.tilesTop.length; i++) {
-		for(var j = 0; j < this.tilesTop[i].length; j++) {
-			if(this.tilesTop[i][j] == 1) {
-				this.tilesX = (j * (this.tileWidth + this.tilePadding)) + this.tileOffSetLeft;
-				this.tilesY = (i * (this.tileHeight + this.tilePadding)) + this.tileOffSetTop;
-				return {
-					posX: this.tilesX, 
-					posY: this.tilesY,
-					width: this.tileWidth,
-					height: this.tileHeight
-				};
-			}					
+
+Tiles.prototype.getCollisionEntity = function() {
+	var ships = entityManager._ships;
+	var enemies = entityManager._enemies;
+	var bullets = entityManager._bullets;
+	for(var i = 0; i < ships.length; ++i) {
+		var pos = ships[i].getPos();
+		//console.log(ships[i]);
+		if(this.collides(pos.posX, pos.posY, ships[i].getRadius())) {
+			if(ships[i]._isWarping == false)
+				ships[i].wallCollision();
+		}
+	}
+	for(i = 0; i < enemies.length; ++i) {
+		var pos = enemies[i].getPos();
+		if(this.collides(pos.posX, pos.posY, enemies[i].getRadius())) {
+			enemies[i].wallCollision();
+		}
+	}
+	for(i = 0; i < bullets.length; ++i) {
+		var pos = bullets[i].getPos();
+		if(this.collides(pos.posX, pos.posY, bullets[i].getRadius())) {
+			var canHitWall = bullets[i].wallCollision;
+			if(canHitWall) canHitWall.call(bullets[i]);
 		}
 	}
 };
@@ -95,14 +127,10 @@ Tiles.prototype.update = function(du) {
 	var top = this.tilesTop[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width;
 	var bot = this.tilesBottom[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width;
 	if( top || bot ) {
-		this.tileOffSetLeft -= this.speed;		
+		this.tileOffSetLeft -= this.speed * du;		
 	}
-	/*
-	var colli = this.collides(this.tileWidth, this.tileHeight, this.getRadius());
-	if(colli) {
-		return entityManager.KILL_ME_NOW;
-	}*/
-	spatialManager.register(this);
+
+	this.getCollisionEntity();
 };
  
 Tiles.prototype.render = function(ctx) {

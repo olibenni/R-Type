@@ -13,11 +13,21 @@ backGround.prototype.cy = 0;
 backGround.prototype.rotation = 0;
 backGround.prototype.distance = 0;
 
+backGround.prototype.sound1 = new Audio (
+	"sounds/MusicLoop1.ogg");
+backGround.prototype.sound2 = new Audio (
+	"sounds/MusicLoop2.ogg");
+
+backGround.prototype.playSounds = function () {
+	this.sound1.volume = 0.3;
+	this.sound1.play();
+};
+
 backGround.prototype.triggerCalls = {
-	enemy : function(y,amount){
-		for(var i = 0; i < 6; i++){
+	enemy1 : function(y,amount){
+		for(var i = 0; i < amount; i++){
 			entityManager.generateEnemy({
-				cx : 600+i*20,
+				cx : g_canvas.width+i*20,
 				cy : y+i*20,
 				sprite : g_sprites.enemy1[0],
 				sprites : g_sprites.enemy1,
@@ -27,24 +37,35 @@ backGround.prototype.triggerCalls = {
 	},
 	
 	enemy2 : function(y,amount){
-		for(var i = 0; i < 6; i++){
+		for(var i = 0; i < amount; i++){
 			entityManager.generateEnemy2({
-				cx : 600+i*30,
+				cx : g_canvas.width+i*30,
 				cyStart : y,
 				sprite : g_sprites.enemy2,
 				scale : 1
 			});
 		}
+	},
+
+	boss : function(y, amount){
+		entityManager.generateBoss({
+			cx : g_canvas.width,
+			cy : y,
+			sprite : g_sprites.boss,
+			width : g_sprites.boss[0].width
+		});
 	}
 };
 
 backGround.prototype.curTrigger = 0;
+backGround.prototype.triggerIndex = 0;
 //triggers : Distance in game, triggerCall, y, number of enemies
 backGround.prototype.triggers = [
-	[250,1,200,6],
-	[350,2,300,6],
-	[500,1,200,6],
-	[600,2,300,6]
+	{dist: 250,  enemyType: "enemy1", y: 200, amount: 6},
+	{dist: 400,  enemyType: "enemy2", y: 300, amount: 6},
+	{dist: 550,  enemyType: "enemy1", y: 200, amount: 6},
+	{dist: 700,  enemyType: "enemy2", y: 300, amount: 6},
+	{dist: 600, enemyType: "boss",   y: 300, amount: 1}
 ];
 
 backGround.prototype.getSpeed = function() {
@@ -53,72 +74,45 @@ backGround.prototype.getSpeed = function() {
 
 backGround.prototype.update = function(du) {
 	// move the background backward
-	
-	this.checkTrigger();
+	this.playSounds();
 
-	this.distance++;
+	this.checkTrigger();
+	this.addRandomEnemies();
+
+	this.distance += this.speed * du;
 	
-	this.cx -= this.speed;
+	this.cx -= this.speed * du;
 	if(this.cx <= 0) {
 		this.cx = g_canvas.width;
 	}
 };
-
+ 
 backGround.prototype.checkTrigger = function() {
-	
-	if(this.triggers[this.curTrigger][0] == this.distance){
-		var thisTrigger = this.triggers[this.curTrigger]
-		if(thisTrigger[1] == 1){
-			this.triggerCalls.enemy(thisTrigger[2],thisTrigger[3]);
+	var info = this.triggers[this.triggerIndex];
+	if(info){
+		if(info.dist <= this.distance){
+			this.triggerCalls[info.enemyType](info.y, info.amount);
+			this.triggerIndex++;
 		}
-		else if(thisTrigger[1]== 2){
-			this.triggerCalls.enemy2(thisTrigger[2],thisTrigger[3]);
-		}
-		
-		if(this.curTrigger < this.triggers.length-1)
-		this.curTrigger += 1
 	}
 };
+
+backGround.prototype.addRandomEnemies = function(){
+	if(util.randRange(0,10) > 9.95){
+		var enemyType = Math.floor(util.randRange(0,1.999));
+		var enemies = ["enemy1","enemy2"]
+		console.log(enemyType)
+		this.triggerCalls[enemies[enemyType]](util.randRange(200,400),1);
+	}
+}
  
 backGround.prototype.render = function(ctx) {
 
 	this.sprite.drawWrappedCentredAt(
-	ctx, this.cx, this.cy, this.rotation);
-	this.sprite.drawWrappedCentredAt(
-		ctx, this.cx + this.sprite.width, this.cy, this.rotation);
-	
+		ctx, this.cx, this.cy, this.rotation);
+
 	ctx.fillStyle = "black";
 	ctx.fillRect(0,0,g_canvas.width,32);
 	ctx.fillRect(0,526,g_canvas.width,78);
-	
-	this.drawLaserCharge(ctx);
-	
-	this.drawLives(ctx);
-
 };
 
-backGround.prototype.drawLaserCharge = function(ctx){
-		ctx.font = "20px sans-serif";
-		ctx.fillStyle = "white";
-		ctx.fillText("Charge", g_canvas.width/2-100,550);
-		ctx.fillStyle = "blue";
-		ctx.fillRect(g_canvas.width/2-30, 535, 120, 20);
-		if(entityManager._ships[0]){
-			var charged = entityManager._ships[0].getLaserCharge();
-			if(charged < 30){charged = 0}
-			if(charged > 150){charged = 150}
-			ctx.fillStyle = "red";
-			if(charged > 30){
-				ctx.fillRect(g_canvas.width/2-30, 535, charged-30, 20);
-			}
-		}
-};
-
-backGround.prototype.drawLives = function(ctx){
-	if(entityManager._ships[0]){
-		var lives = entityManager._ships[0].getLives();
-		for(var i = 0; i < lives; i++){
-			g_sprites.ship[3].drawCentredAt(ctx, 20+i*40,15,0);
-		}
-	}
-};

@@ -49,7 +49,7 @@ Missile.prototype.update = function (du) {
 	this.getEnemy();
     if (this.cx > g_canvas.width+50) return entityManager.KILL_ME_NOW;
 
-	if(this.vel > this.velX){
+	if(this.vel*2 > this.velX){
 		this.velX *= 1.08;
 	}else {
 		this.velX = this.vel;
@@ -70,7 +70,7 @@ Missile.prototype.update = function (du) {
     if (hitEntity) {
         var canTakeHit = hitEntity.takeBulletHit;
         if (canTakeHit) {
-			canTakeHit.call(hitEntity, 1); 
+			canTakeHit.call(hitEntity, this.vel); 
 			return entityManager.KILL_ME_NOW;
 		}
     }
@@ -81,11 +81,10 @@ Missile.prototype.update = function (du) {
 };
 
 Missile.prototype.getYVel = function(){
-	console.log(this.enemy.cx, this.enemy.cy)
 	if(this.cy - this.enemy.cy > this.getRadius()){
-		this.velY = -this.vel/2;
+		this.velY = -this.vel;
 	}else if(this.cy - this.enemy.cy < -this.getRadius()){
-		this.velY = this.vel/2;
+		this.velY = this.vel;
 	}else{
 		this.velY = 0;
 	}
@@ -112,7 +111,7 @@ Missile.prototype.getRadius = function () {
 
 Missile.prototype.render = function (ctx) {
 
-    g_sprites.bullet.drawCentredAt(
+    g_sprites.missile.drawCentredAt(
         ctx, this.cx, this.cy, this.rotation
     );
 

@@ -179,7 +179,8 @@ function requestPreloads() {
         sheet43 : "./images/r-typesheet43.gif",
         rock    : "./images/rock.png",
 		starField: "./images/starfield2.png",
-		wall 	: "./images/wall.png"
+		wall 	: "./images/wall.png",
+		missile : "./images/missile.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);

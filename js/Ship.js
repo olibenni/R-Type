@@ -57,7 +57,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
 Ship.prototype.spriteIndex = 2;
-Ship.prototype.powerUps = {blue : 0, red : 0, misseles : 0, speed : 0};
+Ship.prototype.powerUps = {blue : 0, red : 0, missile : 1, speed : 0};
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -275,7 +275,9 @@ Ship.prototype.maybeFireBullet = function (du) {
 		if(this.powerUps.blue > 0){
 			this.fireBlue(launchDist);
 		}
-		this.fireMissile(launchDist);
+		if(this.powerUps.missile > 0){
+			this.fireMissile(launchDist);
+		}
         this.chargeLaser(du);
     } 
     //Laser has been charging and space has been released = fire laser
@@ -342,7 +344,7 @@ Ship.prototype.fireBlue = function(launchDist){
 
 Ship.prototype.fireMissile = function(launchDist){
 	entityManager.fireMissile(
-		this.cx, this.cy-launchDist*2,5,0
+		this.cx, this.cy-launchDist*2,this.powerUps.missile,0
 	)
 }
 
@@ -391,6 +393,11 @@ Ship.prototype.takePowerUp = function (powerUp) {
 	if(powerUp == "Red"){
 		if(this.powerUps.red < 3){
 			this.powerUps.red += 1;
+		}
+	}
+	if(powerUp == "Missile"){
+		if(this.powerUps.missile < 3){
+			this.powerUps.missile += 1;
 		}
 	}
 };
@@ -489,12 +496,18 @@ Ship.prototype.drawPowerUps = function(ctx){
 	ctx.strokeStyle = "Grey"
 	ctx.stroke();
 	
+	ctx.beginPath();
+	ctx.arc(x+(radius+5)*6, y, radius, 0, Math.PI * 2);
+	ctx.strokeStyle = "Yellow"
+	ctx.stroke();
+	
 	ctx.font = "40px sans-serif";
 	ctx.fillStyle = "white";
 	
 	ctx.fillText(this.powerUps.blue, x-11,y+13);
 	ctx.fillText(this.powerUps.red, x+(radius+5)*2-11,y+13);
 	ctx.fillText(this.powerUps.speed, x+(radius+5)*4-11,y+13);
+	ctx.fillText(this.powerUps.missile, x+(radius+5)*6-11,y+13);
 	ctx.restore();
 }
 

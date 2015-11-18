@@ -138,6 +138,14 @@ fireLaserBullet: function(cx, cy, velX, velY, rotation) {
     }));
 },
 
+fireMissile: function(cx,cy,vel){
+	this._bullets.push(new Missile({
+		cx	: cx,
+		cy	: cy,
+		vel : vel
+	}));
+},
+
 fireLaser: function(cx, cy, velX, velY, rotation, charge) {
     this._bullets.push(new Laser({
         cx   : cx,
@@ -219,6 +227,16 @@ haltShips: function() {
 
 toggleRocks: function() {
     this._bShowRocks = !this._bShowRocks;
+},
+
+getOneEnemy: function(x) {
+	for(var i = 0; i <this._enemies.length; i++){
+			if(this._enemies[i].cx > x){
+				return this._enemies[i];
+			}
+	}
+	return -1;
+	
 },
 
 update: function(du) {

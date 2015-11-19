@@ -47,6 +47,18 @@ backGround.prototype.triggerCalls = {
 		}
 	},
 
+	enemy3 : function(y, amount){
+		for(var i = 0; i < amount; i++){
+			entityManager.generateEnemy3({
+				cx : g_canvas.width+1*40,
+				cy : y,
+				sprite : g_sprites.enemy3,
+				scale : 1
+			});
+		}
+	},
+
+
 	boss : function(y, amount){
 		entityManager.generateBoss({
 			cx : g_canvas.width,
@@ -65,8 +77,10 @@ backGround.prototype.triggers = [
 	{dist: 350,  enemyType: "enemy1", y: 200, amount: 3},
 	{dist: 350,  enemyType: "enemy1", y: 250, amount: 3},
 	{dist: 750,  enemyType: "enemy2", y: 300, amount: 6},
+	{dist: 1050, enemyType: "enemy3", y: 200, amount: 4},
 	{dist: 1400,  enemyType: "enemy1", y: 200, amount: 6},
 	{dist: 1500,  enemyType: "enemy2", y: 300, amount: 6},
+	{dist: 1800,  enemyType: "enemy3", y: 250, amount: 4},
 	{dist: 2200,  enemyType: "enemy2", y: 200, amount: 6},
 	{dist: 2200,  enemyType: "enemy2", y: 400, amount: 6},
 	{dist: 2750,  enemyType: "enemy1", y: 175, amount: 9},
@@ -105,7 +119,7 @@ backGround.prototype.checkTrigger = function() {
 backGround.prototype.addRandomEnemies = function(){
 	if(util.randRange(0,10) > 11){
 		var enemyType = Math.floor(util.randRange(0,1.999));
-		var enemies = ["enemy1","enemy2"]
+		var enemies = ["enemy1","enemy2","enemy3"]
 		console.log(enemyType)
 		this.triggerCalls[enemies[enemyType]](util.randRange(200,400),1);
 	}

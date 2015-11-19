@@ -202,6 +202,10 @@ generateEnemy2 : function(descr) {
     this._enemies.push(new Enemy2(descr));
 },
 
+generateEnemy3 : function(descr) {
+	this._enemies.push(new Enemy3(descr));
+},
+
 generateBoss : function(descr) {
     this._enemies.push(new Boss(descr));
 },

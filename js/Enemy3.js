@@ -48,7 +48,6 @@ Enemy3.prototype.playSounds = function () {
 Enemy3.prototype.update = function (du) {
     this.lifeTime += du;
     this.computeVelChanges(du);
-    this.computeSprite(du);
     // Unregister and check for death
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
@@ -71,13 +70,7 @@ Enemy3.prototype.update = function (du) {
 
 Enemy3.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;
 Enemy3.prototype.elapsedDelay = 0;
-Enemy3.prototype.computeSprite = function(du) {
-    this.elapsedDelay += du;
-    if(this.elapsedDelay >= this.delay) {
-        this.elapsedDelay = 0;
-        this.spriteIndex = (this.spriteIndex + 1) % this.sprites.length;
-    }
-}
+
 Enemy3.prototype.computeVelChanges = function(du) {
     if(this.lifeTime < 100) {
         this.velY = 1;
@@ -168,9 +161,12 @@ Enemy3.prototype.getRadius = function () {
 };
 
 Enemy3.prototype.render = function (ctx) {
+    var origScale = this.sprite.scale;
     this.sprite.scale = this._scale;
 
-    this.sprites[this.spriteIndex].drawCentredAt(
+    this.sprite.drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
+
+    this.sprite.scale = origScale;
 };

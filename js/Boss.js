@@ -33,7 +33,7 @@ Boss.prototype.numSubSteps = 1;
 Boss.prototype.lives = 150;
 Boss.prototype.lifeTime = 0;
 Boss.prototype.shootingSpeed = 5;
-Boss.prototype.spriteIndex = 0;
+Boss.prototype.spriteIndex = 4;
 
 Boss.prototype.deadSound = new Audio (
 	"sounds/rtypeDie.ogg");
@@ -51,6 +51,10 @@ Boss.prototype.update = function (du) {
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
+    }
+
+    if(this.shouldFlash){
+        this.playFlashAnimation(du);
     }
 
     this.handlePhase(du);
@@ -76,7 +80,7 @@ Boss.prototype.handlePhase = function(du) {
 
 Boss.prototype.entranceDelay = 400 / NOMINAL_UPDATE_INTERVAL;
 Boss.prototype.elapsedDelay = 0;
-Boss.prototype.spriteIncrement = 1;
+Boss.prototype.spriteIncrement = -1;
 Boss.prototype.runEnteringPhase = function(du) {
     if( !this.inPosition() ) {
         this.cx += this.velX*du;
@@ -93,25 +97,27 @@ Boss.prototype.runEnteringPhase = function(du) {
 Boss.prototype.runEntranceAnimation = function(du) {
     this.elapsedDelay += du;
     if(this.elapsedDelay > this.entranceDelay){
-        if(this.spriteIndex == 4){ this.spriteIncrement = 1;}
-        else if(this.spriteIndex == 7){ this.spriteIncrement = -1;}
+        if(this.spriteIndex === 4 || this.spriteIndex === 7){ 
+            this.spriteIncrement *= -1;}
         this.spriteIndex += this.spriteIncrement;
         this.elapsedDelay = 0;
     }
 };
 
-Boss.prototype.fetusDelay = 100 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.fetusPhaseDelay = 100 / NOMINAL_UPDATE_INTERVAL;
 Boss.prototype.runFetusPhase = function(du) {
     this.elapsedDelay += du;
-    if(this.elapsedDelay > this.fetusDelay){
+    if(this.elapsedDelay > this.fetusPhaseDelay){
         this.spriteIndex += 1;
         this.elapsedDelay = 0;
     }
     if(this.spriteIndex === this.sprite.length){
         this.spriteIndex = 24;
+        this.spriteIncrement = -4;
         this.currentPhase = "figthingPhase";
     }
 };
+
 Boss.prototype.runFigthingPhase = function(du) {
    // Handle firing
     this.maybeFireBullet(du);
@@ -119,16 +125,61 @@ Boss.prototype.runFigthingPhase = function(du) {
     spatialManager.register(this);
 };
 
-Boss.prototype.fetusBulletDelay = 5000 / NOMINAL_UPDATE_INTERVAL;
-Boss.prototype.elapsedDelayBetweenFetusBullets = 0;
+Boss.prototype.fetusAnimationDelay = 3000 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.elapsedFetusAnimationDelay = 0;
 Boss.prototype.runFetusFightingAnimation = function(du) {
-    this.elapsedDelayBetweenFetusBullets += du;
-    if(this.elapsedDelayBetweenFetusBullets > this.fetusBulletDelay){
-        this.elapsedDelayBetweenFetusBullets = 0;
+    this.elapsedFetusAnimationDelay += du;
+    if(this.elapsedFetusAnimationDelay > this.fetusAnimationDelay){
+        if(this.spriteIndex === 24 || this.spriteIndex === 32){
+            this.spriteIncrement *= -1;
+        }
+        this.spriteIndex += this.spriteIncrement;
+        this.elapsedFetusAnimationDelay = 0;
+        if(this.spriteIndex === 32){
+            this.isFetusFiring = true;
+        }
+    }
+    if(this.isFetusFiring){
+        this.fetusFire(du);        
     }
 };
 
+Boss.prototype.fetusFireDelay = 100 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.elapsedFetusFireDelay = 100;
+Boss.prototype.totalFetusShots = 0;
+Boss.prototype.fetusFire = function(du) {
+    this.elapsedFetusFireDelay += du;
+    if(this.elapsedFetusFireDelay > this.fetusFireDelay){
+        entityManager.fireEnemyBullet(
+           this.cx, this.cy+5,
+            -7, 
+            0,
+           this.rotation
+        );
+        this.elapsedFetusFireDelay = 0;
+        this.totalFetusShots++;
+    }
+    if(this.totalFetusShots === 10){
+        this.isFetusFiring = false;
+        this.totalFetusShots = 0;
+    }
+};
+
+Boss.prototype.flashTimer = 0;
+Boss.prototype.alphaIndex = 1;
+Boss.prototype.playFlashAnimation = function(du){
+    this.flashTimer += du;
+    this.alphaIndex = Math.random() * 0.5 + 0.25;
+    if(this.flashTimer > 1000 / NOMINAL_UPDATE_INTERVAL){
+        this.alphaIndex = 1;
+        this.flashTimer = 0;
+        this.shouldFlash = false;
+    }
+};
+
+Boss.prototype.shouldFlash = false;
 Boss.prototype.takeBulletHit = function(damage) {
+    this.shouldFlash = true;
 
     var currentLives = this.lives;
     this.lives -= damage;
@@ -141,7 +192,7 @@ Boss.prototype.takeBulletHit = function(damage) {
         entityManager.createBigExplosion({
             cx    : this.cx, 
             cy    : this.cy,
-            scale : this.scale*2,
+            scale : this.scale*5,
             sprites : g_sprites.bigDeathExplosion
         });
     } else {
@@ -191,8 +242,10 @@ Boss.prototype.getRadius = function () {
 };
 
 Boss.prototype.render = function (ctx) {
-
+    ctx.save();
+    ctx.globalAlpha = this.alphaIndex;
     this.sprite[this.spriteIndex].drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
+    ctx.restore();
 };

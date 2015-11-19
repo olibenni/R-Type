@@ -14,7 +14,7 @@ function createSprites(images, sprites, animatedSprites) {
 	sprites.missile = new Sprite(images.missile,0,0,2105,555);
 	sprites.missile.scale = 0.015;
     sprites.enemyBullet = new Sprite(images.sheet43, 135, 5, 8, 7);
-    sprites.bossBullet = new Sprite(images.sheet30, 575, 2061, 23, 23);
+    sprites.fetusBossBullet = new Sprite(images.sheet30, 575, 2061, 23, 23);
     animatedSprites.laserCharge = new AnimationSprite(images.sheet1, 0, 51, 33.25, 32, 0, 8);
     animatedSprites.laser = []; 
     sprites.laser = new Sprite(images.sheet1, 200, 120, 32.5, 12);

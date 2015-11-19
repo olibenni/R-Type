@@ -168,14 +168,9 @@ Enemy3.prototype.getRadius = function () {
 };
 
 Enemy3.prototype.render = function (ctx) {
-    var origScale = this.sprite.scale;
     this.sprite.scale = this._scale;
 
     this.sprites[this.spriteIndex].drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
-
-    // g_animatedSprites.enemy1.cycleAnimationAt(ctx, this.cx, this.cy);
-
-    this.sprite.scale = origScale;
 };

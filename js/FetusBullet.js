@@ -1,5 +1,5 @@
 // ======
-// ENEMYBULLET
+// FetusBullet
 // ======
 
 "use strict";
@@ -13,23 +13,31 @@
 
 
 // A generic contructor which accepts an arbitrary descriptor object
-function EnemyBullet(descr) {
+function FetusBullet(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
 };
 
-EnemyBullet.prototype = new Entity();
+FetusBullet.prototype = new Entity();
 
 // Initial, inheritable, default values
-EnemyBullet.prototype.rotation = 0;
-EnemyBullet.prototype.cx = 200;
-EnemyBullet.prototype.cy = 200;
-EnemyBullet.prototype.velX = 1;
-EnemyBullet.prototype.velY = 1;
+FetusBullet.prototype.rotation = 0;
+FetusBullet.prototype.cx = 200;
+FetusBullet.prototype.cy = 200;
+FetusBullet.prototype.velX = 1;
+FetusBullet.prototype.velY = 1;
+FetusBullet.prototype.lifeTime = 0;
 
-EnemyBullet.prototype.update = function (du) {
-
+FetusBullet.prototype.update = function (du) {
+    this.lifeTime += du;
+    if(this.lifeTime > 300 / NOMINAL_UPDATE_INTERVAL){
+        if(this.randomTrajectory){
+            this.velY = Math.random() * (-10) + 5;
+        }else{
+            this.velY += -0.1;
+        }
+    }
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
@@ -57,11 +65,11 @@ EnemyBullet.prototype.update = function (du) {
 
 };
 
-EnemyBullet.prototype.outOfBounds = function() {
+FetusBullet.prototype.outOfBounds = function() {
     if(this.cx <= 0) this.kill();
 };
 
-EnemyBullet.prototype.wallCollision = function () {
+FetusBullet.prototype.wallCollision = function () {
 	this._isDeadNow = true;
     entityManager.createExplosion({
         cx    : this.cx, 
@@ -71,13 +79,13 @@ EnemyBullet.prototype.wallCollision = function () {
     });
 };
 
-EnemyBullet.prototype.getRadius = function () {
+FetusBullet.prototype.getRadius = function () {
     return 4;
 };
 
 
-EnemyBullet.prototype.render = function (ctx) {
-    g_sprites.enemyBullet.drawCentredAt(
+FetusBullet.prototype.render = function (ctx) {
+    g_sprites.fetusBullet.drawCentredAt(
         ctx, this.cx, this.cy, this.rotation
     );
 };

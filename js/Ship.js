@@ -114,7 +114,7 @@ Ship.prototype._moveToASafePlace = function () {
         var warpDirn = Math.random() * consts.FULL_CIRCLE;
         
         this.cx = warpDistance * Math.abs(Math.sin(warpDirn));
-        this.cy = 200 + Math.cos(warpDirn)*100;
+        this.cy = g_canvas.height/2 + Math.cos(warpDirn)*50;
         
         this.wrapPosition();
         

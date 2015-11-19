@@ -125,7 +125,7 @@ Boss.prototype.runFigthingPhase = function(du) {
     spatialManager.register(this);
 };
 
-Boss.prototype.fetusAnimationDelay = 3000 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.fetusAnimationDelay = 2000 / NOMINAL_UPDATE_INTERVAL;
 Boss.prototype.elapsedFetusAnimationDelay = 0;
 Boss.prototype.runFetusFightingAnimation = function(du) {
     this.elapsedFetusAnimationDelay += du;
@@ -144,13 +144,13 @@ Boss.prototype.runFetusFightingAnimation = function(du) {
     }
 };
 
-Boss.prototype.fetusFireDelay = 100 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.fetusFireDelay = 50 / NOMINAL_UPDATE_INTERVAL;
 Boss.prototype.elapsedFetusFireDelay = 100;
 Boss.prototype.totalFetusShots = 0;
 Boss.prototype.fetusFire = function(du) {
     this.elapsedFetusFireDelay += du;
     if(this.elapsedFetusFireDelay > this.fetusFireDelay){
-        entityManager.fireEnemyBullet(
+        entityManager.fireFetusBullets(
            this.cx, this.cy+5,
             -7, 
             0,

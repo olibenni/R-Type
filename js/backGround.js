@@ -20,7 +20,7 @@ backGround.prototype.sound2 = new Audio (
 
 backGround.prototype.playSounds = function () {
 	this.sound1.volume = 0.2;
-	this.sound1.play();
+	if(!MUTE) this.sound1.play();
 };
 
 backGround.prototype.triggerCalls = {

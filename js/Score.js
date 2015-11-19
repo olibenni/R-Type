@@ -4,7 +4,7 @@ var Score = {
 	
 	addScore : function(x) {
 		this.music.volume = 0.3;
-		this.music.play();
+		if(!MUTE) this.music.play();
 		this.score += x;
 	},
 

@@ -19,7 +19,7 @@ function LaserBullet(descr) {
     this.setup(descr);
 
     // Make a noise when I am created (i.e. fired)
-    this.fireSound.play();
+    if(!MUTE) this.fireSound.play();
     
 /*
     // Diagnostics to check inheritance stuff

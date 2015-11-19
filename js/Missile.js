@@ -19,7 +19,7 @@ function Missile(descr) {
     this.setup(descr);
 
     // Make a noise when I am created (i.e. fired)
-    this.fireSound.play();
+    if(!MUTE) this.fireSound.play();
     
 	this.vel = this.vel || 2;
 	this.enemy = this.getEnemy();

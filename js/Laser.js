@@ -18,10 +18,9 @@ function Laser(descr) {
     // Common inherited setup logic from Entity
     this.setup(descr);
 
-    this.fireSound.play();
+    if(!MUTE) this.fireSound.play();
     this.type = this.getType();
     this.lives = this.getDamage();
-    console.log(this.getDamage());
 }
 
 Laser.prototype = new Entity();

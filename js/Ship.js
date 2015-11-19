@@ -69,7 +69,7 @@ Ship.prototype.warp = function () {
 
     this._isWarping = true;
     this._scaleDirn = -1;
-    this.warpSound.play();
+    if(!MUTE) this.warpSound.play();
     
     // Unregister me from my old posistion
     // ...so that I can't be collided with while warping
@@ -283,7 +283,7 @@ Ship.prototype.maybeFireBullet = function (du) {
     } 
     //Laser has been charging and space has been released = fire laser
     else if( this.isChargingLaser() && !keys[this.KEY_FIRE] ) {
-        this.lazerSound.play();
+        if(!MUTE) this.lazerSound.play();
 		entityManager.fireLaser(
            this.cx + launchDist*2, this.cy,
            relVelX, relVelY,

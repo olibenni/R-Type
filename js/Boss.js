@@ -42,7 +42,7 @@ Boss.prototype.fireSound = new Audio (
 
 Boss.prototype.playSounds = function () {
 		this.fireSound.volume = 0.3;
-		this.fireSound.play();
+		if(!MUTE) this.fireSound.play();
 };
 
 Boss.prototype.update = function (du) {
@@ -187,7 +187,7 @@ Boss.prototype.takeBulletHit = function(damage) {
 
     if(this.lives <= 0) {
 		Score.addScore(500);
-		this.deadSound.play();
+		if(!MUTE) this.deadSound.play();
         this.kill();
         entityManager.createBigExplosion({
             cx    : this.cx, 
@@ -196,7 +196,7 @@ Boss.prototype.takeBulletHit = function(damage) {
             sprites : g_sprites.bigDeathExplosion
         });
     } else {
-		this.deadSound.play();
+		if(!MUTE) this.deadSound.play();
         entityManager.createExplosion({
             cx    : this.cx, 
             cy    : this.cy,

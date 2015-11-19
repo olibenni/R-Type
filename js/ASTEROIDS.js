@@ -94,7 +94,7 @@ var g_useGravity = false;
 var g_useAveVel = true;
 var g_renderSpatialDebug = false;
 
-var KEY_MIXED   = keyCode('M');
+var KEY_MIXED   = keyCode('L');
 var KEY_GRAVITY = keyCode('G');
 var KEY_AVE_VEL = keyCode('V');
 var KEY_SPATIAL = keyCode('X');
@@ -110,6 +110,7 @@ var KEY_2 = keyCode('2');
 var KEY_K = keyCode('K');
 
 var PLAY_AGAIN = keyCode('T');
+var MUTE_KEY = keyCode('M');
 
 function processDiagnostics() {
 
@@ -140,6 +141,9 @@ function processDiagnostics() {
         g_mouseX, g_mouseY);
 	
 	if(eatKey(PLAY_AGAIN) && entityManager.isPlayerDead()) entityManager.playAgain();
+	if(eatKey(MUTE_KEY)){
+		MUTE = !MUTE;
+	} 
 }
 
 

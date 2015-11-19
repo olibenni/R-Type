@@ -125,5 +125,9 @@ backGround.prototype.render = function(ctx) {
 	ctx.fillStyle = "black";
 	ctx.fillRect(0,0,g_canvas.width,32);
 	ctx.fillRect(0,526,g_canvas.width,78);
+	
+	ctx.font = '12px sans-serif';
+	ctx.fillStyle = 'white';
+	ctx.fillText("Press M to mute", 20, g_canvas.height-50);
 };
 

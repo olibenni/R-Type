@@ -455,11 +455,11 @@ Ship.prototype.drawShield = function(ctx){
 Ship.prototype.drawLaserCharge = function(ctx){
 		ctx.font = "20px sans-serif";
 		ctx.fillStyle = "white";
-		ctx.fillText("Charge", g_canvas.width/2-100,550);
+		ctx.fillText("Charge", g_canvas.width/2-100,570);
 		ctx.beginPath();
 		ctx.save();
 		ctx.strokeStyle = 'white';
-		ctx.strokeRect(g_canvas.width/2-30, 535, 120, 20);
+		ctx.strokeRect(g_canvas.width/2-30, 555, 120, 20);
 		ctx.closePath();
 		ctx.restore();
 		var charged = this.laserCharge
@@ -467,7 +467,7 @@ Ship.prototype.drawLaserCharge = function(ctx){
 		if(charged > 150){charged = 150}
 		ctx.fillStyle = "blue";
 		if(charged > 30){
-			ctx.fillRect(g_canvas.width/2-30, 535, charged-30, 20);
+			ctx.fillRect(g_canvas.width/2-30, 555, charged-30, 20);
 		}
 };
 

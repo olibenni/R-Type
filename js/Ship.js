@@ -57,7 +57,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
 Ship.prototype.spriteIndex = 2;
-Ship.prototype.powerUps = {blue : 0, red : 0, missile : 1, speed : 0};
+Ship.prototype.powerUps = {blue : 0, red : 0, missile : 0, speed : 0};
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -147,6 +147,7 @@ Ship.prototype.update = function (du) {
     // Unregister and check for death
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
+		this.resetPowerUps();
         return entityManager.KILL_ME_NOW;
     }
 
@@ -344,7 +345,7 @@ Ship.prototype.fireBlue = function(launchDist){
 
 Ship.prototype.fireMissile = function(launchDist){
 	entityManager.fireMissile(
-		this.cx, this.cy-launchDist*2,this.powerUps.missile,0
+		this.cx+launchDist*2, this.cy,this.powerUps.missile,0
 	)
 }
 
@@ -424,6 +425,13 @@ Ship.prototype.updateRotation = function (du) {
         this.rotation += NOMINAL_ROTATE_RATE * du;
     }
 };
+
+Ship.prototype.resetPowerUps = function(){
+	this.powerUps.blue = 0;
+	this.powerUps.red = 0;
+	this.powerUps.speed = 0;
+	this.powerUps.missile = 0;
+}
 
 Ship.prototype.drawShield = function(ctx){
 	var shieldColors = ["rgba(255, 0, 0, 0.2)","rgba(0, 255, 0, 0.2)","rgba(0, 0, 255, 0.4)"]

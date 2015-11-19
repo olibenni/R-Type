@@ -122,6 +122,10 @@ Tiles.prototype.getCollisionEntity = function() {
 	}
 };
 
+Tiles.prototype.reset = function(){
+	this.tileOffSetLeft = 0;
+}
+
 Tiles.prototype.update = function(du) {
 
 	var top = this.tilesTop[0].length * this.tileWidth + this.tileOffSetLeft > g_canvas.width;

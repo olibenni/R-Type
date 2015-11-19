@@ -250,6 +250,34 @@ getOneEnemy: function(x) {
 	
 },
 
+playAgain: function(){
+	this.clearBullets();
+	this._enemies.forEach(function(enemy){
+        enemy.kill();
+    });
+	this._ships.forEach(function(ship){
+			ship.kill();
+		});
+	this._powerups.forEach(function(powerUp){
+		powerUp.kill();
+	});
+	this._bg[0].reset();
+	this._tiles[0].reset();
+	
+	entityManager.generateShip({
+        cx : 200,
+        cy : 200,
+		sprite : g_sprites.ship[2],
+        sprites : g_sprites.ship
+    }); 
+},
+
+isPlayerDead: function(){
+	if(this._ships.length == 0){
+		return true;
+	} else return false;
+},
+
 update: function(du) {
 
     for (var c = 0; c < this._categories.length; ++c) {

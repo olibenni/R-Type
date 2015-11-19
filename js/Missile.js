@@ -21,7 +21,7 @@ function Missile(descr) {
     // Make a noise when I am created (i.e. fired)
     this.fireSound.play();
     
-	this.vel = this.vel || 1;
+	this.vel = this.vel || 2;
 	this.enemy = this.getEnemy();
 }
 
@@ -35,7 +35,7 @@ Missile.prototype.zappedSound = new Audio(
     
 // Initial, inheritable, default values
 Missile.prototype.rotation = 0;
-Missile.prototype.velX = 1;
+Missile.prototype.velX = 2;
 Missile.prototype.velY = 0;
 
 
@@ -49,10 +49,10 @@ Missile.prototype.update = function (du) {
 	this.getEnemy();
     if (this.cx > g_canvas.width+50) return entityManager.KILL_ME_NOW;
 
-	if(this.vel*2 > this.velX){
-		this.velX *= 1.08;
+	if(this.vel+3 > this.velX){
+		this.velX *= 1.09;
 	}else {
-		this.velX = this.vel;
+		this.velX = this.vel+3;
 		if(this.enemy == -1){
 			this.velY = 0;
 		}else{

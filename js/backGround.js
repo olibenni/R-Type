@@ -109,6 +109,12 @@ backGround.prototype.addRandomEnemies = function(){
 		console.log(enemyType)
 		this.triggerCalls[enemies[enemyType]](util.randRange(200,400),1);
 	}
+};
+
+backGround.prototype.reset = function(){
+	this.distance = 0;
+	this.triggerIndex = 0;
+	this.curTrigger = 0;
 }
  
 backGround.prototype.render = function(ctx) {

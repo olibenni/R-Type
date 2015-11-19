@@ -304,6 +304,15 @@ update: function(du) {
 
 },
 
+renderGameLost: function(ctx){
+	ctx.font = '40px sans-serif';
+	ctx.fillStyle = 'white';
+	ctx.fillText("You Lost", g_canvas.width/2-80, g_canvas.height/2);
+	ctx.font = '20px sans-serif';
+	ctx.fillText("Press 'T' to play Again", g_canvas.width/2-100, g_canvas.height/2+30);
+
+},
+
 render: function(ctx) {
 	
     var debugX = 10, debugY = 100;
@@ -326,6 +335,9 @@ render: function(ctx) {
     }
 	
 	Score.render(ctx);
+	if(entityManager.isPlayerDead()){
+		this.renderGameLost(ctx);	
+	}
 }
 
 }

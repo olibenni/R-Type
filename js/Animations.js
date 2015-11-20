@@ -42,3 +42,8 @@ function BigExplosion(descr) {
 BigExplosion.prototype = new Animation();
 BigExplosion.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL; //Overwrite the delay
 
+function GreaterExplosion(descr) {
+	this.setup(descr);
+};
+GreaterExplosion.prototype = new Animation();
+GreaterExplosion.prototype.delay = 100 / NOMINAL_UPDATE_INTERVAL;

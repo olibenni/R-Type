@@ -7,6 +7,7 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.laserCharge = [];
     sprites.deathExplosion = [];
     sprites.bigDeathExplosion = [];
+	sprites.greaterDeathExplosion = [];
     sprites.enemy1 = [];
 	sprites.enemy2 = new Sprite(images.sheet8, 6, 5, 24, 25);
     sprites.enemy3 = [];
@@ -14,7 +15,7 @@ function createSprites(images, sprites, animatedSprites) {
 	sprites.missile = new Sprite(images.missile,0,0,2105,555);
 	sprites.missile.scale = 0.015;
     sprites.enemyBullet = new Sprite(images.sheet43, 135, 5, 8, 7);
-    sprites.fetusBossBullet = new Sprite(images.sheet30, 575, 2061, 23, 23);
+    sprites.fetusBullet = new Sprite(images.sheet30, 575, 2061, 23, 23);
     animatedSprites.laserCharge = new AnimationSprite(images.sheet1, 0, 51, 33.25, 32, 0, 8);
     animatedSprites.laser = []; 
     sprites.laser = new Sprite(images.sheet1, 200, 120, 32.5, 12);
@@ -72,6 +73,12 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 81, 41, 27, 28));
     sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 43, 37, 29, 31));
 
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 0, 98, 65, 66));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 65, 98, 65, 66));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 130, 98, 65, 66));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 195, 98, 65, 66));	
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 260, 98, 65, 66));
+	
     sprites.bullet = new Sprite(images.sheet1, 248,88,17,6);
     sprites.bullet.scale = 1;
 }

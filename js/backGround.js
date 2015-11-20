@@ -82,7 +82,7 @@ backGround.prototype.triggers = [
 	{dist: 2200,  enemyType: "enemy2", y: 400, amount: 6},
 	{dist: 2450,  enemyType: "enemy3", y: 600, amount: 1},
 	{dist: 2750,  enemyType: "enemy1", y: 175, amount: 9},
-	{dist: 3500, enemyType: "boss",   y: 300, amount: 1}
+	{dist: 1600, enemyType: "boss",   y: 300, amount: 1}
 ];
 
 backGround.prototype.getSpeed = function() {

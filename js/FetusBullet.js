@@ -1,5 +1,5 @@
 // ======
-// ENEMYBULLET
+// FetusBullet
 // ======
 
 "use strict";
@@ -13,23 +13,31 @@
 
 
 // A generic contructor which accepts an arbitrary descriptor object
-function EnemyBullet(descr) {
+function FetusBullet(descr) {
 
     // Common inherited setup logic from Entity
     this.setup(descr);
 };
 
-EnemyBullet.prototype = new Entity();
+FetusBullet.prototype = new Entity();
 
 // Initial, inheritable, default values
-EnemyBullet.prototype.rotation = 0;
-EnemyBullet.prototype.cx = 200;
-EnemyBullet.prototype.cy = 200;
-EnemyBullet.prototype.velX = 1;
-EnemyBullet.prototype.velY = 1;
+FetusBullet.prototype.rotation = 0;
+FetusBullet.prototype.cx = 200;
+FetusBullet.prototype.cy = 200;
+FetusBullet.prototype.velX = 1;
+FetusBullet.prototype.velY = 1;
+FetusBullet.prototype.lifeTime = 0;
 
-EnemyBullet.prototype.update = function (du) {
-
+FetusBullet.prototype.update = function (du) {
+    this.lifeTime += du;
+    if(this.lifeTime > 200 / NOMINAL_UPDATE_INTERVAL){
+        if(this.randomTrajectory){
+            this.velY = Math.random() * (-16) + 8;
+        }else{
+            this.velY += this.trajectory;
+        }
+    }
     spatialManager.unregister(this);
     if( this._isDeadNow ) {
         return entityManager.KILL_ME_NOW;
@@ -57,12 +65,12 @@ EnemyBullet.prototype.update = function (du) {
 
 };
 
-EnemyBullet.prototype.outOfBounds = function() {
+FetusBullet.prototype.outOfBounds = function() {
     if(this.cx <= 0) this.kill();
 };
 
-EnemyBullet.prototype.wallCollision = function () {
-	this._isDeadNow = true;
+FetusBullet.prototype.wallCollision = function () {
+    this._isDeadNow = true;
     entityManager.createExplosion({
         cx    : this.cx, 
         cy    : this.cy,
@@ -71,13 +79,14 @@ EnemyBullet.prototype.wallCollision = function () {
     });
 };
 
-EnemyBullet.prototype.getRadius = function () {
-    return 4;
+
+FetusBullet.prototype.getRadius = function () {
+    return 10;
 };
 
 
-EnemyBullet.prototype.render = function (ctx) {
-    g_sprites.enemyBullet.drawCentredAt(
+FetusBullet.prototype.render = function (ctx) {
+    g_sprites.fetusBullet.drawCentredAt(
         ctx, this.cx, this.cy, this.rotation
     );
 };

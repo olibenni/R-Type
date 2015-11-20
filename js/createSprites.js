@@ -7,6 +7,7 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.laserCharge = [];
     sprites.deathExplosion = [];
     sprites.bigDeathExplosion = [];
+	sprites.greaterDeathExplosion = [];
     sprites.enemy1 = [];
 	sprites.enemy2 = new Sprite(images.sheet8, 6, 5, 24, 25);
     sprites.enemy3 = new Sprite(images.sheet8, 6, 5, 24, 25);
@@ -64,6 +65,12 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 81, 41, 27, 28));
     sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 43, 37, 29, 31));
 
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 0, 98, 65, 66));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 65, 98, 65, 66));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 130, 98, 65, 66));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 195, 98, 65, 66));	
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 260, 98, 65, 66));
+	
     sprites.bullet = new Sprite(images.sheet1, 248,88,17,6);
     sprites.bullet.scale = 1;
 }

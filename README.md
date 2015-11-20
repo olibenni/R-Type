@@ -11,7 +11,6 @@ Blue:   More bullets
 Red:    Shield
 Gray:   Speed
 Green:  Missiles
-
 Powerups can stack.
 
 Other keys:

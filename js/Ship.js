@@ -167,7 +167,10 @@ Ship.prototype.update = function (du) {
 	var collision = this.isColliding();
 	if(collision){
 		if(collision.type != "PowerUp" && this.powerUps.red == 0) {
-			if(--this.lives === 0) return entityManager.KILL_ME_NOW;
+			if(--this.lives === 0){
+				this.resetPowerUps();
+				return entityManager.KILL_ME_NOW;
+			} 
                 this.warp();
                 entityManager.clearBullets();
 		}else if(collision.type == "PowerUp"){

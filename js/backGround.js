@@ -50,7 +50,7 @@ backGround.prototype.triggerCalls = {
 	enemy3 : function(y,amount, velX){
 		for(var i = 0; i < amount; i++){
 			entityManager.generateEnemy3({
-				cx : g_canvas.width+i*40,
+				cx : g_canvas.width+i*50,
 				cy : y,
 				velX : velX,
 				sprite : g_sprites.enemy3,
@@ -76,26 +76,53 @@ backGround.prototype.triggers = [
 	{dist: 150,  enemyType: "enemy1", y: 200, amount: 6},
 	{dist: 350,  enemyType: "enemy1", y: 200, amount: 3},
 	{dist: 350,  enemyType: "enemy1", y: 250, amount: 3},
+
 	{dist: 750,  enemyType: "enemy2", y: 300, amount: 6},
 	{dist: 1400,  enemyType: "enemy1", y: 200, amount: 6},
 	{dist: 1500,  enemyType: "enemy2", y: 300, amount: 6},
+
 	{dist: 2200,  enemyType: "enemy2", y: 200, amount: 6},
 	{dist: 2200,  enemyType: "enemy2", y: 400, amount: 6},
 	{dist: 2450,  enemyType: "enemy3", y: 475, amount: 1, velX: -0.9},
 	{dist: 2750,  enemyType: "enemy1", y: 175, amount: 9},
-	{dist: 3900,  enemyType: "enemy3", y: 475, amount: 1, velX: -0.7},
+
+	{dist: 3850,  enemyType: "enemy3", y: 475, amount: 2, velX: -0.675},
 	{dist: 3900,  enemyType: "enemy2", y: 200, amount: 3},
 	{dist: 3900,  enemyType: "enemy2", y: 300, amount: 3},
 	{dist: 3900,  enemyType: "enemy2", y: 400, amount: 3},
-	{dist: 4000,  enemyType: "enemy3", y: 475, amount: 1, velX: -0.7},
+
 	{dist: 5000,  enemyType: "enemy1", y: 200, amount: 2},
 	{dist: 5000,  enemyType: "enemy1", y: 225, amount: 2},
 	{dist: 5000,  enemyType: "enemy1", y: 250, amount: 2},
 	{dist: 5000,  enemyType: "enemy1", y: 275, amount: 2},
-	{dist: 6000,  enemyType: "enemy3", y: 475, amount: 1, velX: -1.1},
-	{dist: 6100,  enemyType: "enemy3", y: 475, amount: 1, velX: -1.1},
-	{dist: 6200,  enemyType: "enemy3", y: 475, amount: 1, velX: -1.1},
-	{dist: 8000, enemyType: "boss",   y: 300, amount: 1},
+
+	{dist: 5850,  enemyType: "enemy3", y: 475, amount: 3, velX: -0.9},
+	{dist: 5850,  enemyType: "enemy2", y: 200, amount: 7},
+	{dist: 5850,  enemyType: "enemy2", y: 400, amount: 7},
+	{dist: 6350,  enemyType: "enemy1", y: 225, amount: 1},
+	{dist: 6350,  enemyType: "enemy1", y: 250, amount: 1},
+	{dist: 6350,  enemyType: "enemy1", y: 275, amount: 1},
+	{dist: 6350,  enemyType: "enemy1", y: 300, amount: 1},
+	{dist: 6350,  enemyType: "enemy1", y: 325, amount: 1},
+	{dist: 6350,  enemyType: "enemy1", y: 350, amount: 1},
+
+	{dist: 6750,  enemyType: "enemy2", y: 200, amount: 7},
+	{dist: 6750,  enemyType: "enemy2", y: 400, amount: 7},
+	{dist: 7000,  enemyType: "enemy1", y: 250, amount: 5},
+	{dist: 7050,  enemyType: "enemy1", y: 250, amount: 5},
+	{dist: 7100,  enemyType: "enemy1", y: 250, amount: 5},
+
+	{dist: 8000,  enemyType: "enemy1", y: 250, amount: 1},	
+	{dist: 8050,  enemyType: "enemy1", y: 250, amount: 1},	
+	{dist: 8100,  enemyType: "enemy1", y: 300, amount: 1},
+	{dist: 8150,  enemyType: "enemy1", y: 175, amount: 1},
+	{dist: 8200,  enemyType: "enemy1", y: 225, amount: 1},
+	{dist: 8250,  enemyType: "enemy1", y: 185, amount: 1},
+	{dist: 8300,  enemyType: "enemy1", y: 250, amount: 1},
+	{dist: 8350,  enemyType: "enemy1", y: 300, amount: 1},
+	{dist: 8450,  enemyType: "enemy3", y: 439, amount: 4, velX: -TILE_SPEED},
+
+	{dist: 11000, enemyType: "boss",   y: 300, amount: 1},
 	
 ];
 

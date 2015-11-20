@@ -47,11 +47,12 @@ backGround.prototype.triggerCalls = {
 		}
 	},
 
-	enemy3 : function(y,amount){
+	enemy3 : function(y,amount, velX){
 		for(var i = 0; i < amount; i++){
 			entityManager.generateEnemy3({
 				cx : g_canvas.width+i*40,
-				cyStart : y,
+				cy : y,
+				velX : velX,
 				sprite : g_sprites.enemy3,
 				scale : 1
 			});
@@ -80,9 +81,22 @@ backGround.prototype.triggers = [
 	{dist: 1500,  enemyType: "enemy2", y: 300, amount: 6},
 	{dist: 2200,  enemyType: "enemy2", y: 200, amount: 6},
 	{dist: 2200,  enemyType: "enemy2", y: 400, amount: 6},
-	{dist: 2450,  enemyType: "enemy3", y: 600, amount: 1},
+	{dist: 2450,  enemyType: "enemy3", y: 475, amount: 1, velX: -0.9},
 	{dist: 2750,  enemyType: "enemy1", y: 175, amount: 9},
-	{dist: 1600, enemyType: "boss",   y: 300, amount: 1}
+	{dist: 3900,  enemyType: "enemy3", y: 475, amount: 1, velX: -0.7},
+	{dist: 3900,  enemyType: "enemy2", y: 200, amount: 3},
+	{dist: 3900,  enemyType: "enemy2", y: 300, amount: 3},
+	{dist: 3900,  enemyType: "enemy2", y: 400, amount: 3},
+	{dist: 4000,  enemyType: "enemy3", y: 475, amount: 1, velX: -0.7},
+	{dist: 5000,  enemyType: "enemy1", y: 200, amount: 2},
+	{dist: 5000,  enemyType: "enemy1", y: 225, amount: 2},
+	{dist: 5000,  enemyType: "enemy1", y: 250, amount: 2},
+	{dist: 5000,  enemyType: "enemy1", y: 275, amount: 2},
+	{dist: 6000,  enemyType: "enemy3", y: 475, amount: 1, velX: -1.1},
+	{dist: 6100,  enemyType: "enemy3", y: 475, amount: 1, velX: -1.1},
+	{dist: 6200,  enemyType: "enemy3", y: 475, amount: 1, velX: -1.1},
+	{dist: 8000, enemyType: "boss",   y: 300, amount: 1},
+	
 ];
 
 backGround.prototype.getSpeed = function() {
@@ -108,7 +122,7 @@ backGround.prototype.checkTrigger = function() {
 	var info = this.triggers[this.triggerIndex];
 	if(info){
 		if(info.dist <= this.distance){
-			this.triggerCalls[info.enemyType](info.y, info.amount);
+			this.triggerCalls[info.enemyType](info.y, info.amount, info.velX);
 			this.triggerIndex++;
 		}
 	}

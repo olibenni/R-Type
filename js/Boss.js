@@ -30,7 +30,7 @@ Boss.prototype.cx = 200;
 Boss.prototype.velX = -1;
 Boss.prototype.velY = 0;
 Boss.prototype.numSubSteps = 1;
-Boss.prototype.lives = 200;
+Boss.prototype.lives = 20;
 Boss.prototype.lifeTime = 0;
 Boss.prototype.shootingSpeed = 5;
 Boss.prototype.spriteIndex = 4;
@@ -74,6 +74,9 @@ Boss.prototype.handlePhase = function(du) {
     }
     else if(this.currentPhase === "figthingPhase"){
         this.runFigthingPhase(du);
+    }
+    else if(this.currentPhase === "dyingPhase"){
+        this.runDyingPhase(du);
     }
 };
 
@@ -195,25 +198,33 @@ Boss.prototype.takeBulletHit = function(damage) {
 
     if(this.lives <= 0) {
 		Score.addScore(500);
-		if(!MUTE) this.deadSound.play();
-        this.kill();
-        entityManager.createBigExplosion({
-            cx    : this.cx, 
-            cy    : this.cy,
-            scale : this.scale*5,
-            sprites : g_sprites.bigDeathExplosion
-        });
-    } else {
-		if(!MUTE) this.deadSound.play();
-        entityManager.createExplosion({
-            cx    : this.cx, 
-            cy    : this.cy,
-            scale : this.scale,
-            sprites : g_sprites.deathExplosion
-        });
-    }
+        this.currentPhase = "dyingPhase";
+    } 
 
     return damageDealt;
+};
+
+Boss.prototype.dyingPhaseDuration = 5000 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.elapsedDyingPhase = 0;
+Boss.prototype.dyingPhaseDelay = 500 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.elapsedDyingPhaseDelay = 0;
+Boss.prototype.runDyingPhase = function(du) {
+    this.shouldFlash = true;
+    this.elapsedDyingPhase += du;
+    this.elapsedDyingPhaseDelay += du;
+    if(this.elapsedDyingPhaseDelay > this.dyingPhaseDelay){
+        this.elapsedDyingPhaseDelay = 0;
+        if(!MUTE) this.deadSound.play();
+        entityManager.createGreaterExplosion({
+            cx    : this.cx + Math.random() * (-100) + 50, 
+            cy    : this.cy + Math.random() * (-250) + 125,
+            scale : this.scale,
+            sprites : g_sprites.greaterDeathExplosion
+        });
+    }
+    if(this.elapsedDyingPhase > this.dyingPhaseDuration){
+        this.kill();
+    }
 };
 
 Boss.prototype.delayBetweenBullets = 2000 / NOMINAL_UPDATE_INTERVAL;

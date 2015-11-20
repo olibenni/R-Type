@@ -28,10 +28,10 @@ Enemy3.prototype = new Entity();
 Enemy3.prototype.rotation = 0;
 Enemy3.prototype.cx = 200;
 Enemy3.prototype.cy = 475;
-Enemy3.prototype.velX = 0;
+Enemy3.prototype.velX = -0.9;
 Enemy3.prototype.velY = 0;
 Enemy3.prototype.numSubSteps = 1;
-Enemy3.prototype.lives = 2;
+Enemy3.prototype.lives = 4;
 Enemy3.prototype.spriteIndex = 0;
 Enemy3.prototype.lifeTime = 0;
 
@@ -47,7 +47,7 @@ Enemy3.prototype.playSounds = function () {
 
 Enemy3.prototype.update = function (du) {
     this.lifeTime += du;
-    this.computeVelChanges(du);
+    // this.computeVelChanges(du);
     this.computeSprite(du);
     // Unregister and check for death
     spatialManager.unregister(this);
@@ -89,16 +89,15 @@ Enemy3.prototype.computeSprite = function(du) {
         this.spriteIndex = (this.spriteIndex + 1) % this.sprite.length;
     }
 }
-Enemy3.prototype.dirChangeDelay = 200;
-Enemy3.prototype.elapsedDirChangeDelay = 0;
-
-Enemy3.prototype.computeVelChanges = function(du) {
-    if(this.lifeTime > 0){
-        this.velX = -0.9;
-    } else {
-        this.velX = 3;
-    }
-}
+// Enemy3.prototype.dirChangeDelay = 200;
+// Enemy3.prototype.elapsedDirChangeDelay = 0;
+// Enemy3.prototype.computeVelChanges = function(du) {
+//     if(this.lifeTime > 0/ NOMINAL_UPDATE_INTERVAL){
+//         this.velX = -0.9;
+//     } else {
+//         this.velX = 0.9 - MAP_SPEED/2; //CANCEL ON THIS AS ctx.scale(-1,1) seems to be giving us problems
+//     }
+// }
 
 Enemy3.prototype.computeSubStep = function (du) {
 
@@ -171,8 +170,9 @@ Enemy3.prototype.getRadius = function () {
 };
 
 Enemy3.prototype.render = function (ctx) {
-
+    ctx.save();
     this.sprite[this.spriteIndex].drawCentredAt(
        ctx, this.cx, this.cy, this.rotation
     );
+    ctx.restore();
 };

@@ -273,7 +273,7 @@ playAgain: function(){
 	});
 	this._bg[0].reset();
 	this._tiles[0].reset();
-	
+	Score.score = 0;
 	entityManager.generateShip({
         cx : 200,
         cy : 200,

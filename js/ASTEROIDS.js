@@ -94,6 +94,7 @@ var g_useGravity = false;
 var g_useAveVel = true;
 var g_renderSpatialDebug = false;
 
+
 var KEY_MIXED   = keyCode('L');
 var KEY_GRAVITY = keyCode('G');
 var KEY_AVE_VEL = keyCode('V');
@@ -144,6 +145,7 @@ function processDiagnostics() {
 	if(eatKey(MUTE_KEY)){
 		MUTE = !MUTE;
 	} 
+
 }
 
 
@@ -182,6 +184,7 @@ function requestPreloads() {
         sheet3  : "./images/r-typesheet3.gif",
         sheet5  : "./images/r-typesheet5.gif",
 		sheet8	: "./images/r-typesheet8.gif",
+        sheet10 : "./images/r-typesheet10.gif",
         sheet16 : "./images/r-typesheet16.gif",
         sheet30 : "./images/r-typesheet30.gif",
         sheet43 : "./images/r-typesheet43.gif",

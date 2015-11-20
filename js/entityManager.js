@@ -317,6 +317,15 @@ renderGameLost: function(ctx){
 
 },
 
+
+renderStartGame: function(ctx){
+    ctx.font = '40px sans-serif';
+    ctx.fillStyle = 'white';
+    ctx.fillText("Welcome to R-Type", g_canvas.width/2-80, g_canvas.height/2);
+    ctx.font = '20px sans-serif';
+    ctx.fillText("Press 'I' to start the game", g_canvas.width/2-100, g_canvas.height/2+30);
+},
+
 render: function(ctx) {
 	
     var debugX = 10, debugY = 100;

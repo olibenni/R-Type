@@ -9,7 +9,7 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.bigDeathExplosion = [];
     sprites.enemy1 = [];
 	sprites.enemy2 = new Sprite(images.sheet8, 6, 5, 24, 25);
-    sprites.enemy3 = new Sprite(images.sheet8, 6, 5, 24, 25);
+    sprites.enemy3 = [];
     sprites.boss = [];
 	sprites.missile = new Sprite(images.missile,0,0,2105,555);
 	sprites.missile.scale = 0.015;
@@ -43,14 +43,22 @@ function createSprites(images, sprites, animatedSprites) {
     animatedSprites.laser.push(new AnimationSprite(images.sheet1, 136, 153, 64, 15, 10, 2 ));
     animatedSprites.laser.push(new AnimationSprite(images.sheet1, 104, 170, 80, 16, 10, 2 ));
 
-    sprites.enemy1.push(new Sprite(images.sheet5, 5, 5, 21, 25));
-    sprites.enemy1.push(new Sprite(images.sheet5, 37, 5, 21, 25));
-    sprites.enemy1.push(new Sprite(images.sheet5, 70, 5, 21, 25));
-    sprites.enemy1.push(new Sprite(images.sheet5, 103, 5, 21, 25));
-    sprites.enemy1.push(new Sprite(images.sheet5, 137, 5, 21, 25));
-    sprites.enemy1.push(new Sprite(images.sheet5, 169, 5, 21, 25));
-    sprites.enemy1.push(new Sprite(images.sheet5, 203, 5, 21, 25));
-    sprites.enemy1.push(new Sprite(images.sheet5, 236, 5, 21, 25));
+    sprites.enemy1.push(new Sprite(images.sheet5, 5, 2, 21, 25));
+    sprites.enemy1.push(new Sprite(images.sheet5, 37, 2, 21, 25));
+    sprites.enemy1.push(new Sprite(images.sheet5, 70, 2, 21, 25));
+    sprites.enemy1.push(new Sprite(images.sheet5, 103, 2, 21, 25));
+    sprites.enemy1.push(new Sprite(images.sheet5, 137, 2, 21, 25));
+    sprites.enemy1.push(new Sprite(images.sheet5, 169, 2, 21, 25));
+    sprites.enemy1.push(new Sprite(images.sheet5, 203, 2, 21, 25));
+    sprites.enemy1.push(new Sprite(images.sheet5, 236, 2, 21, 25));
+
+    sprites.enemy3.push(new Sprite(images.sheet10, 1, 5, 31, 25));
+    sprites.enemy3.push(new Sprite(images.sheet10, 34, 5, 31, 25));
+    sprites.enemy3.push(new Sprite(images.sheet10, 67, 5, 31, 25));
+    sprites.enemy3.push(new Sprite(images.sheet10, 100, 5, 31, 25));
+    sprites.enemy3.push(new Sprite(images.sheet10, 133, 5, 31, 25));
+    sprites.enemy3.push(new Sprite(images.sheet10, 166, 5, 31, 25));
+    sprites.enemy3.push(new Sprite(images.sheet10, 167, 35, 27, 25));
 
     sprites.deathExplosion.push(new Sprite(images.sheet1, 267, 304, 19, 16));
     sprites.deathExplosion.push(new Sprite(images.sheet1, 217, 300, 27, 21));

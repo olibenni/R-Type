@@ -92,7 +92,7 @@ Bullet.prototype.wallCollision = function () {
         cx    : this.cx, 
         cy    : this.cy,
         scale : this.scale,
-        sprites : g_sprites.deathExplosion
+        sprites : g_sprites.bulletExplosion
     });
 };
 

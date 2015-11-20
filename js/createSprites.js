@@ -23,7 +23,7 @@ function createSprites(images, sprites, animatedSprites) {
 	sprites.starField = new Sprite(images.starField);
 	sprites.wall = new Sprite(images.wall, 0, 0, 64, 23);
 	sprites.wall.scale = 1.6;
-    
+    sprites.bulletExplosion = [];
 	
     for(var i = 100; i <= 233; i+= 33.25){
         sprites.ship.push(new Sprite(images.sheet1, i, 2, 33.25, 15));
@@ -39,6 +39,11 @@ function createSprites(images, sprites, animatedSprites) {
         }
     }
 
+	sprites.bulletExplosion.push(new Sprite(images.sheet1, 211, 278, 8, 8));
+	sprites.bulletExplosion.push(new Sprite(images.sheet1, 226, 278, 9, 8));
+	sprites.bulletExplosion.push(new Sprite(images.sheet1, 242, 276, 13, 12));
+	sprites.bulletExplosion.push(new Sprite(images.sheet1, 259, 276, 14, 12));
+	
     animatedSprites.laser.push(new AnimationSprite(images.sheet1, 200, 120, 33, 12, 10, 2));
     animatedSprites.laser.push(new AnimationSprite(images.sheet1, 168, 135, 48, 15, 10, 2 ));
     animatedSprites.laser.push(new AnimationSprite(images.sheet1, 136, 153, 64, 15, 10, 2 ));
@@ -72,12 +77,27 @@ function createSprites(images, sprites, animatedSprites) {
     sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 113, 43, 27, 25));
     sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 81, 41, 27, 28));
     sprites.bigDeathExplosion.push(new Sprite(images.sheet16, 43, 37, 29, 31));
-
+	
 	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 0, 98, 65, 66));
 	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 65, 98, 65, 66));
 	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 130, 98, 65, 66));
 	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 195, 98, 65, 66));	
 	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 260, 98, 65, 66));
+	
+	/* sprenging númer 2 í sheet44 (tók ekki inn hvítur og rauður hringur)
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 140, 46, 44, 20));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 202, 45, 53, 43));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 264, 40, 57, 54));
+	*/
+	
+	/* sprenging númer 1 í sheet44
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 130, 2, 30, 28));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 163, 1, 30, 33));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 193, 0, 33, 34));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 227, 2, 33, 31));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 259, 1, 33, 32));
+	sprites.greaterDeathExplosion.push(new Sprite(images.sheet44, 293, 1, 32, 32));
+	*/
 	
     sprites.bullet = new Sprite(images.sheet1, 248,88,17,6);
     sprites.bullet.scale = 1;

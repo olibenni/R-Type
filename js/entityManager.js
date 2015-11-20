@@ -158,13 +158,15 @@ fireLaser: function(cx, cy, velX, velY, rotation, charge) {
     }));
 },
 
-fireFetusBullets: function(cx, cy, velX, velY, rotation) {
+fireFetusBullets: function(cx, cy, velX, velY, rotation, randomTrajectory, trajectory) {
     this._bullets.push(new FetusBullet({
         cx   : cx,
         cy   : cy,
         velX : velX,
         velY : velY,
         rotation : rotation,
+        randomTrajectory: randomTrajectory,
+        trajectory: trajectory
     }));    
 },
 

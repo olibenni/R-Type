@@ -31,11 +31,11 @@ FetusBullet.prototype.lifeTime = 0;
 
 FetusBullet.prototype.update = function (du) {
     this.lifeTime += du;
-    if(this.lifeTime > 300 / NOMINAL_UPDATE_INTERVAL){
+    if(this.lifeTime > 200 / NOMINAL_UPDATE_INTERVAL){
         if(this.randomTrajectory){
-            this.velY = Math.random() * (-10) + 5;
+            this.velY = Math.random() * (-16) + 8;
         }else{
-            this.velY += -0.1;
+            this.velY += this.trajectory;
         }
     }
     spatialManager.unregister(this);
@@ -70,7 +70,7 @@ FetusBullet.prototype.outOfBounds = function() {
 };
 
 FetusBullet.prototype.wallCollision = function () {
-	this._isDeadNow = true;
+    this._isDeadNow = true;
     entityManager.createExplosion({
         cx    : this.cx, 
         cy    : this.cy,
@@ -79,8 +79,9 @@ FetusBullet.prototype.wallCollision = function () {
     });
 };
 
+
 FetusBullet.prototype.getRadius = function () {
-    return 4;
+    return 10;
 };
 
 

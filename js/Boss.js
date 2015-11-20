@@ -30,7 +30,7 @@ Boss.prototype.cx = 200;
 Boss.prototype.velX = -1;
 Boss.prototype.velY = 0;
 Boss.prototype.numSubSteps = 1;
-Boss.prototype.lives = 150;
+Boss.prototype.lives = 200;
 Boss.prototype.lifeTime = 0;
 Boss.prototype.shootingSpeed = 5;
 Boss.prototype.spriteIndex = 4;
@@ -125,7 +125,7 @@ Boss.prototype.runFigthingPhase = function(du) {
     spatialManager.register(this);
 };
 
-Boss.prototype.fetusAnimationDelay = 2000 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.fetusAnimationDelay = 1500 / NOMINAL_UPDATE_INTERVAL;
 Boss.prototype.elapsedFetusAnimationDelay = 0;
 Boss.prototype.runFetusFightingAnimation = function(du) {
     this.elapsedFetusAnimationDelay += du;
@@ -137,6 +137,7 @@ Boss.prototype.runFetusFightingAnimation = function(du) {
         this.elapsedFetusAnimationDelay = 0;
         if(this.spriteIndex === 32){
             this.isFetusFiring = true;
+            this.setupFetusFiring();
         }
     }
     if(this.isFetusFiring){
@@ -144,7 +145,12 @@ Boss.prototype.runFetusFightingAnimation = function(du) {
     }
 };
 
-Boss.prototype.fetusFireDelay = 50 / NOMINAL_UPDATE_INTERVAL;
+Boss.prototype.setupFetusFiring = function() {
+    this.fetusBulletRandomTrajectory = Math.random() > 1/3;
+    this.fetusBulletTrajectory = Math.random() > 0.5 ? 0.2 : -0.2
+};
+
+Boss.prototype.fetusFireDelay = 25 / NOMINAL_UPDATE_INTERVAL;
 Boss.prototype.elapsedFetusFireDelay = 100;
 Boss.prototype.totalFetusShots = 0;
 Boss.prototype.fetusFire = function(du) {
@@ -152,14 +158,16 @@ Boss.prototype.fetusFire = function(du) {
     if(this.elapsedFetusFireDelay > this.fetusFireDelay){
         entityManager.fireFetusBullets(
            this.cx, this.cy+5,
-            -7, 
+            -10, 
             0,
-           this.rotation
+           this.rotation,
+           this.fetusBulletRandomTrajectory,
+           this.fetusBulletTrajectory
         );
         this.elapsedFetusFireDelay = 0;
         this.totalFetusShots++;
     }
-    if(this.totalFetusShots === 10){
+    if(this.totalFetusShots === 25){
         this.isFetusFiring = false;
         this.totalFetusShots = 0;
     }

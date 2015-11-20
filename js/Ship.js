@@ -57,7 +57,7 @@ Ship.prototype.numSubSteps = 1;
 Ship.prototype.lives = 3;
 Ship.prototype.speed = 3;
 Ship.prototype.spriteIndex = 2;
-Ship.prototype.powerUps = {blue : 0, red : 0, missile : 0, speed : 0};
+Ship.prototype.powerUps = {blue : 0, red : 0, missile : 1, speed : 0};
 
 // HACKED-IN AUDIO (no preloading)
 Ship.prototype.warpSound = new Audio(
@@ -160,6 +160,7 @@ Ship.prototype.update = function (du) {
     }
 
     // Handle firing
+	this.calcMissileReload();
     this.maybeFireBullet(du);
 
     // Handle collision
@@ -343,10 +344,24 @@ Ship.prototype.fireBlue = function(launchDist){
 	}
 };
 
+Ship.prototype.missileReloadTime = 150 / NOMINAL_UPDATE_INTERVAL;
+Ship.prototype.missileReloadingDone = 0;
 Ship.prototype.fireMissile = function(launchDist){
-	entityManager.fireMissile(
-		this.cx+launchDist*2, this.cy,this.powerUps.missile,0
-	)
+	if(this.missileReloadTime == this.missileReloadingDone){
+		entityManager.fireMissile(
+			this.cx+launchDist*2, this.cy,this.powerUps.missile,0
+		)
+		this.missileReloadingDone = 0;
+	}
+};
+
+Ship.prototype.calcMissileReload = function(){
+	if(this.missileReloadingDone < this.missileReloadTime){
+		this.missileReloadingDone += this.powerUps.missile / NOMINAL_UPDATE_INTERVAL;
+	}
+	if(this.missileReloadingDone > this.missileReloadTime){
+		this.missileReloadingDone = this.missileReloadTime;
+	}
 }
 
 Ship.prototype.laserReloadTime = 500 / NOMINAL_UPDATE_INTERVAL;

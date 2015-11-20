@@ -141,7 +141,10 @@ function processDiagnostics() {
     if (eatKey(KEY_K)) entityManager.killNearestShip(
         g_mouseX, g_mouseY);
 	
-	if(eatKey(PLAY_AGAIN) && entityManager.isPlayerDead()) entityManager.playAgain();
+	if(eatKey(PLAY_AGAIN) && entityManager.isPlayerDead()) {
+        entityManager.playAgain();
+        entityManager.gameHasStarted = true;
+    }
 	if(eatKey(MUTE_KEY)){
 		MUTE = !MUTE;
 	} 
@@ -207,7 +210,7 @@ function preloadDone() {
 
 
     entityManager.init();
-    createInitialShips();
+    //createInitialShips();
 
     main.init();
 }

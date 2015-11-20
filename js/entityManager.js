@@ -93,6 +93,7 @@ _forEachOf: function(aCategory, fn) {
 // to request the blessed release of death!
 //
 KILL_ME_NOW : -1,
+gameHasStarted: false,
 
 // Some things must be deferred until after initial construction
 // i.e. thing which need `this` to be defined.
@@ -283,9 +284,7 @@ playAgain: function(){
 },
 
 isPlayerDead: function(){
-	if(this._ships.length == 0){
-		return true;
-	} else return false;
+	return (this._ships.length === 0);
 },
 
 update: function(du) {
@@ -327,9 +326,9 @@ renderGameLost: function(ctx){
 renderStartGame: function(ctx){
     ctx.font = '40px sans-serif';
     ctx.fillStyle = 'white';
-    ctx.fillText("Welcome to R-Type", g_canvas.width/2-80, g_canvas.height/2);
+    ctx.fillText("Welcome to R-Type", g_canvas.width/2-150, g_canvas.height/2);
     ctx.font = '20px sans-serif';
-    ctx.fillText("Press 'I' to start the game", g_canvas.width/2-100, g_canvas.height/2+30);
+    ctx.fillText("Press 'T' to start the game", g_canvas.width/2-100, g_canvas.height/2+30);
 },
 
 render: function(ctx) {
@@ -354,9 +353,13 @@ render: function(ctx) {
     }
 	
 	Score.render(ctx);
-	if(entityManager.isPlayerDead()){
+	if(entityManager.isPlayerDead() && entityManager.gameHasStarted){
 		this.renderGameLost(ctx);	
 	}
+
+    if(!entityManager.gameHasStarted){
+        this.renderStartGame(ctx);
+    }
 }
 
 }

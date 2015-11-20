@@ -94,6 +94,7 @@ _forEachOf: function(aCategory, fn) {
 //
 KILL_ME_NOW : -1,
 gameHasStarted: false,
+gameIsWon: false,
 
 // Some things must be deferred until after initial construction
 // i.e. thing which need `this` to be defined.
@@ -331,6 +332,13 @@ renderStartGame: function(ctx){
     ctx.fillText("Press 'T' to start the game", g_canvas.width/2-100, g_canvas.height/2+30);
 },
 
+renderGameWon: function(ctx){
+    ctx.font = '40px sans-serif';
+    ctx.fillStyle = 'white';
+    ctx.fillText("Congratulations!!!", g_canvas.width/2-150, g_canvas.height/2);
+    ctx.font = '20px sans-serif';
+},
+
 render: function(ctx) {
 	
     var debugX = 10, debugY = 100;
@@ -354,11 +362,16 @@ render: function(ctx) {
 	
 	Score.render(ctx);
 	if(entityManager.isPlayerDead() && entityManager.gameHasStarted){
+        entityManager.gameIsWon = false;
 		this.renderGameLost(ctx);	
 	}
 
     if(!entityManager.gameHasStarted){
         this.renderStartGame(ctx);
+    }
+
+    if(entityManager.gameIsWon){
+        this.renderGameWon(ctx);
     }
 }
 

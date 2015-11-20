@@ -223,6 +223,7 @@ Boss.prototype.runDyingPhase = function(du) {
         });
     }
     if(this.elapsedDyingPhase > this.dyingPhaseDuration){
+        entityManager.gameIsWon = true;
         this.kill();
     }
 };

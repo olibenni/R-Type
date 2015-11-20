@@ -1,15 +1,5 @@
-// ====
-// ROCK
-// ====
 
 "use strict";
-
-/* jshint browser: true, devel: true, globalstrict: true */
-
-/*
-0        1         2         3         4         5         6         7         8
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
-*/
 
 
 // A generic contructor which accepts an arbitrary descriptor object
@@ -30,10 +20,12 @@ function PowerUp(descr) {
 PowerUp.prototype = new Entity();
 
 PowerUp.prototype.allPowers = ["Blue","Speed","Red","Missile"];
+PowerUp.prototype.powerColors = ["rgba(0, 0, 255, 0.3)", "rgba(64, 64, 64, 0.3)", "rgba(255, 0, 0, 0.3)", "rgba(255, 255, 0, 0.3)"];
 
 PowerUp.prototype.choosePower = function(){
 	var num = Math.floor(util.randRange(0,3.9999));
 	this.power = this.allPowers[num];
+	this.color = this.powerColors[num];
 }
 
 PowerUp.prototype.update = function (du) {
@@ -62,7 +54,13 @@ PowerUp.prototype.render = function (ctx) {
     var origScale = this.sprite.scale;
     // pass my scale into the sprite, for drawing
     this.sprite.scale = this.scale;
-    this.sprite.drawCentredAt(
+	this.sprite.drawCentredAt(
         ctx, this.cx, this.cy, this.rotation
     );
+	ctx.beginPath();
+	ctx.arc(this.cx, this.cy, this.getRadius(), 0, Math.PI * 2);
+	ctx.stroke();
+	ctx.fillStyle = this.color;
+	ctx.fill();
+    
 };

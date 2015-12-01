@@ -7,10 +7,15 @@ Fire: SPACE
 Hold fire to charge up laserbeam
 
 4 Kinds of powerups:
+
 Blue:   More bullets
+
 Red:    Shield
+
 Gray:   Speed
+
 Green:  Missiles
+
 Powerups can stack.
 
 Other keys:

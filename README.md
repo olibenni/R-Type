@@ -1,6 +1,10 @@
 # R-Type
 A remake of R-type shoot em up game for Computer games class at the UNI of Iceland
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=BHDsQkgGzuE
+" target="_blank"><img src="http://img.youtube.com/vi/BHDsQkgGzuE/0.jpg" 
+alt="R-Type" width="240" height="180" border="10" /></a>
+
 <br />
 <br />
 

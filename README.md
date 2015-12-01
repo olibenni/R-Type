@@ -2,6 +2,10 @@
 A remake of R-type shoot em up game for Computer games class at the UNI of Iceland
 
 
+
+
+
+
 Control keys: WASD
 Fire: SPACE
 Hold fire to charge up laserbeam

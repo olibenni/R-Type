@@ -68,4 +68,19 @@ G: enable gravity (deprecated)
 <br />
 <br />
 
+# Authors
+
+Hoai Nam Duc Tran 
+
+Kristjana Eir Jónsdóttir
+
+Pedro Luis Carvalho
+
+Ólafur Magnússon
+
+
+
+
+
+
 

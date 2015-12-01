@@ -1,10 +1,8 @@
 # R-Type
 A remake of R-type shoot em up game for Computer games class at the UNI of Iceland
 
-
-
-
-
+{empty} +
+{empty} +
 
 Control keys: WASD
 Fire: SPACE
@@ -22,8 +20,8 @@ Green:  Missiles
 
 Powerups can stack.
 
-
-
+{empty} +
+{empty} +
 
 Other keys:
 
@@ -45,6 +43,8 @@ X: see hitboxes (off by default)
 
 N: quit game
 
+{empty} +
+{empty} +
 
 C: clear canvas (on by default)
 
@@ -60,4 +60,9 @@ H: halt the ship (deprecated)
 2: spawn a new ship a mouse location (disabled)
 
 G: enable gravity (deprecated)
+
+{empty} +
+{empty} +
+
+
 
